@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FASE 1 / BW LED — Estruturação Comercial</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  /* ── RESET ─────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue-dark:  #1F3864;
+    --blue-mid:   #2F5496;
+    --blue-light: #D6E4F0;
+    --green-bg:   #E2EFDA;
+    --green-text: #375623;
+    --yellow-bg:  #FFF2CC;
+    --yellow-text:#7F6000;
+    --red-bg:     #FCE4D6;
+    --red-text:   #843C0C;
+    --gray-bg:    #F2F2F2;
+    --gray-text:  #595959;
+    --white:      #FFFFFF;
+    --surface:    #F7F8FA;
+    --border:     #E0E4EA;
+    --text-main:  #1A1D23;
+    --text-sub:   #5A6070;
+    --text-hint:  #9AA0AD;
+    --shadow:     0 1px 4px rgba(0,0,0,.08), 0 0 0 .5px rgba(0,0,0,.06);
+    --radius:     10px;
+    --radius-sm:  6px;
+  }
+  html { font-size: 15px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--surface);
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ────────────────────────────────────── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ───────────────────────────────────── */
+  .sidebar {
+    width: 240px; flex-shrink: 0;
+    background: var(--blue-dark);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    cursor: pointer; user-select: none;
+  }
+  .sidebar-logo-title {
+    font-size: 13px; font-weight: 600; color: #fff;
+    line-height: 1.3;
+  }
+  .sidebar-logo-sub {
+    font-size: 11px; color: rgba(255,255,255,.55); margin-top: 2px;
+  }
+  .sidebar-nav { padding: .75rem 0; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: .6rem 1.25rem; cursor: pointer;
+    font-size: 13px; color: rgba(255,255,255,.65);
+    transition: background .15s, color .15s;
+    border-radius: 0;
+  }
+  .nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+  .nav-item.active { background: rgba(255,255,255,.12); color: #fff; font-weight: 500; }
+  .nav-item i { font-size: 17px; flex-shrink: 0; }
+  .sidebar-admin {
+    padding: .75rem 1.25rem 1rem;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .admin-btn {
+    width: 100%; padding: .5rem; background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.15);
+    border-radius: var(--radius-sm); font-size: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: background .15s;
+  }
+  .admin-btn:hover { background: rgba(255,255,255,.14); color: #fff; }
+  .admin-badge {
+    background: #F59E0B; color: #78350F; font-size: 10px; font-weight: 600;
+    padding: 1px 7px; border-radius: 99px; margin-left: auto;
+  }
+
+  /* ── MAIN ──────────────────────────────────────── */
+  .main { margin-left: 240px; flex: 1; padding: 1.75rem 2rem; max-width: 900px; }
+
+  /* ── TOP BAR ───────────────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .page-title { font-size: 20px; font-weight: 600; color: var(--text-main); }
+  .page-sub { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
+  .last-updated { font-size: 11px; color: var(--text-hint); }
+
+  /* ── CARDS ─────────────────────────────────────── */
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 12px; font-weight: 600; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1rem;
+  }
+
+  /* ── COVER CARD ────────────────────────────────── */
+  .cover-card {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+    border-radius: var(--radius); padding: 1.5rem;
+    margin-bottom: 1rem; color: #fff;
+  }
+  .cover-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .cover-sub { font-size: 13px; opacity: .75; margin-bottom: 1.25rem; }
+  .cover-meta {
+    display: flex; gap: 1.5rem; font-size: 12px; opacity: .8; margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .cover-meta span { display: flex; align-items: center; gap: 5px; }
+  .progress-wrap { background: rgba(255,255,255,.2); border-radius: 99px; height: 8px; margin-bottom: 6px; }
+  .progress-fill { height: 8px; border-radius: 99px; background: #fff; transition: width .6s ease; }
+  .progress-label { font-size: 12px; opacity: .8; }
+
+  /* ── METRICS ───────────────────────────────────── */
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .metric {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1rem;
+  }
+  .metric-val { font-size: 22px; font-weight: 700; color: var(--text-main); }
+  .metric-lbl { font-size: 11px; color: var(--text-sub); margin-top: 3px; }
+  .metric-delta {
+    font-size: 11px; color: var(--green-text); background: var(--green-bg);
+    padding: 1px 6px; border-radius: 99px; margin-top: 4px; display: inline-block;
+  }
+
+  /* ── STAGE CARDS ───────────────────────────────── */
+  .stages-grid { display: grid; gap: 8px; }
+  .stage-item {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; transition: box-shadow .15s, transform .1s;
+    border-left: 4px solid transparent;
+  }
+  .stage-item:hover { box-shadow: 0 3px 12px rgba(0,0,0,.12); transform: translateY(-1px); }
+  .stage-item.locked { opacity: .4; cursor: default; transform: none; }
+  .stage-item.locked:hover { box-shadow: var(--shadow); }
+  .stage-item.status-done  { border-left-color: #375623; }
+  .stage-item.status-prog  { border-left-color: #F59E0B; }
+  .stage-item.status-pend  { border-left-color: #E26B0A; }
+  .stage-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  .icon-done { background: var(--green-bg); color: var(--green-text); }
+  .icon-prog { background: var(--yellow-bg); color: var(--yellow-text); }
+  .icon-pend { background: var(--red-bg); color: var(--red-text); }
+  .icon-lock { background: var(--gray-bg); color: var(--gray-text); }
+  .stage-info { flex: 1; min-width: 0; }
+  .stage-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .stage-desc { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+  .badge {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .badge-done { background: var(--green-bg); color: var(--green-text); }
+  .badge-prog { background: var(--yellow-bg); color: var(--yellow-text); }
+  .badge-pend { background: var(--red-bg); color: var(--red-text); }
+  .badge-lock { background: var(--gray-bg); color: var(--gray-text); }
+
+  /* ── DETAIL DRAWER ─────────────────────────────── */
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 200;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 480px; max-width: 95vw;
+    background: var(--white); z-index: 201; overflow-y: auto;
+    transform: translateX(100%); transition: transform .25s ease;
+    box-shadow: -4px 0 24px rgba(0,0,0,.15);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header {
+    background: var(--blue-dark); color: #fff;
+    padding: 1.25rem 1.5rem; position: sticky; top: 0; z-index: 1;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  }
+  .drawer-title { font-size: 16px; font-weight: 600; }
+  .drawer-subtitle { font-size: 12px; opacity: .7; margin-top: 3px; }
+  .drawer-close {
+    background: rgba(255,255,255,.15); border: none; color: #fff;
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background .15s;
+  }
+  .drawer-close:hover { background: rgba(255,255,255,.25); }
+  .drawer-body { padding: 1.25rem 1.5rem; }
+  .drawer-section { margin-bottom: 1.25rem; }
+  .drawer-section-title {
+    font-size: 11px; font-weight: 600; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: .6rem;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .finding-item {
+    background: var(--surface); border-left: 3px solid var(--blue-mid);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: .6rem .9rem; margin-bottom: 6px; font-size: 13px; line-height: 1.5;
+  }
+  .finding-item.alert { border-left-color: #C00000; background: var(--red-bg); }
+  .finding-item.ok { border-left-color: var(--green-text); background: var(--green-bg); }
+  .action-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: .6rem 0; border-bottom: 1px solid var(--border);
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--blue-dark); color: #fff;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .action-text { font-size: 13px; color: var(--text-main); flex: 1; }
+  .action-resp { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+  /* ── ACTION PLAN TABLE ─────────────────────────── */
+  .area-group { margin-bottom: 1rem; }
+  .area-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: .5rem .75rem; border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 700; margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .area-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .action-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: .9rem 1.1rem;
+    margin-bottom: 6px; display: flex; align-items: flex-start; gap: 12px;
+  }
+  .action-card-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue-dark); color: #fff;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .action-card-body { flex: 1; min-width: 0; }
+  .action-card-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .action-card-why { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; }
+  .action-card-meta {
+    display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .action-meta-item {
+    font-size: 11px; color: var(--text-sub);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .action-status-pill {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+  }
+
+  /* ── RAIO X ────────────────────────────────────── */
+  .raio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .raio-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1rem 1.1rem;
+  }
+  .raio-area { font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+  .raio-bar-wrap { background: var(--border); border-radius: 99px; height: 6px; margin-bottom: 6px; }
+  .raio-bar-fill { height: 6px; border-radius: 99px; }
+  .raio-scores { font-size: 11px; color: var(--text-sub); display: flex; justify-content: space-between; }
+  .raio-score-val { font-size: 18px; font-weight: 700; }
+  .score-area { text-align: center; }
+
+  /* ── TEAM ──────────────────────────────────────── */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .team-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1rem; text-align: center;
+  }
+  .team-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--blue-light); color: var(--blue-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; margin: 0 auto 8px;
+  }
+  .team-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .team-role { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+  .team-disc {
+    margin-top: 8px; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 99px; display: inline-block;
+  }
+
+  /* ── ADMIN PANEL ───────────────────────────────── */
+  .admin-panel {
+    background: #FEF3C7; border: 1.5px solid #F59E0B;
+    border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1rem;
+    display: none;
+  }
+  .admin-panel.visible { display: block; }
+  .admin-panel-title {
+    font-size: 12px; font-weight: 700; color: #92400E;
+    display: flex; align-items: center; gap: 6px; margin-bottom: .75rem;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .admin-toggle-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: .45rem 0; border-bottom: 1px solid #FDE68A;
+    font-size: 13px;
+  }
+  .admin-toggle-row:last-child { border-bottom: none; }
+  .toggle-wrap { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .toggle-status-select {
+    font-size: 11px; border: 1px solid #FDE68A; border-radius: var(--radius-sm);
+    padding: 3px 6px; background: #fff; cursor: pointer; color: var(--text-main);
+  }
+  .toggle-lock {
+    width: 36px; height: 20px; border-radius: 99px; cursor: pointer;
+    position: relative; flex-shrink: 0; transition: background .2s;
+    border: none;
+  }
+  .toggle-lock::after {
+    content: ''; position: absolute; top: 2px; width: 16px; height: 16px;
+    border-radius: 50%; background: #fff; transition: left .2s;
+  }
+  .toggle-on { background: var(--blue-mid); }
+  .toggle-on::after { left: 18px; }
+  .toggle-off { background: #9CA3AF; }
+  .toggle-off::after { left: 2px; }
+
+  /* ── PIN MODAL ─────────────────────────────────── */
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 300; opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .modal-bg.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    background: var(--white); border-radius: 16px; padding: 2rem;
+    width: 320px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    transform: scale(.95); transition: transform .2s;
+  }
+  .modal-bg.open .modal { transform: scale(1); }
+  .modal-icon { font-size: 36px; color: var(--blue-mid); margin-bottom: 1rem; }
+  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 1.25rem; }
+  .pin-input {
+    width: 100%; padding: .75rem 1rem; font-size: 20px; letter-spacing: .3em;
+    text-align: center; border: 1.5px solid var(--border); border-radius: var(--radius);
+    margin-bottom: .75rem; outline: none;
+  }
+  .pin-input:focus { border-color: var(--blue-mid); }
+  .pin-btn {
+    width: 100%; padding: .75rem; background: var(--blue-dark); color: #fff;
+    border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background .15s;
+  }
+  .pin-btn:hover { background: var(--blue-mid); }
+  .pin-error { font-size: 12px; color: #C00000; margin-top: .5rem; display: none; }
+
+  /* ── SECTION DIVIDER ───────────────────────────── */
+  .section-label {
+    font-size: 11px; font-weight: 700; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: .07em;
+    margin: 1.25rem 0 .6rem; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── PAGE VISIBILITY ───────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── RESPONSIVE ────────────────────────────────── */
+  @media (max-width: 700px) {
+    .sidebar { width: 0; overflow: hidden; }
+    .main { margin-left: 0; padding: 1rem; }
+    .raio-grid { grid-template-columns: 1fr; }
+    .drawer { width: 100%; }
+    .mobile-menu-btn { display: flex !important; }
+    .sidebar.mobile-open { width: 240px; }
+  }
+  .mobile-menu-btn {
+    display: none; position: fixed; bottom: 1.25rem; right: 1.25rem;
+    width: 48px; height: 48px; background: var(--blue-dark); color: #fff;
+    border: none; border-radius: 50%; font-size: 22px; z-index: 150;
+    align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── PIN MODAL ──────────────────────────────────────────── -->
+<div class="modal-bg" id="pin-modal">
+  <div class="modal">
+    <div class="modal-icon"><i class="ti ti-shield-lock"></i></div>
+    <div class="modal-title">Modo Administrador</div>
+    <div class="modal-sub">Digite o PIN para liberar etapas e atualizar status</div>
+    <input class="pin-input" type="password" id="pin-input" maxlength="6" placeholder="••••">
+    <button class="pin-btn" onclick="checkPin()">Entrar</button>
+    <div class="pin-error" id="pin-error">PIN incorreto. Tente novamente.</div>
+    <div style="margin-top:.75rem">
+      <button onclick="closePinModal()" style="background:none;border:none;font-size:13px;color:var(--text-sub);cursor:pointer">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── DRAWER ─────────────────────────────────────────────── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title" id="drawer-title"></div>
+      <div class="drawer-subtitle" id="drawer-subtitle"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<!-- ─── SIDEBAR ────────────────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo" onclick="logoClick()">
+    <div class="sidebar-logo-title">FASE 1 / BW LED</div>
+    <div class="sidebar-logo-sub">Estruturação Comercial</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-page="visao" onclick="showPage('visao',this)">
+      <i class="ti ti-layout-dashboard"></i> Visão Geral
+    </div>
+    <div class="nav-item" data-page="etapas" onclick="showPage('etapas',this)">
+      <i class="ti ti-list-check"></i> Etapas do Projeto
+    </div>
+    <div class="nav-item" data-page="acoes" onclick="showPage('acoes',this)">
+      <i class="ti ti-target"></i> Plano de Ação
+    </div>
+    <div class="nav-item" data-page="diagnostico" onclick="showPage('diagnostico',this)">
+      <i class="ti ti-chart-bar"></i> Diagnóstico
+    </div>
+    <div class="nav-item" data-page="time" onclick="showPage('time',this)">
+      <i class="ti ti-users"></i> Time Comercial
+    </div>
+  </nav>
+  <div class="sidebar-admin">
+    <button class="admin-btn" onclick="openPinModal()">
+      <i class="ti ti-lock"></i> Admin
+      <span class="admin-badge" id="admin-badge" style="display:none">ON</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ─── MAIN ───────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ════ VISÃO GERAL ════ -->
+  <div class="page active" id="page-visao">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Visão Geral</div>
+        <div class="page-sub">Acompanhamento do projeto de estruturação comercial</div>
+      </div>
+      <div class="last-updated" id="last-updated-label"></div>
+    </div>
+
+    <div class="admin-panel" id="admin-panel-visao">
+      <div class="admin-panel-title"><i class="ti ti-settings"></i> Painel Admin — Progresso Global</div>
+      <div id="admin-toggle-list"></div>
+    </div>
+
+    <div class="cover-card">
+      <div class="cover-title">FASE 1 Comunicação Visual / BW LED</div>
+      <div class="cover-sub">Consultoria COMPORTEC · Início: Mai/2025 · Previsão: Dez/2025</div>
+      <div class="cover-meta">
+        <span><i class="ti ti-building"></i> Comunicação visual · Mercado imobiliário</span>
+        <span><i class="ti ti-map-pin"></i> São Paulo, SP</span>
+        <span><i class="ti ti-calendar"></i> Projeto em andamento</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-fill" id="cover-progress" style="width:20%"></div>
+      </div>
+      <div class="progress-label" id="cover-progress-label">Calculando...</div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-val">R$14,7M</div>
+        <div class="metric-lbl">Faturamento 2025</div>
+        <div class="metric-delta">+17,7% vs 2024</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">657</div>
+        <div class="metric-lbl">Clientes no ano</div>
+        <div class="metric-delta">+10,4% vs 2024</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">R$6.965</div>
+        <div class="metric-lbl">Ticket médio</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" id="metric-done">--</div>
+        <div class="metric-lbl">Ações concluídas</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" id="metric-pct">--%</div>
+        <div class="metric-lbl">Plano executado</div>
+      </div>
+    </div>
+
+    <div class="section-label">Etapas liberadas</div>
+    <div class="stages-grid" id="stages-preview-unlocked"></div>
+    <div class="section-label">Próximas etapas</div>
+    <div class="stages-grid" id="stages-preview-locked"></div>
+  </div>
+
+  <!-- ════ ETAPAS ════ -->
+  <div class="page" id="page-etapas">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Etapas do Projeto</div>
+        <div class="page-sub">Clique em uma etapa liberada para ver os detalhes</div>
+      </div>
+    </div>
+    <div class="admin-panel" id="admin-panel-etapas">
+      <div class="admin-panel-title"><i class="ti ti-lock-open"></i> Liberar / Bloquear Etapas</div>
+      <div id="admin-stages-list"></div>
+    </div>
+    <div class="section-label">Liberadas</div>
+    <div class="stages-grid" id="stages-main-unlocked"></div>
+    <div class="section-label">Bloqueadas</div>
+    <div class="stages-grid" id="stages-main-locked"></div>
+  </div>
+
+  <!-- ════ PLANO DE AÇÃO ════ -->
+  <div class="page" id="page-acoes">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Plano de Ação</div>
+        <div class="page-sub">20 ações priorizadas por área crítica</div>
+      </div>
+    </div>
+    <div class="admin-panel" id="admin-panel-acoes">
+      <div class="admin-panel-title"><i class="ti ti-edit"></i> Atualizar Status das Ações</div>
+      <div id="admin-actions-list"></div>
+    </div>
+    <div id="actions-render"></div>
+  </div>
+
+  <!-- ════ DIAGNÓSTICO ════ -->
+  <div class="page" id="page-diagnostico">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Diagnóstico Comercial</div>
+        <div class="page-sub">Raio X dos 26 pontos + dados financeiros</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Raio X Comercial — Nota por Área</div>
+      <div class="raio-grid" id="raio-grid"></div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Alertas Críticos</div>
+      <div class="finding-item alert"><strong>Propostas perdidas (24 meses):</strong> R$57,2M em 2.405 propostas · ticket médio R$23.798 — 3,4× maior que as ganhas · oportunidade de receita não capturada</div>
+      <div class="finding-item alert"><strong>Gestão comercial:</strong> 0/10 — zero metas definidas, zero KPIs acompanhados, zero rotinas estruturadas</div>
+      <div class="finding-item alert"><strong>Prospecção outbound:</strong> 0/10 — crescimento 100% reativo, sem máquina de geração ativa de oportunidades</div>
+      <div class="finding-item ok"><strong>Faturamento crescendo:</strong> R$12,1M (2024) → R$14,7M (2025) +17,7% mesmo sem estrutura comercial</div>
+      <div class="finding-item ok"><strong>Mercado bem definido:</strong> construtoras e incorporadoras · Helbor, Plano&Plano, ECON, Dubai, Metro Casa</div>
+      <div class="finding-item ok"><strong>DISC aplicado:</strong> 5 perfis mapeados · organograma definido</div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Dados Financeiros Históricos</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--surface)">
+              <th style="text-align:left;padding:.6rem .75rem;border-bottom:1.5px solid var(--border);font-weight:600">Ano</th>
+              <th style="text-align:right;padding:.6rem .75rem;border-bottom:1.5px solid var(--border);font-weight:600">Faturamento</th>
+              <th style="text-align:right;padding:.6rem .75rem;border-bottom:1.5px solid var(--border);font-weight:600">Clientes</th>
+              <th style="text-align:right;padding:.6rem .75rem;border-bottom:1.5px solid var(--border);font-weight:600">Projetos</th>
+              <th style="text-align:right;padding:.6rem .75rem;border-bottom:1.5px solid var(--border);font-weight:600">Crescimento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:.6rem .75rem;border-bottom:1px solid var(--border)">2024</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">R$14.592.000</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">595</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">1.873</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">—</td></tr>
+            <tr style="background:var(--surface)"><td style="padding:.6rem .75rem;border-bottom:1px solid var(--border)">2025</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">R$14.664.000</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">657</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border)">2.334</td><td style="text-align:right;padding:.6rem .75rem;border-bottom:1px solid var(--border);color:var(--green-text);font-weight:600">+17,7%</td></tr>
+            <tr><td style="padding:.6rem .75rem">2026 (parcial)</td><td style="text-align:right;padding:.6rem .75rem">R$6.870.775</td><td style="text-align:right;padding:.6rem .75rem">—</td><td style="text-align:right;padding:.6rem .75rem">997</td><td style="text-align:right;padding:.6rem .75rem;color:var(--text-sub)">Em curso</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TIME ════ -->
+  <div class="page" id="page-time">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Time Comercial</div>
+        <div class="page-sub">Organograma e perfis DISC mapeados</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Organograma Atual</div>
+      <div style="text-align:center;padding:1rem 0">
+        <div style="display:inline-flex;flex-direction:column;align-items:center;gap:0">
+          <div style="background:var(--blue-dark);color:#fff;padding:.5rem 1.5rem;border-radius:var(--radius-sm);font-size:13px;font-weight:600">Douglas · Head Comercial</div>
+          <div style="width:2px;height:20px;background:var(--border)"></div>
+          <div style="display:flex;gap:2rem;align-items:flex-start">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div style="background:var(--blue-light);color:var(--blue-dark);padding:.45rem 1.2rem;border-radius:var(--radius-sm);font-size:13px;font-weight:600">Tony · Vendas</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div style="background:var(--gray-bg);color:var(--gray-text);padding:.45rem 1.2rem;border-radius:var(--radius-sm);font-size:12px;border:1.5px dashed #9CA3AF">SDR · Vaga em aberto</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div style="background:var(--blue-light);color:var(--blue-dark);padding:.45rem 1.2rem;border-radius:var(--radius-sm);font-size:13px;font-weight:600">Gil · Assistente</div>
+              <div style="width:2px;height:16px;background:var(--border)"></div>
+              <div style="background:var(--blue-light);color:var(--blue-dark);padding:.35rem 1rem;border-radius:var(--radius-sm);font-size:12px">Jessica · Assistente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Perfis DISC — Time Atual</div>
+      <div class="team-grid" id="team-grid"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Mobile menu button -->
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+  <i class="ti ti-menu-2"></i>
+</button>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIGURAÇÃO DO PORTAL — EDITE SOMENTE ESTA SEÇÃO
+// Para liberar uma etapa: troque "liberada: false" para "liberada: true"
+// Para atualizar status: "done" | "prog" | "pend" | "lock"
+// ═══════════════════════════════════════════════════════════════
+const CONFIG = {
+  pin: "0807",
+  ultima_atualizacao: "23/06/2026",
+
+  etapas: [
+    {
+      id: 1, liberada: true, status: "done",
+      nome: "E1 — Alinhamento e expectativas",
+      desc: "Definição de escopo, objetivos e resultado esperado do projeto",
+      achados: [
+        "Meta declarada: elevar MRR para R$2M (atual R$1,25M)",
+        "Foco principal: profissionalizar o comercial e sair da dependência dos sócios",
+        "BW LED identificada como unidade de expansão estratégica",
+        "Expectativa de criar uma máquina de vendas replicável e escalável"
+      ],
+      proximas_acoes: []
+    },
+    {
+      id: 2, liberada: true, status: "done",
+      nome: "E1.1 — Raio X Comercial",
+      desc: "Diagnóstico completo dos 26 pontos — notas e gaps identificados",
+      achados: [
+        "Gestão / Liderança: 0/10 — crítico e bloqueante",
+        "T&D: 1,3/10 — treinamento só na prática, sem programa",
+        "Prospecção: 3,4/10 — sem outbound, sem cadência",
+        "Pessoas: 3,8/10 — sem R&S estruturado, sem feedback, sem carreira",
+        "Processos: 4,3/10 — sem CRM, funil sem gestão, OS incompletas",
+        "3 saídas no último ano: Adilson, Bia, Renato"
+      ],
+      proximas_acoes: []
+    },
+    {
+      id: 3, liberada: true, status: "done",
+      nome: "E6 — Diagnóstico Empresarial",
+      desc: "Histórico financeiro, análise de propostas e carteira de clientes",
+      achados: [
+        "Propostas ganhas (24m): 4.112 · R$28,6M · ticket médio R$6.965",
+        "Propostas perdidas (24m): 2.405 · R$57,2M · ticket médio R$23.798",
+        "Clientes top: ECON, Helbor, Plano&Plano, Dubai, Metro Casa",
+        "Faturamento cresceu +17,7% sem estrutura comercial formal"
+      ],
+      proximas_acoes: []
+    },
+    {
+      id: 4, liberada: true, status: "done",
+      nome: "E4 — Perfil do time comercial",
+      desc: "DISC aplicado em 5 pessoas + organograma definido",
+      achados: [
+        "DISC mapeado: Gil, Douglas Dantas, Antonio Alineri, Edson, Felipe Teixeira",
+        "Organograma: Douglas (head) · Tony (vendas) · Gil + Jessica (assistente)",
+        "Vaga de SDR em aberto — prioridade para prospecção ativa"
+      ],
+      proximas_acoes: []
+    },
+    {
+      id: 5, liberada: true, status: "prog",
+      nome: "E3 — Plano de Ação 5W2H",
+      desc: "20 ações priorizadas com responsável, prazo e custo definidos",
+      achados: [
+        "20 ações mapeadas em 5 áreas críticas",
+        "2 ações em andamento: Gerente Comercial + estruturação R&S",
+        "18 ações pendentes de execução",
+        "Investimento estimado total: R$3.800 (SDR + LinkedIn)"
+      ],
+      proximas_acoes: [
+        "Definir o Gerente Comercial (interno ou externo)",
+        "Criar metas individuais e por equipe",
+        "Implantar rotina de daily + reunião semanal",
+        "Selecionar e implantar CRM"
+      ]
+    },
+    {
+      id: 6, liberada: true, status: "pend",
+      nome: "E9 — Proposta de Valor",
+      desc: "Workshop para definir o que a empresa oferece e seu diferencial",
+      achados: [
+        "Template criado — perguntas ainda sem resposta",
+        "Sessão presencial com sócios necessária para completar"
+      ],
+      proximas_acoes: [
+        "Agendar workshop com sócios (2h)",
+        "Responder as 7 perguntas de proposta de valor",
+        "Definir quem a empresa decide NÃO atender",
+        "Formalizar frase de posicionamento"
+      ]
+    },
+    {
+      id: 7, liberada: true, status: "pend",
+      nome: "E10 — ICP e melhores clientes",
+      desc: "Definição formal do Perfil de Cliente Ideal com critérios de qualificação",
+      achados: [
+        "ICP informal existe: construtoras e incorporadoras",
+        "Sem documentação estratégica formalizada",
+        "Segmento imobiliário como foco principal"
+      ],
+      proximas_acoes: [
+        "Workshop: analisar os 10 melhores clientes",
+        "Mapear padrões: segmento, porte, cargo do decisor, dores",
+        "Criar Matriz de Qualificação personalizada",
+        "Definir nichos prioritários dentro do imobiliário"
+      ]
+    },
+    {
+      id: 8, liberada: true, status: "pend",
+      nome: "E11 — Funil de Vendas",
+      desc: "Estrutura das 6 etapas, volumes por fase e origens de leads",
+      achados: [
+        "6 etapas já definidas: Prospecção → Qualificação → Reunião → Proposta → Negociação → Fechamento",
+        "Todos os volumes zerados — sem dados de pipeline atual",
+        "Sem gestão de forecast implementada"
+      ],
+      proximas_acoes: [
+        "Levantar volumes reais por etapa do funil",
+        "Configurar funil no CRM",
+        "Criar rotina semanal de acompanhamento de pipeline",
+        "Implantar forecast mensal"
+      ]
+    },
+    {
+      id: 9, liberada: true, status: "pend",
+      nome: "E12 — Controle de Indicadores",
+      desc: "8 KPIs comerciais, dashboard gerencial e mapa estratégico",
+      achados: [
+        "Estrutura de 8 KPIs criada · nenhum sendo acompanhado",
+        "Empresa tem forte cultura analítica no financeiro — replicar para o comercial",
+        "Mapa estratégico: 4 perspectivas definidas (Financeiro, Clientes, Processos, Pessoas)"
+      ],
+      proximas_acoes: [
+        "Definir metas para cada KPI",
+        "Criar dashboard gerencial (Power BI ou planilha)",
+        "Implantar reunião semanal de resultado",
+        "Acompanhar: prospecções/semana, reuniões, propostas, conversão, ticket, CAC"
+      ]
+    },
+    {
+      id: 10, liberada: false, status: "lock",
+      nome: "E13 — Prospecção Ativa",
+      desc: "Cadência outbound, LinkedIn e estratégia de geração de leads",
+      achados: [], proximas_acoes: []
+    },
+    {
+      id: 11, liberada: false, status: "lock",
+      nome: "E14 — Contratação e perfis",
+      desc: "Perfil SDR, executivo de contas e processo de R&S estruturado",
+      achados: [], proximas_acoes: []
+    },
+    {
+      id: 12, liberada: false, status: "lock",
+      nome: "E15 — Definição de SLAs",
+      desc: "Acordos de nível de serviço por etapa do funil comercial",
+      achados: [], proximas_acoes: []
+    },
+    {
+      id: 13, liberada: false, status: "lock",
+      nome: "E16 — Rotinas de gestão",
+      desc: "Daily, pipeline review semanal, reunião mensal estratégica",
+      achados: [], proximas_acoes: []
+    }
+  ],
+
+  acoes: [
+    { n:1,  area:"Gestão / Liderança", status:"prog", nome:"Estruturar o Gerente Comercial", porque:"Sem liderança, nenhuma outra ação funciona — peça que desbloqueia toda a estruturação", resp:"Sócios / Consultoria", prazo:"18/06/2025" },
+    { n:2,  area:"Gestão / Liderança", status:"pend", nome:"Criar metas comerciais — individual e equipe", porque:"Operação 100% reativa, sem direção ou previsibilidade de resultado", resp:"Gerente Comercial / Consultoria", prazo:"08/06/2025" },
+    { n:3,  area:"Gestão / Liderança", status:"pend", nome:"Implantar rotina comercial — daily, semanal e mensal", porque:"Não existe nenhuma rotina — sem pipeline review ou acompanhamento estruturado", resp:"Gerente Comercial", prazo:"03/06/2025" },
+    { n:4,  area:"Gestão / Liderança", status:"pend", nome:"Implantar KPIs e dashboard gerencial", porque:"Gestão comercial tem zero KPI acompanhado — empresa tem cultura analítica no financeiro", resp:"Gerente Comercial / Consultoria", prazo:"08/06/2025" },
+    { n:5,  area:"T&D", status:"pend", nome:"Criar trilha e agenda mensal de treinamentos", porque:"Treinamentos só na prática — sem programa, agenda ou metodologia de capacitação", resp:"Gerente Comercial / Consultoria", prazo:"05/07/2025" },
+    { n:6,  area:"T&D", status:"pend", nome:"Criar rotina de feedback e 1:1 com o time", porque:"Não há nenhum processo de feedback interno — desenvolvimento negligenciado", resp:"Gerente Comercial", prazo:"15/07/2025" },
+    { n:7,  area:"T&D", status:"pend", nome:"Estruturar gestão do tempo do time comercial", porque:"Time reativo — sem priorização estratégica ou separação de atividades", resp:"Gerente Comercial / Consultoria", prazo:"15/07/2025" },
+    { n:8,  area:"Prospecção", status:"pend", nome:"Formalizar ICP — Perfil do Cliente Ideal", porque:"ICP informal sem documentação estratégica formalizada", resp:"Sócios / Consultoria", prazo:"29/05/2025" },
+    { n:9,  area:"Prospecção", status:"pend", nome:"Contratar SDR — Pré-Vendas", porque:"Sem prospecção ativa — crescimento depende de relacionamento dos sócios", resp:"Gerente Comercial / Sócios", prazo:"15/07/2025" },
+    { n:10, area:"Prospecção", status:"pend", nome:"Criar cadência de prospecção outbound", porque:"Prospecção outbound inexistente — sem processo, lista ou cadência estruturada", resp:"SDR / Gerente Comercial", prazo:"15/07/2025" },
+    { n:11, area:"Prospecção", status:"pend", nome:"Implantar forecast e gestão de pipeline", porque:"Baixa previsibilidade — sem gestão de pipeline ou indicadores de conversão", resp:"Gerente Comercial / Consultoria", prazo:"21/06/2025" },
+    { n:12, area:"Prospecção", status:"pend", nome:"Fortalecer LinkedIn como canal de prospecção", porque:"LinkedIn tem presença mas não é usado como ferramenta comercial estratégica", resp:"SDR / Vendedores / Gerente", prazo:"05/07/2025" },
+    { n:13, area:"Prospecção", status:"pend", nome:"Social selling — posicionamento digital dos vendedores", porque:"Empresa tem autoridade e cases mas sem estratégia digital de geração de oportunidades", resp:"Vendedores / SDR / Gerente", prazo:"19/08/2025" },
+    { n:14, area:"Prospecção", status:"pend", nome:"Padronizar processo e formato das propostas", porque:"Propostas dependem da experiência individual — sem padronização ou estrutura persuasiva", resp:"Gerente Comercial / Vendedores", prazo:"19/07/2025" },
+    { n:15, area:"Pessoas", status:"prog", nome:"Estruturar processo de R&S comercial", porque:"R&S pouco estruturado — sem etapas técnicas ou critérios padronizados de avaliação", resp:"Gerente Comercial / Consultoria", prazo:"05/07/2025" },
+    { n:16, area:"Pessoas", status:"pend", nome:"Estruturar política salarial e plano de comissão", porque:"Sem política de crescimento ou meritocracia estruturada para alta performance", resp:"Sócios / Gerente Comercial", prazo:"20/07/2025" },
+    { n:17, area:"Pessoas", status:"pend", nome:"Criar plano de carreira para o time comercial", porque:"Sem trilha de crescimento — impacta retenção e engajamento", resp:"Sócios / Consultoria / Gerente", prazo:"19/08/2025" },
+    { n:18, area:"Processos", status:"pend", nome:"Selecionar e implantar CRM comercial", porque:"Controles descentralizados — sem rastreabilidade completa do pipeline", resp:"Gerente Comercial / Sócios", prazo:"01/07/2025" },
+    { n:19, area:"Processos", status:"pend", nome:"Estruturar funil de vendas com etapas e critérios", porque:"Funil sem gestão estruturada — sem previsibilidade ou critérios claros", resp:"Consultoria / Gerente Comercial", prazo:"03/06/2025" },
+    { n:20, area:"Processos", status:"pend", nome:"Padronizar checklist de OS e fluxo comercial", porque:"OS incompletas impactam produção e expedição — dependência de pessoas", resp:"Gerente Comercial / Produção", prazo:"08/06/2025" }
+  ],
+
+  raio_x: [
+    { area:"Gestão / Liderança", nota:0,   obj:7, cor:"#C00000" },
+    { area:"T&D",                 nota:1.3, obj:8, cor:"#E26B0A" },
+    { area:"Prospecção",          nota:3.4, obj:8, cor:"#7030A0" },
+    { area:"Pessoas",             nota:3.8, obj:8, cor:"#2F5496" },
+    { area:"Processos",           nota:4.3, obj:8, cor:"#375623" }
+  ],
+
+  time: [
+    { nome:"Douglas Dantas", iniciais:"DD", cargo:"Head Comercial", disc:"Dominante (D)", disc_cor:"#FCE4D6", disc_txt:"#C00000" },
+    { nome:"Tony",           iniciais:"TO", cargo:"Vendas",         disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
+    { nome:"Gil",            iniciais:"GI", cargo:"Assistente",     disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
+    { nome:"Jessica",        iniciais:"JE", cargo:"Assistente",     disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
+    { nome:"Felipe Teixeira",iniciais:"FT", cargo:"Comercial",      disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
+    { nome:"Edson",          iniciais:"ED", cargo:"Sócio",          disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
+    { nome:"SDR — Vaga",     iniciais:"?",  cargo:"Pré-Vendas",     disc:"Vaga em aberto", disc_cor:"#E2EFDA", disc_txt:"#375623" }
+  ]
+};
+// ═══════════════════════════════════════════════════════════════
+// FIM DA CONFIGURAÇÃO
+// ═══════════════════════════════════════════════════════════════
+
+// ── STATE ────────────────────────────────────────────────────
+let isAdmin = false;
+let logoClicks = 0;
+const STATUS_LABEL = { done:"Concluída", prog:"Em andamento", pend:"Pendente", lock:"Bloqueada" };
+const STATUS_ICON  = { done:"ti-circle-check", prog:"ti-loader-2", pend:"ti-circle-x", lock:"ti-lock" };
+const AREA_COLORS  = {
+  "Gestão / Liderança": { bg:"#FCE4D6", txt:"#C00000", dot:"#C00000" },
+  "T&D":                { bg:"#FDEBD0", txt:"#E26B0A", dot:"#E26B0A" },
+  "Prospecção":         { bg:"#EAD1DC", txt:"#7030A0", dot:"#7030A0" },
+  "Pessoas":            { bg:"#D6E4F0", txt:"#2F5496", dot:"#2F5496" },
+  "Processos":          { bg:"#E2EFDA", txt:"#375623", dot:"#375623" }
+};
+
+// ── INIT ─────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  loadState();
+  renderAll();
+  document.getElementById("last-updated-label").textContent = "Atualizado em " + CONFIG.ultima_atualizacao;
+  document.getElementById("pin-input").addEventListener("keydown", e => { if(e.key==="Enter") checkPin(); });
+});
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("fase1_portal"));
+    if (!saved) return;
+    if (saved.etapas) saved.etapas.forEach((s,i) => {
+      if (CONFIG.etapas[i]) { CONFIG.etapas[i].liberada = s.liberada; CONFIG.etapas[i].status = s.status; }
+    });
+    if (saved.acoes) saved.acoes.forEach((s,i) => {
+      if (CONFIG.acoes[i]) CONFIG.acoes[i].status = s.status;
+    });
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem("fase1_portal", JSON.stringify({
+    etapas: CONFIG.etapas.map(e => ({ liberada: e.liberada, status: e.status })),
+    acoes:  CONFIG.acoes.map(a => ({ status: a.status }))
+  }));
+}
+
+function renderAll() {
+  updateProgress();
+  renderStages("stages-preview-unlocked", "stages-preview-locked", true);
+  renderStages("stages-main-unlocked",    "stages-main-locked",    false);
+  renderActions();
+  renderRaioX();
+  renderTeam();
+  if (isAdmin) renderAdminPanels();
+}
+
+// ── PROGRESS ─────────────────────────────────────────────────
+function updateProgress() {
+  const total  = CONFIG.acoes.length;
+  const done   = CONFIG.acoes.filter(a => a.status === "done").length;
+  const prog   = CONFIG.acoes.filter(a => a.status === "prog").length;
+  const pct    = Math.round((done / total) * 100);
+  document.getElementById("cover-progress").style.width = pct + "%";
+  document.getElementById("cover-progress-label").textContent =
+    `${done} de ${total} ações concluídas · ${pct}% realizado · ${prog} em andamento`;
+  const mv = document.getElementById("metric-done");
+  const mp = document.getElementById("metric-pct");
+  if (mv) mv.textContent = done + "/" + total;
+  if (mp) mp.textContent = pct + "%";
+}
+
+// ── STAGES ───────────────────────────────────────────────────
+function renderStages(unlockedId, lockedId, preview) {
+  const ul = document.getElementById(unlockedId);
+  const ll = document.getElementById(lockedId);
+  if (!ul || !ll) return;
+  ul.innerHTML = ""; ll.innerHTML = "";
+  CONFIG.etapas.forEach(e => {
+    const card = makeStageCard(e);
+    (e.liberada ? ul : ll).appendChild(card);
+  });
+}
+
+function makeStageCard(e) {
+  const div = document.createElement("div");
+  const st  = e.liberada ? e.status : "lock";
+  div.className = `stage-item status-${st} ${e.liberada ? "" : "locked"}`;
+  div.innerHTML = `
+    <div class="stage-icon icon-${st}"><i class="ti ${STATUS_ICON[st]}"></i></div>
+    <div class="stage-info">
+      <div class="stage-name">${e.nome}</div>
+      <div class="stage-desc">${e.desc}</div>
+    </div>
+    <span class="badge badge-${st}">${STATUS_LABEL[st]}</span>`;
+  if (e.liberada && st !== "lock") div.onclick = () => openDrawer(e);
+  return div;
+}
+
+// ── DRAWER ───────────────────────────────────────────────────
+function openDrawer(e) {
+  document.getElementById("drawer-title").textContent = e.nome;
+  document.getElementById("drawer-subtitle").textContent = e.desc;
+  let html = "";
+  if (e.achados.length) {
+    html += `<div class="drawer-section">
+      <div class="drawer-section-title"><i class="ti ti-zoom-in"></i> Principais achados</div>`;
+    e.achados.forEach(a => { html += `<div class="finding-item">${a}</div>`; });
+    html += `</div>`;
+  }
+  if (e.proximas_acoes.length) {
+    html += `<div class="drawer-section">
+      <div class="drawer-section-title"><i class="ti ti-arrow-right"></i> Próximas ações</div>`;
+    e.proximas_acoes.forEach((a, i) => {
+      html += `<div class="action-item">
+        <div class="action-num">${i+1}</div>
+        <div><div class="action-text">${a}</div></div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  if (!e.achados.length && !e.proximas_acoes.length) {
+    html = `<div style="text-align:center;padding:2rem;color:var(--text-hint)">
+      <i class="ti ti-lock" style="font-size:36px;display:block;margin-bottom:.75rem"></i>
+      Conteúdo será liberado em breve</div>`;
+  }
+  document.getElementById("drawer-body").innerHTML = html;
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawer-overlay").classList.add("open");
+}
+function closeDrawer() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawer-overlay").classList.remove("open");
+}
+
+// ── ACTIONS ──────────────────────────────────────────────────
+function renderActions() {
+  const el = document.getElementById("actions-render");
+  if (!el) return;
+  const areas = [...new Set(CONFIG.acoes.map(a => a.area))];
+  let html = "";
+  areas.forEach(area => {
+    const ac = AREA_COLORS[area] || { bg:"#F2F2F2", txt:"#595959", dot:"#595959" };
+    const items = CONFIG.acoes.filter(a => a.area === area);
+    html += `<div class="area-group">
+      <div class="area-header" style="background:${ac.bg};color:${ac.txt}">
+        <div class="area-dot" style="background:${ac.dot}"></div>${area}
+        <span style="margin-left:auto;font-size:11px;opacity:.7">${items.length} ações</span>
+      </div>`;
+    items.forEach(a => {
+      const sc = stColor(a.status);
+      html += `<div class="action-card">
+        <div class="action-card-num">${a.n}</div>
+        <div class="action-card-body">
+          <div class="action-card-name">${a.nome}</div>
+          <div class="action-card-why">${a.porque}</div>
+          <div class="action-card-meta">
+            <div class="action-meta-item"><i class="ti ti-user" style="font-size:13px"></i> ${a.resp}</div>
+            <div class="action-meta-item"><i class="ti ti-calendar" style="font-size:13px"></i> ${a.prazo}</div>
+            <span class="action-status-pill" style="background:${sc.bg};color:${sc.fc}">${STATUS_LABEL[a.status]}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  el.innerHTML = html;
+}
+
+function stColor(s) {
+  return { done:{bg:"#E2EFDA",fc:"#375623"}, prog:{bg:"#FFF2CC",fc:"#7F6000"},
+           pend:{bg:"#FCE4D6",fc:"#843C0C"}, lock:{bg:"#F2F2F2",fc:"#595959"} }[s] || {bg:"#F2F2F2",fc:"#595959"};
+}
+
+// ── RAIO X ───────────────────────────────────────────────────
+function renderRaioX() {
+  const el = document.getElementById("raio-grid");
+  if (!el) return;
+  el.innerHTML = CONFIG.raio_x.map(r => `
+    <div class="raio-card">
+      <div class="raio-area">${r.area}</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="score-area">
+          <div class="raio-score-val" style="color:${r.cor}">${r.nota}</div>
+          <div style="font-size:10px;color:var(--text-hint)">atual</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:10px;color:var(--text-sub);margin-bottom:4px">Nota atual / Meta</div>
+          <div class="raio-bar-wrap">
+            <div class="raio-bar-fill" style="width:${r.nota*10}%;background:${r.cor}"></div>
+          </div>
+          <div class="raio-bar-wrap" style="margin-top:2px">
+            <div class="raio-bar-fill" style="width:${r.obj*10}%;background:${r.cor};opacity:.3"></div>
+          </div>
+        </div>
+        <div class="score-area">
+          <div class="raio-score-val" style="color:var(--text-sub)">${r.obj}</div>
+          <div style="font-size:10px;color:var(--text-hint)">meta</div>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+// ── TEAM ─────────────────────────────────────────────────────
+function renderTeam() {
+  const el = document.getElementById("team-grid");
+  if (!el) return;
+  el.innerHTML = CONFIG.time.map(t => `
+    <div class="team-card">
+      <div class="team-avatar">${t.iniciais}</div>
+      <div class="team-name">${t.nome}</div>
+      <div class="team-role">${t.cargo}</div>
+      <div class="team-disc" style="background:${t.disc_cor};color:${t.disc_txt}">${t.disc}</div>
+    </div>`).join("");
+}
+
+// ── ADMIN ────────────────────────────────────────────────────
+function openPinModal() {
+  if (isAdmin) { toggleAdmin(false); return; }
+  document.getElementById("pin-modal").classList.add("open");
+  document.getElementById("pin-input").value = "";
+  document.getElementById("pin-error").style.display = "none";
+  setTimeout(() => document.getElementById("pin-input").focus(), 200);
+}
+function closePinModal() { document.getElementById("pin-modal").classList.remove("open"); }
+function checkPin() {
+  const val = document.getElementById("pin-input").value;
+  if (val === CONFIG.pin) { closePinModal(); toggleAdmin(true); }
+  else { document.getElementById("pin-error").style.display = "block"; }
+}
+function logoClick() {
+  logoClicks++;
+  if (logoClicks >= 3) { logoClicks = 0; openPinModal(); }
+}
+function toggleAdmin(on) {
+  isAdmin = on;
+  const badge = document.getElementById("admin-badge");
+  badge.style.display = on ? "inline" : "none";
+  document.querySelectorAll(".admin-panel").forEach(p => {
+    p.classList.toggle("visible", on);
+  });
+  if (on) renderAdminPanels();
+}
+
+function renderAdminPanels() {
+  // Stages toggle list (in etapas tab)
+  const sl = document.getElementById("admin-stages-list");
+  if (sl) {
+    sl.innerHTML = CONFIG.etapas.map((e, i) => `
+      <div class="admin-toggle-row">
+        <span style="font-size:13px">${e.nome}</span>
+        <div class="toggle-wrap">
+          <select class="toggle-status-select" onchange="updateStageStatus(${i}, this.value)">
+            <option value="done" ${e.status==="done"?"selected":""}>Concluída</option>
+            <option value="prog" ${e.status==="prog"?"selected":""}>Em andamento</option>
+            <option value="pend" ${e.status==="pend"?"selected":""}>Pendente</option>
+          </select>
+          <button class="toggle-lock ${e.liberada?"toggle-on":"toggle-off"}" onclick="toggleStage(${i})"></button>
+        </div>
+      </div>`).join("");
+  }
+  // Actions status list
+  const al = document.getElementById("admin-actions-list");
+  if (al) {
+    al.innerHTML = CONFIG.acoes.map((a, i) => `
+      <div class="admin-toggle-row">
+        <span style="font-size:12px">${a.n}. ${a.nome}</span>
+        <select class="toggle-status-select" onchange="updateAction(${i}, this.value)" style="margin-left:auto">
+          <option value="done" ${a.status==="done"?"selected":""}>Concluída</option>
+          <option value="prog" ${a.status==="prog"?"selected":""}>Em andamento</option>
+          <option value="pend" ${a.status==="pend"?"selected":""}>Pendente</option>
+        </select>
+      </div>`).join("");
+  }
+  // Visao geral admin = same as stages
+  const vl = document.getElementById("admin-toggle-list");
+  if (vl) vl.innerHTML = sl ? sl.innerHTML : "";
+}
+
+function toggleStage(i) {
+  CONFIG.etapas[i].liberada = !CONFIG.etapas[i].liberada;
+  if (!CONFIG.etapas[i].liberada) CONFIG.etapas[i].status = "lock";
+  else if (CONFIG.etapas[i].status === "lock") CONFIG.etapas[i].status = "pend";
+  saveState(); renderAll();
+}
+function updateStageStatus(i, val) {
+  CONFIG.etapas[i].status = val;
+  saveState(); updateProgress(); renderStages("stages-main-unlocked","stages-main-locked",false);
+  renderStages("stages-preview-unlocked","stages-preview-locked",true);
+}
+function updateAction(i, val) {
+  CONFIG.acoes[i].status = val;
+  saveState(); renderAll();
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function showPage(id, el) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById("page-" + id).classList.add("active");
+  el.classList.add("active");
+  if (id === "etapas" && isAdmin) renderAdminPanels();
+}
+
+function toggleMobileMenu() {
+  document.getElementById("sidebar").classList.toggle("mobile-open");
+}
+</script>
+</body>
+</html>
