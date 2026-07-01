@@ -636,6 +636,7 @@
       <div class="card-title">Perfis DISC — Time Atual</div>
       <div class="team-grid" id="team-grid"></div>
     </div>
+    <div class="card" style="margin-top:1rem" id="card-comissao"></div>
   </div>
 
 </main>
@@ -653,7 +654,7 @@
 // ═══════════════════════════════════════════════════════════════
 const CONFIG = {
   pin: "0807",
-  ultima_atualizacao: "23/06/2026",
+  ultima_atualizacao: "01/07/2026",
 
   etapas: [
     {
@@ -827,7 +828,7 @@ const CONFIG = {
     { n:13, area:"Prospecção", status:"pend", nome:"Social selling — posicionamento digital dos vendedores", porque:"Empresa tem autoridade e cases mas sem estratégia digital de geração de oportunidades", resp:"Vendedores / SDR / Gerente", prazo:"19/08/2025" },
     { n:14, area:"Prospecção", status:"pend", nome:"Padronizar processo e formato das propostas", porque:"Propostas dependem da experiência individual — sem padronização ou estrutura persuasiva", resp:"Gerente Comercial / Vendedores", prazo:"19/07/2025" },
     { n:15, area:"Pessoas", status:"prog", nome:"Estruturar processo de R&S comercial", porque:"R&S pouco estruturado — sem etapas técnicas ou critérios padronizados de avaliação", resp:"Gerente Comercial / Consultoria", prazo:"05/07/2025" },
-    { n:16, area:"Pessoas", status:"pend", nome:"Estruturar política salarial e plano de comissão", porque:"Sem política de crescimento ou meritocracia estruturada para alta performance", resp:"Sócios / Gerente Comercial", prazo:"20/07/2025" },
+    { n:16, area:"Pessoas", status:"prog", nome:"Estruturar política salarial e plano de comissão", porque:"Sem política de crescimento ou meritocracia estruturada para alta performance", resp:"Sócios / Gerente Comercial", prazo:"20/07/2025" },
     { n:17, area:"Pessoas", status:"pend", nome:"Criar plano de carreira para o time comercial", porque:"Sem trilha de crescimento — impacta retenção e engajamento", resp:"Sócios / Consultoria / Gerente", prazo:"19/08/2025" },
     { n:18, area:"Processos", status:"pend", nome:"Selecionar e implantar CRM comercial", porque:"Controles descentralizados — sem rastreabilidade completa do pipeline", resp:"Gerente Comercial / Sócios", prazo:"01/07/2025" },
     { n:19, area:"Processos", status:"pend", nome:"Estruturar funil de vendas com etapas e critérios", porque:"Funil sem gestão estruturada — sem previsibilidade ou critérios claros", resp:"Consultoria / Gerente Comercial", prazo:"03/06/2025" },
@@ -850,7 +851,32 @@ const CONFIG = {
     { nome:"Felipe Teixeira",iniciais:"FT", cargo:"Comercial",      disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
     { nome:"Edson",          iniciais:"ED", cargo:"Sócio",          disc:"[A preencher]", disc_cor:"#F2F2F2", disc_txt:"#595959" },
     { nome:"SDR — Vaga",     iniciais:"?",  cargo:"Pré-Vendas",     disc:"Vaga em aberto", disc_cor:"#E2EFDA", disc_txt:"#375623" }
-  ]
+  ],
+
+  comissionamento: {
+    gerente: {
+      nome: "Douglas Dantas",
+      cargo: "Head / Gerente Comercial",
+      fixo: 5000,
+      modelo: "Comissão sobre vendas do time + bônus progressivo por meta",
+      faixas: [
+        { meta: "Até R$ 299.999",    comissao: "1,0%", bonus: "0%",   variavel: "1,0%" },
+        { meta: "R$ 300.000",        comissao: "1,0%", bonus: "0,5%", variavel: "1,5%" },
+        { meta: "R$ 400.000",        comissao: "1,0%", bonus: "1,0%", variavel: "2,0%" },
+        { meta: "R$ 500.000 ou mais",comissao: "1,0%", bonus: "1,5%", variavel: "2,5%" }
+      ],
+      exemplo: { vendas_time: 300000, comissao_r: 3000, bonus_r: 1500, total: 9500 }
+    },
+    vendedor: {
+      nome: "Tony (Antônio S. Alineri)",
+      cargo: "Vendedor Externo",
+      fixo: 3000,
+      modelo: "Comissão sobre vendas próprias",
+      comissao_pct: "3,0%",
+      bonus: "Não definido",
+      exemplo: { vendas: 300000, comissao_r: 9000, total: 12000 }
+    }
+  }
 };
 // ═══════════════════════════════════════════════════════════════
 // FIM DA CONFIGURAÇÃO
@@ -1064,6 +1090,76 @@ function renderTeam() {
       <div class="team-role">${t.cargo}</div>
       <div class="team-disc" style="background:${t.disc_cor};color:${t.disc_txt}">${t.disc}</div>
     </div>`).join("");
+  renderComissionamento();
+}
+
+function renderComissionamento() {
+  const el = document.getElementById("card-comissao");
+  if (!el || !CONFIG.comissionamento) return;
+  const { gerente, vendedor } = CONFIG.comissionamento;
+  const fmt = v => "R$ " + v.toLocaleString("pt-BR");
+  el.innerHTML = `
+    <div class="card-title">Plano de Comissionamento</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <!-- GERENTE -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem">
+        <div style="font-weight:700;font-size:14px;margin-bottom:.25rem">${gerente.nome}</div>
+        <div style="font-size:12px;color:var(--gray-text);margin-bottom:.75rem">${gerente.cargo}</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
+          <span style="font-size:12px;color:var(--gray-text)">Salário Fixo</span>
+          <span style="font-weight:600;font-size:13px">${fmt(gerente.fixo)}</span>
+        </div>
+        <div style="font-size:11px;color:var(--gray-text);margin-bottom:.75rem">${gerente.modelo}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="background:var(--blue-light)">
+              <th style="padding:.35rem .5rem;text-align:left;color:var(--blue-dark)">Vendas do Time</th>
+              <th style="padding:.35rem .5rem;text-align:center;color:var(--blue-dark)">Comissão</th>
+              <th style="padding:.35rem .5rem;text-align:center;color:var(--blue-dark)">Bônus</th>
+              <th style="padding:.35rem .5rem;text-align:center;color:var(--blue-dark)">Total Var.</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${gerente.faixas.map((f,i) => `
+            <tr style="background:${i%2===0?'var(--bg)':'var(--sidebar-bg)'}">
+              <td style="padding:.3rem .5rem">${f.meta}</td>
+              <td style="padding:.3rem .5rem;text-align:center">${f.comissao}</td>
+              <td style="padding:.3rem .5rem;text-align:center">${f.bonus}</td>
+              <td style="padding:.3rem .5rem;text-align:center;font-weight:600;color:var(--blue-dark)">${f.variavel}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+        <div style="margin-top:.75rem;padding:.5rem;background:var(--blue-light);border-radius:var(--radius-sm);font-size:12px">
+          <strong>Exemplo (R$300k vendas):</strong> ${fmt(gerente.exemplo.comissao_r)} comissão + ${fmt(gerente.exemplo.bonus_r)} bônus =
+          <strong style="color:var(--blue-dark)"> Total ${fmt(gerente.exemplo.total)}</strong>
+          (fixo + variável)
+        </div>
+      </div>
+
+      <!-- VENDEDOR -->
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem">
+        <div style="font-weight:700;font-size:14px;margin-bottom:.25rem">${vendedor.nome}</div>
+        <div style="font-size:12px;color:var(--gray-text);margin-bottom:.75rem">${vendedor.cargo}</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
+          <span style="font-size:12px;color:var(--gray-text)">Salário Fixo</span>
+          <span style="font-weight:600;font-size:13px">${fmt(vendedor.fixo)}</span>
+        </div>
+        <div style="font-size:11px;color:var(--gray-text);margin-bottom:.75rem">${vendedor.modelo}</div>
+        <div style="display:flex;justify-content:space-between;padding:.5rem;background:var(--blue-light);border-radius:var(--radius-sm);margin-bottom:.5rem">
+          <span style="font-size:12px;color:var(--blue-dark)">Comissão sobre vendas</span>
+          <span style="font-weight:700;font-size:16px;color:var(--blue-dark)">${vendedor.comissao_pct}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:.4rem .5rem;font-size:12px;color:var(--gray-text)">
+          <span>Bônus</span><span>${vendedor.bonus}</span>
+        </div>
+        <div style="margin-top:.75rem;padding:.5rem;background:var(--blue-light);border-radius:var(--radius-sm);font-size:12px">
+          <strong>Exemplo (R$300k vendas):</strong> ${fmt(vendedor.exemplo.comissao_r)} comissão =
+          <strong style="color:var(--blue-dark)"> Total ${fmt(vendedor.exemplo.total)}</strong>
+          (fixo + variável)
+        </div>
+      </div>
+    </div>`;
 }
 
 // ── ADMIN ────────────────────────────────────────────────────
