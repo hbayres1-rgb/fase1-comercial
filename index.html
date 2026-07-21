@@ -654,7 +654,7 @@
 // ═══════════════════════════════════════════════════════════════
 const CONFIG = {
   pin: "0807",
-  ultima_atualizacao: "02/07/2026",
+  ultima_atualizacao: "21/07/2026",
 
   etapas: [
     {
@@ -755,17 +755,21 @@ const CONFIG = {
       ]
     },
     {
-      id: 8, liberada: true, status: "pend",
+      id: 8, liberada: true, status: "done",
       nome: "E11 — Funil de Vendas",
-      desc: "Estrutura das 6 etapas, volumes por fase e origens de leads",
+      desc: "Estrutura das 6 etapas definidas com descrição e critérios de avanço",
       achados: [
-        "6 etapas já definidas: Prospecção → Qualificação → Reunião → Proposta → Negociação → Fechamento",
-        "Todos os volumes zerados — sem dados de pipeline atual",
-        "Sem gestão de forecast implementada"
+        "6 etapas definidas e documentadas pelo time",
+        "1. Qualificação — análise de segmento, potencial e perfil antes do contato (LinkedIn, obras, área de atuação)",
+        "2. Prospecção — ligação, WhatsApp, LinkedIn, e-mail",
+        "3. Reunião — identificar oportunidades, criar relacionamento, apresentar FASE 1 / BW LED",
+        "4. Apresentação — diferenciais, portfólio, vantagens e benefícios",
+        "5. Negociação — avaliação técnica, custo de material, operacional e deslocamento",
+        "6. Fechamento do orçamento — liberação de OS com fotomontagem e aprovação formal"
       ],
       proximas_acoes: [
-        "Levantar volumes reais por etapa do funil",
-        "Configurar funil no CRM",
+        "Configurar funil no CRM com as 6 etapas",
+        "Levantar volumes reais por etapa (pipeline atual)",
         "Criar rotina semanal de acompanhamento de pipeline",
         "Implantar forecast mensal"
       ]
@@ -831,7 +835,7 @@ const CONFIG = {
     { n:16, area:"Pessoas", status:"done", nome:"Estruturar política salarial e plano de comissão", porque:"Sem política de crescimento ou meritocracia estruturada para alta performance", resp:"Sócios / Gerente Comercial", prazo:"20/07/2025" },
     { n:17, area:"Pessoas", status:"pend", nome:"Criar plano de carreira para o time comercial", porque:"Sem trilha de crescimento — impacta retenção e engajamento", resp:"Sócios / Consultoria / Gerente", prazo:"19/08/2025" },
     { n:18, area:"Processos", status:"pend", nome:"Selecionar e implantar CRM comercial", porque:"Controles descentralizados — sem rastreabilidade completa do pipeline", resp:"Gerente Comercial / Sócios", prazo:"01/07/2025" },
-    { n:19, area:"Processos", status:"pend", nome:"Estruturar funil de vendas com etapas e critérios", porque:"Funil sem gestão estruturada — sem previsibilidade ou critérios claros", resp:"Consultoria / Gerente Comercial", prazo:"03/06/2025" },
+    { n:19, area:"Processos", status:"done", nome:"Estruturar funil de vendas com etapas e critérios", porque:"Funil sem gestão estruturada — sem previsibilidade ou critérios claros", resp:"Consultoria / Gerente Comercial", prazo:"03/06/2025" },
     { n:20, area:"Processos", status:"pend", nome:"Padronizar checklist de OS e fluxo comercial", porque:"OS incompletas impactam produção e expedição — dependência de pessoas", resp:"Gerente Comercial / Produção", prazo:"08/06/2025" }
   ],
 
