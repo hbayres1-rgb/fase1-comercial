@@ -654,7 +654,7 @@
 // ═══════════════════════════════════════════════════════════════
 const CONFIG = {
   pin: "0807",
-  ultima_atualizacao: "21/07/2026",
+  ultima_atualizacao: "22/07/2026",
 
   etapas: [
     {
@@ -739,19 +739,25 @@ const CONFIG = {
       ]
     },
     {
-      id: 7, liberada: true, status: "pend",
+      id: 7, liberada: true, status: "done",
       nome: "E10 — ICP e melhores clientes",
-      desc: "Definição formal do Perfil de Cliente Ideal com critérios de qualificação",
+      desc: "20 melhores clientes mapeados e Perfil de Cliente Ideal definido",
       achados: [
-        "ICP informal existe: construtoras e incorporadoras",
-        "Sem documentação estratégica formalizada",
-        "Segmento imobiliário como foco principal"
+        "20 clientes mapeados pelo gerente comercial com descrição e 5 características cada",
+        "Segmento dominante: Construtora e Incorporadora (13/20)",
+        "Porte dominante: Grande (13/20)",
+        "Localização: São Paulo capital, ABC, Alphaville e Campinas (90% dos clientes)",
+        "Serviços mais comprados: Fachadas + Tapumes + Placas + Painéis de LED (combo completo)",
+        "16/20 clientes pagam em dia ou antecipado",
+        "Clientes com risco: Cury e Cavazani (pagam com atraso)",
+        "Clientes para reativação: Somattos e Benx (perderam contato por mudança de time)",
+        "Oportunidade identificada: Living/Cyrela — grande potencial, mas FASE 1 perde todas as concorrências de projeto 3D"
       ],
       proximas_acoes: [
-        "Workshop: analisar os 10 melhores clientes",
-        "Mapear padrões: segmento, porte, cargo do decisor, dores",
-        "Criar Matriz de Qualificação personalizada",
-        "Definir nichos prioritários dentro do imobiliário"
+        "Preencher critérios de categorização A+/A/B por potencial financeiro e volume",
+        "Mapear decisores por categoria (MKT, Suprimentos, PDV)",
+        "Criar Matriz de Qualificação personalizada FASE 1",
+        "Definir nichos prioritários: construtoras grandes + SP capital + combo CV/LED"
       ]
     },
     {
@@ -824,7 +830,7 @@ const CONFIG = {
     { n:5,  area:"T&D", status:"pend", nome:"Criar trilha e agenda mensal de treinamentos", porque:"Treinamentos só na prática — sem programa, agenda ou metodologia de capacitação", resp:"Gerente Comercial / Consultoria", prazo:"05/07/2025" },
     { n:6,  area:"T&D", status:"pend", nome:"Criar rotina de feedback e 1:1 com o time", porque:"Não há nenhum processo de feedback interno — desenvolvimento negligenciado", resp:"Gerente Comercial", prazo:"15/07/2025" },
     { n:7,  area:"T&D", status:"pend", nome:"Estruturar gestão do tempo do time comercial", porque:"Time reativo — sem priorização estratégica ou separação de atividades", resp:"Gerente Comercial / Consultoria", prazo:"15/07/2025" },
-    { n:8,  area:"Prospecção", status:"pend", nome:"Formalizar ICP — Perfil do Cliente Ideal", porque:"ICP informal sem documentação estratégica formalizada", resp:"Sócios / Consultoria", prazo:"29/05/2025" },
+    { n:8,  area:"Prospecção", status:"done", nome:"Formalizar ICP — Perfil do Cliente Ideal", porque:"ICP informal sem documentação estratégica formalizada", resp:"Sócios / Consultoria", prazo:"29/05/2025" },
     { n:9,  area:"Prospecção", status:"pend", nome:"Contratar SDR — Pré-Vendas", porque:"Sem prospecção ativa — crescimento depende de relacionamento dos sócios", resp:"Gerente Comercial / Sócios", prazo:"15/07/2025" },
     { n:10, area:"Prospecção", status:"pend", nome:"Criar cadência de prospecção outbound", porque:"Prospecção outbound inexistente — sem processo, lista ou cadência estruturada", resp:"SDR / Gerente Comercial", prazo:"15/07/2025" },
     { n:11, area:"Prospecção", status:"pend", nome:"Implantar forecast e gestão de pipeline", porque:"Baixa previsibilidade — sem gestão de pipeline ou indicadores de conversão", resp:"Gerente Comercial / Consultoria", prazo:"21/06/2025" },
