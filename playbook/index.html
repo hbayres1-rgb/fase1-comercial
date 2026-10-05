@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="description" content="Playbook comercial da BW LED: rotina, metas, scripts, objeções, catálogo de produtos e glossário técnico.">
-<meta name="theme-color" content="#0D1218">
-<title>Playbook BW LED · FASE 1</title>
+<meta name="description" content="Playbook comercial da FASE 1 Comunicação Visual: rotina, metas, scripts, objeções, catálogo de produtos e glossário técnico.">
+<meta name="theme-color" content="#C62D49">
+<title>Playbook FASE 1 · Comunicação Visual</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230D1218'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='15' font-weight='bold' fill='%23E0A94A' text-anchor='middle'%3EBW%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23EC3237'/%3E%3Cstop offset='1' stop-color='%23C62D49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='url(%23g)'/%3E%3Ctext x='16' y='23' font-family='Arial' font-style='italic' font-size='17' font-weight='bold' fill='%23fff' text-anchor='middle'%3EF1%3C/text%3E%3C/svg%3E">
 <style>
     :root{color-scheme:light}
     *{-webkit-tap-highlight-color:transparent}
@@ -19,27 +19,29 @@
 </head>
 <body>
 <style>
-/* Layout: barra fixa de busca + navegacao lateral persistente + uma secao por vez, estilo consulta rapida de oficina */
+/* Layout: barra fixa de busca + navegacao lateral persistente + uma secao por vez, estilo consulta rapida de oficina.
+   Cor: vermelho da marca FASE 1 (gradiente #EC3237 -> #C62D49) como unico acento; laranja para alerta, verde para confirmacao. */
 :root{
-  --bg:#EDEFF1; --surface:#FFFFFF; --surface2:#F6F7F8; --ink:#141A21; --muted:#5A6672; --line:#D4DADF;
-  --amber:#9C6612; --amber-soft:#FBF2E2; --steel:#1F4E79; --steel-soft:#E9F0F7;
-  --green:#1C7355; --green-soft:#E6F3EE; --red:#A8392C; --red-soft:#FBEDEA;
-  --shadow:0 1px 2px rgba(20,26,33,.07), 0 6px 18px rgba(20,26,33,.05);
+  --bg:#EFF0F2; --surface:#FFFFFF; --surface2:#F6F6F8; --ink:#16181D; --muted:#5F6671; --line:#D8DADF;
+  --amber:#C1202F; --amber-soft:#FCEBED; --steel:#2B4C73; --steel-soft:#EBF0F6;
+  --green:#1C7355; --green-soft:#E6F3EE; --red:#9A5312; --red-soft:#FDF1E3;
+  --grad:linear-gradient(135deg,#EC3237,#C62D49);
+  --shadow:0 1px 2px rgba(22,24,29,.07), 0 6px 18px rgba(22,24,29,.05);
   --display:"Archivo","Arial Narrow",Arial,sans-serif;
   --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --bg:#0D1218; --surface:#141C25; --surface2:#1A242F; --ink:#E4EBF1; --muted:#90A0AE; --line:#243242;
-  --amber:#E0A94A; --amber-soft:#241B0C; --steel:#6FA3D6; --steel-soft:#0F1D2B;
-  --green:#4FB18A; --green-soft:#0D1F19; --red:#DD7463; --red-soft:#241210;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.3); color-scheme:dark;
+  --bg:#101216; --surface:#181B21; --surface2:#1F232B; --ink:#E7E9ED; --muted:#99A1AC; --line:#2A2F38;
+  --amber:#FF6068; --amber-soft:#2B1115; --steel:#7FA8D8; --steel-soft:#141C26;
+  --green:#4FB18A; --green-soft:#0E1F19; --red:#E3A258; --red-soft:#2A1C0C;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.32); color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#0D1218; --surface:#141C25; --surface2:#1A242F; --ink:#E4EBF1; --muted:#90A0AE; --line:#243242;
-  --amber:#E0A94A; --amber-soft:#241B0C; --steel:#6FA3D6; --steel-soft:#0F1D2B;
-  --green:#4FB18A; --green-soft:#0D1F19; --red:#DD7463; --red-soft:#241210;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.3); color-scheme:dark;
+  --bg:#101216; --surface:#181B21; --surface2:#1F232B; --ink:#E7E9ED; --muted:#99A1AC; --line:#2A2F38;
+  --amber:#FF6068; --amber-soft:#2B1115; --steel:#7FA8D8; --steel-soft:#141C26;
+  --green:#4FB18A; --green-soft:#0E1F19; --red:#E3A258; --red-soft:#2A1C0C;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.32); color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
@@ -52,7 +54,10 @@ button{font-family:inherit}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
 .top-in{max-width:1240px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center}
 .brand{display:flex;align-items:baseline;gap:9px;min-width:0}
-.brand b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.2px;white-space:nowrap}
+.brand b{font-family:var(--display);font-weight:800;font-size:19px;font-style:italic;letter-spacing:-.4px;white-space:nowrap;color:var(--amber)}
+@supports (-webkit-background-clip:text) or (background-clip:text){
+  .brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+}
 .brand span{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .searchwrap{flex:1;min-width:0;position:relative}
 #q{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:7px;background:var(--surface2);color:var(--ink);font-size:14px;font-family:inherit}
@@ -105,18 +110,13 @@ tr:last-child td{border-bottom:0}
 .kv:last-child{border-bottom:0}
 .kv b{font-family:var(--mono);font-weight:600;white-space:nowrap}
 
-/* ---------- metas do dia ---------- */
-.meta{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
-.meta .lbl{font-size:12.5px;color:var(--muted);min-height:32px}
-.meta .row{display:flex;align-items:center;gap:8px;margin-top:8px}
-.meta .val{font-family:var(--mono);font-size:26px;font-weight:600;min-width:62px;font-variant-numeric:tabular-nums}
-.meta .goal{font-family:var(--mono);font-size:13px;color:var(--muted)}
-.step{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
-.step:hover{border-color:var(--amber);color:var(--amber)}
+/* ---------- metas de referencia ---------- */
+.alvo{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:13px 15px;box-shadow:var(--shadow);display:flex;gap:11px;align-items:baseline}
+.alvo b{font-family:var(--mono);font-size:27px;font-weight:600;color:var(--amber);line-height:1;font-variant-numeric:tabular-nums}
+.alvo span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.alvo strong{color:var(--ink);font-weight:600}
 .bar{height:6px;border-radius:4px;background:var(--surface2);overflow:hidden;margin-top:10px;border:1px solid var(--line)}
 .bar i{display:block;height:100%;background:var(--amber);width:0;transition:width .25s}
-.meta.done .bar i{background:var(--green)}
-.meta.done .val{color:var(--green)}
 
 /* ---------- calculadora ---------- */
 label.f{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
@@ -169,12 +169,9 @@ mark{background:var(--amber-soft);color:var(--ink);padding:0 2px;border-radius:2
 .grid > *{min-width:0}
 @media (max-width:560px){
   .g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .meta{padding:11px}
-  .meta .lbl{min-height:0;font-size:12px}
-  .meta .val{min-width:30px;font-size:20px}
-  .meta .goal{font-size:11px}
-  .meta .row{gap:5px}
-  .step{width:27px;height:27px;font-size:15px}
+  .alvo{padding:11px 12px;gap:8px}
+  .alvo b{font-size:22px}
+  .alvo span{font-size:11.5px}
   .card{padding:14px}
 }
 @media (max-width:820px){
@@ -191,7 +188,7 @@ mark{background:var(--amber-soft);color:var(--ink);padding:0 2px;border-radius:2
 
 <header class="top">
   <div class="top-in">
-    <div class="brand"><b>BW LED</b><span>Playbook comercial</span></div>
+    <div class="brand"><b>FASE 1</b><span>Comunicação visual · Playbook</span></div>
     <div class="searchwrap">
       <span class="mag">⌕</span>
       <input id="q" type="search" placeholder="Buscar: produto, objeção, termo técnico, processo…" autocomplete="off">
@@ -213,9 +210,15 @@ const FAMILIAS = ["Adesivo", "Display", "Estrutura", "Fachada", "LED", "Lona", "
 /* ============ conteúdo ============ */
 const SECOES = [
  {id:"dia", grupo:"Todo dia", num:"01", nome:"Meu dia", eyebrow:"Rotina e metas",
-  titulo:"O dia na BW LED", sub:"Marque aqui suas atividades conforme o dia avança. O contador zera sozinho a cada novo dia.",
+  titulo:"O dia na FASE 1", sub:"A rotina que sustenta o resultado: o que fazer, em que ordem e com que meta.",
   html:`
-  <div class="grid g4" id="metas"></div>
+  <div class="grid g4">
+    <div class="alvo"><b>10</b><span>ligações para clientes <strong>novos</strong></span></div>
+    <div class="alvo"><b>10</b><span>mensagens: e-mail, WhatsApp ou LinkedIn</span></div>
+    <div class="alvo"><b>3</b><span>reuniões ou visitas <strong>agendadas</strong></span></div>
+    <div class="alvo"><b>2</b><span>propostas enviadas</span></div>
+  </div>
+  <div class="note" style="margin-top:12px"><b>O lançamento é na planilha de indicadores</b>, todo dia até as 17h. Quem lança é quem fez — assim ninguém depende de outra pessoa para ter o próprio número na mão.</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card">
       <h3>A rotina</h3>
@@ -298,7 +301,7 @@ const SECOES = [
       <h3>Ligação — 45 segundos</h3>
       <div class="script">
         <button class="copy" type="button">Copiar</button>
-        <p>"Bom dia, falo com o responsável pela comunicação visual da empresa? Meu nome é [seu nome], sou da BW LED."</p>
+        <p>"Bom dia, falo com o responsável pela comunicação visual da empresa? Meu nome é [seu nome], sou da FASE 1 Comunicação Visual."</p>
         <p>"Passei pela loja de vocês e reparei na fachada — trabalho justamente com fachada, letreiro e painel de LED aqui em São Paulo."</p>
         <p>"Vocês têm algum projeto de reforma, abertura de unidade ou troca de comunicação visual previsto?"</p>
         <p>"Posso passar aí quinta às 10h, dar uma olhada e já levar uma ideia? São 20 minutos."</p>
@@ -306,7 +309,7 @@ const SECOES = [
       <h3 style="margin-top:15px">WhatsApp ou LinkedIn</h3>
       <div class="script">
         <button class="copy" type="button">Copiar</button>
-        <p>"Olá [nome], tudo bem? Sou [seu nome], da BW LED — trabalhamos com fachadas, letreiros, painéis de LED e comunicação visual em São Paulo. Vi que vocês [estão abrindo unidade / reformaram a loja / estão em obra]. Posso te mandar duas ou três referências do que fizemos para empresas parecidas?"</p>
+        <p>"Olá [nome], tudo bem? Sou [seu nome], da FASE 1 Comunicação Visual — trabalhamos com fachadas, letreiros, painéis de LED e comunicação visual em São Paulo. Vi que vocês [estão abrindo unidade / reformaram a loja / estão em obra]. Posso te mandar duas ou três referências do que fizemos para empresas parecidas?"</p>
       </div>
     </div>
     <div class="card">
@@ -619,17 +622,10 @@ const CK_ONB = ["Playbook lido por completo","Fábrica visitada: produção, mar
  "Política de desconto e condições de pagamento explicadas","Lista das 50 primeiras empresas montada",
  "Primeira ligação feita com o gerente ao lado","Primeira visita acompanhada"];
 
-const METAS = [
- {k:"lig", goal:10, lbl:"Ligações para clientes <b>novos</b>"},
- {k:"msg", goal:10, lbl:"Mensagens: e-mail, WhatsApp ou LinkedIn"},
- {k:"reu", goal:3,  lbl:"Reuniões ou visitas <b>agendadas</b>"},
- {k:"pro", goal:2,  lbl:"Propostas enviadas"},
-];
-
 /* ============ storage seguro ============ */
 const store = {
-  get(k, d){ try{ const v = localStorage.getItem("bwled:"+k); return v===null? d : JSON.parse(v); }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem("bwled:"+k, JSON.stringify(v)); }catch(e){} }
+  get(k, d){ try{ const v = localStorage.getItem("fase1:"+k); return v===null? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("fase1:"+k, JSON.stringify(v)); }catch(e){} }
 };
 const hoje = () => new Date().toISOString().slice(0,10);
 
@@ -672,7 +668,6 @@ function realcar(t){
 
 /* ============ montagem por seção ============ */
 function montar(id){
-  if (id === "dia") montarMetas();
   if (id === "funil") montarFunil();
   if (id === "objecoes") montarObjecoes();
   if (id === "produtos") montarProdutos();
@@ -695,38 +690,6 @@ function selecionar(btn){
   const r = document.createRange(); r.selectNodeContents(btn.parentElement);
   const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
   btn.textContent = "Selecionado"; setTimeout(() => btn.textContent = "Copiar", 1600);
-}
-
-/* --- metas do dia --- */
-function montarMetas(){
-  const box = document.getElementById("metas");
-  const dados = store.get("metas", {});
-  if (dados.dia !== hoje()) { METAS.forEach(m => dados[m.k] = 0); dados.dia = hoje(); store.set("metas", dados); }
-  box.innerHTML = "";
-  METAS.forEach(m => {
-    const d = document.createElement("div");
-    d.className = "meta"; d.id = "m-" + m.k;
-    d.innerHTML = '<div class="lbl">' + m.lbl + '</div>' +
-      '<div class="row"><button class="step" type="button" data-d="-1" aria-label="menos">–</button>' +
-      '<span class="val">0</span><span class="goal">/ ' + m.goal + '</span>' +
-      '<button class="step" type="button" data-d="1" aria-label="mais" style="margin-left:auto">+</button></div>' +
-      '<div class="bar"><i></i></div>';
-    box.appendChild(d);
-    d.querySelectorAll(".step").forEach(b => b.addEventListener("click", () => {
-      const v = store.get("metas", {});
-      v[m.k] = Math.max(0, (v[m.k] || 0) + Number(b.dataset.d));
-      v.dia = hoje(); store.set("metas", v); pintarMeta(m);
-    }));
-    pintarMeta(m);
-  });
-}
-function pintarMeta(m){
-  const v = (store.get("metas", {})[m.k]) || 0;
-  const el = document.getElementById("m-" + m.k);
-  if (!el) return;
-  el.querySelector(".val").textContent = v;
-  el.querySelector(".bar i").style.width = Math.min(100, v / m.goal * 100) + "%";
-  el.classList.toggle("done", v >= m.goal);
 }
 
 /* --- funil invertido --- */
