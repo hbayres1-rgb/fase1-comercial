@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Playbook comercial da BW LED: rotina, metas, scripts, objeções, catálogo de produtos e glossário técnico.">
+<meta name="theme-color" content="#0D1218">
+<title>Playbook BW LED · FASE 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230D1218'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='15' font-weight='bold' fill='%23E0A94A' text-anchor='middle'%3EBW%3C/text%3E%3C/svg%3E">
+<style>
+    :root{color-scheme:light}
+    *{-webkit-tap-highlight-color:transparent}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;background:#fafaf9}
+    img{max-width:100%}
+    [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: barra fixa de busca + navegacao lateral persistente + uma secao por vez, estilo consulta rapida de oficina */
+:root{
+  --bg:#EDEFF1; --surface:#FFFFFF; --surface2:#F6F7F8; --ink:#141A21; --muted:#5A6672; --line:#D4DADF;
+  --amber:#9C6612; --amber-soft:#FBF2E2; --steel:#1F4E79; --steel-soft:#E9F0F7;
+  --green:#1C7355; --green-soft:#E6F3EE; --red:#A8392C; --red-soft:#FBEDEA;
+  --shadow:0 1px 2px rgba(20,26,33,.07), 0 6px 18px rgba(20,26,33,.05);
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0D1218; --surface:#141C25; --surface2:#1A242F; --ink:#E4EBF1; --muted:#90A0AE; --line:#243242;
+  --amber:#E0A94A; --amber-soft:#241B0C; --steel:#6FA3D6; --steel-soft:#0F1D2B;
+  --green:#4FB18A; --green-soft:#0D1F19; --red:#DD7463; --red-soft:#241210;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.3); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1218; --surface:#141C25; --surface2:#1A242F; --ink:#E4EBF1; --muted:#90A0AE; --line:#243242;
+  --amber:#E0A94A; --amber-soft:#241B0C; --steel:#6FA3D6; --steel-soft:#0F1D2B;
+  --green:#4FB18A; --green-soft:#0D1F19; --red:#DD7463; --red-soft:#241210;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 22px rgba(0,0,0,.3); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0}
+a{color:var(--steel)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center}
+.brand{display:flex;align-items:baseline;gap:9px;min-width:0}
+.brand b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.2px;white-space:nowrap}
+.brand span{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.searchwrap{flex:1;min-width:0;position:relative}
+#q{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:7px;background:var(--surface2);color:var(--ink);font-size:14px;font-family:inherit}
+#q::placeholder{color:var(--muted)}
+.mag{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.tbtn{border:1px solid var(--line);background:var(--surface2);color:var(--muted);border-radius:7px;padding:8px 11px;cursor:pointer;font-size:13px;white-space:nowrap}
+.tbtn:hover{color:var(--ink)}
+
+/* ---------- navegacao ---------- */
+.shell{max-width:1240px;margin:0 auto;padding:18px 16px 60px;display:grid;grid-template-columns:216px minmax(0,1fr);gap:26px;align-items:start}
+nav{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);display:flex;flex-direction:column;gap:2px}
+.nav-lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:12px 0 5px 10px}
+.nav-lbl:first-child{margin-top:0}
+nav button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:none;color:var(--muted);
+  padding:7px 10px;border-radius:7px;cursor:pointer;font-size:13.5px;font-weight:500;border-left:2px solid transparent}
+nav button:hover{background:var(--surface2);color:var(--ink)}
+nav button[aria-current="true"]{background:var(--surface);color:var(--ink);border-left-color:var(--amber);box-shadow:var(--shadow);font-weight:600}
+nav button i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--amber);width:20px;flex:none}
+
+/* ---------- conteudo ---------- */
+section[data-sec]{animation:fade .18s ease-out}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){section[data-sec]{animation:none}}
+.sec-head{margin-bottom:16px}
+.eyebrow{font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--amber);font-weight:600}
+h2{font-size:27px;font-weight:800;letter-spacing:-.4px;margin:3px 0 4px}
+.sec-head p{margin:0;color:var(--muted);font-size:14.5px;max-width:68ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
+h3{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:9px}
+.card p{margin:0 0 8px}
+.card p:last-child{margin-bottom:0}
+ul.l{margin:0;padding-left:17px}
+ul.l li{margin:4px 0}
+.note{border-left:3px solid var(--amber);background:var(--amber-soft);padding:11px 14px;border-radius:0 8px 8px 0;font-size:14px}
+.note.ok{border-color:var(--green);background:var(--green-soft)}
+.note.warn{border-color:var(--red);background:var(--red-soft)}
+.note b{font-weight:600}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:20px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.led{color:var(--steel);border-color:var(--steel);background:var(--steel-soft)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:7px 9px;border-bottom:1px solid var(--line)}
+td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.scroll{overflow-x:auto}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:0}
+.kv b{font-family:var(--mono);font-weight:600;white-space:nowrap}
+
+/* ---------- metas do dia ---------- */
+.meta{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;box-shadow:var(--shadow)}
+.meta .lbl{font-size:12.5px;color:var(--muted);min-height:32px}
+.meta .row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.meta .val{font-family:var(--mono);font-size:26px;font-weight:600;min-width:62px;font-variant-numeric:tabular-nums}
+.meta .goal{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.step{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
+.step:hover{border-color:var(--amber);color:var(--amber)}
+.bar{height:6px;border-radius:4px;background:var(--surface2);overflow:hidden;margin-top:10px;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--amber);width:0;transition:width .25s}
+.meta.done .bar i{background:var(--green)}
+.meta.done .val{color:var(--green)}
+
+/* ---------- calculadora ---------- */
+label.f{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+input[type=number],input[type=text]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--surface2);color:var(--ink);font-family:var(--mono);font-size:14px}
+.out{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.out:last-child{border-bottom:0}
+.out span{font-size:13.5px;color:var(--muted)}
+.out b{font-family:var(--mono);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.out.hi b{color:var(--amber);font-size:23px}
+
+/* ---------- listas interativas ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12.5px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.plist{max-height:430px;overflow-y:auto;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.prow{display:flex;gap:11px;align-items:baseline;padding:8px 13px;border-bottom:1px solid var(--line);font-size:13.5px}
+.prow:last-child{border-bottom:0}
+.prow code{font-family:var(--mono);font-size:11.5px;color:var(--muted);min-width:46px}
+.prow .nm{flex:1;min-width:0}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;display:block}
+details{border:1px solid var(--line);border-radius:9px;background:var(--surface);margin-bottom:8px;box-shadow:var(--shadow)}
+details summary{cursor:pointer;padding:12px 15px;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-family:var(--mono);color:var(--amber);font-size:17px}
+details[open] summary::after{content:"–"}
+details .body{padding:0 15px 14px;font-size:14px}
+.ck{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14px;cursor:pointer;border-bottom:1px dashed var(--line)}
+.ck:last-child{border-bottom:0}
+.ck input{margin:3px 0 0;accent-color:var(--amber);width:16px;height:16px;flex:none}
+.ck.on span{color:var(--muted);text-decoration:line-through}
+.script{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:14px;position:relative}
+.script p{margin:0 0 7px}
+.copy{position:absolute;top:9px;right:9px;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  border-radius:6px;padding:4px 9px;font-size:11.5px;cursor:pointer}
+.copy:hover{color:var(--ink);border-color:var(--amber)}
+.stepflow{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(185px,1fr))}
+.stepflow div{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:9px;padding:11px 13px;font-size:13.5px}
+.stepflow div b{display:block;margin-bottom:3px;font-size:14px}
+
+/* ---------- busca ---------- */
+#results{position:absolute;left:0;right:0;top:calc(100% + 7px);background:var(--surface);border:1px solid var(--line);
+  border-radius:9px;box-shadow:var(--shadow);max-height:62vh;overflow-y:auto;z-index:50}
+#results button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line);font-size:13.5px}
+#results button:last-child{border-bottom:0}
+#results button:hover{background:var(--surface2)}
+#results .where{display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber);margin-bottom:2px}
+#results .empty{padding:14px;color:var(--muted);font-size:13.5px}
+mark{background:var(--amber-soft);color:var(--ink);padding:0 2px;border-radius:2px}
+
+.grid > *{min-width:0}
+@media (max-width:560px){
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .meta{padding:11px}
+  .meta .lbl{min-height:0;font-size:12px}
+  .meta .val{min-width:30px;font-size:20px}
+  .meta .goal{font-size:11px}
+  .meta .row{gap:5px}
+  .step{width:27px;height:27px;font-size:15px}
+  .card{padding:14px}
+}
+@media (max-width:820px){
+  .shell{grid-template-columns:1fr;gap:16px;padding-top:12px}
+  nav{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  nav button{white-space:nowrap;border-left:0;border-bottom:2px solid transparent;border-radius:7px;padding:7px 11px}
+  nav button[aria-current="true"]{border-left:0;border-bottom-color:var(--amber)}
+  nav button i{display:none}
+  .nav-lbl{display:none}
+  .brand span{display:none}
+  h2{font-size:23px}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>BW LED</b><span>Playbook comercial</span></div>
+    <div class="searchwrap">
+      <span class="mag">⌕</span>
+      <input id="q" type="search" placeholder="Buscar: produto, objeção, termo técnico, processo…" autocomplete="off">
+      <div id="results" hidden></div>
+    </div>
+    <button class="tbtn" id="theme" type="button">Tema</button>
+  </div>
+</header>
+
+<div class="shell">
+<nav id="nav" aria-label="Seções do playbook"></nav>
+<main id="main"></main>
+</div>
+
+<script>
+const PRODUTOS = [{"c":"918","n":"ACRÍLICO 10MM","f":"Material"},{"c":"1095","n":"ACRÍLICO 20mm","f":"Material"},{"c":"898","n":"ACRÍLICO 2mm","f":"Material"},{"c":"905","n":"ACRÍLICO 3mm","f":"Material"},{"c":"916","n":"ACRÍLICO 4mm","f":"Material"},{"c":"917","n":"ACRÍLICO 5mm","f":"Material"},{"c":"1154","n":"ACRÍLICO 6mm","f":"Material"},{"c":"1548","n":"ADESIVO AUTOMOTIVO","f":"Adesivo"},{"c":"5","n":"ADESIVO DIGITAL BRILHO BLACKOUT","f":"Adesivo"},{"c":"2","n":"ADESIVO DIGITAL BRILHO C/ IMPRESSÃO QUALIDADE FOTOGRÁFICA","f":"Adesivo"},{"c":"91","n":"ADESIVO DIGITAL C/ IMPRESSÃO E RECORTE PLOTER","f":"Adesivo"},{"c":"179","n":"ADESIVO DIGITAL C/ IMPRESSÃO EM MANTA MAGNÉTICA","f":"Adesivo"},{"c":"6","n":"ADESIVO DIGITAL FOSCO BLACKOUT","f":"Adesivo"},{"c":"3","n":"ADESIVO DIGITAL FOSCO C/ IMPRESSÃO QUALIDADE FOTOGRÁFICA","f":"Adesivo"},{"c":"1458","n":"ADESIVO DIGITAL FOSCO S/ IMPRESSÃO","f":"Adesivo"},{"c":"12","n":"ADESIVO DIGITAL PERFURADO C/ IMPRESSÃO (VIDRO/ VITRINE)","f":"Adesivo"},{"c":"8","n":"ADESIVO DIGITAL TRANSPARENTE C/ IMPRESSÃO","f":"Adesivo"},{"c":"1512","n":"ADESIVO DIGITAL TRANSPARENTE S/ IMPRESSÃO","f":"Adesivo"},{"c":"1439","n":"ADESIVO JATEADO C/ IMPRESSÂO DIGITAL","f":"Adesivo"},{"c":"107","n":"ADESIVO JATEADO C/ RECORTE ELETRÔNICO","f":"Adesivo"},{"c":"1453","n":"ADESIVO JATEADO S/ IMPRESSÃO","f":"Adesivo"},{"c":"1547","n":"ADESIVO PERSONALIZADO","f":"Adesivo"},{"c":"161","n":"ADESIVO REFLETIVO 3M","f":"Adesivo"},{"c":"764","n":"ADESIVO TÉRMICO","f":"Adesivo"},{"c":"88","n":"APLIQUE EM DURATEX COM CAIXILHO DE MADEIRA ADESIVADO","f":"Adesivo"},{"c":"86","n":"APLIQUE EM DURATEX COM CAIXILHO DE MADEIRA E LONA","f":"Lona"},{"c":"1577","n":"APLIQUE EM LONA IMPRESSA COM ESTRUTURA DE MADEIRA","f":"Lona"},{"c":"106","n":"APLIQUE EM LONA IMPRESSA COM ESTRUTURA METÁLICA","f":"Lona"},{"c":"912","n":"APLIQUE EM PS ADESIVADO COM ESTRUTURA DE MADEIRA","f":"Adesivo"},{"c":"13","n":"APLIQUE EM PS ADESIVADO COM ESTRUTURA METÁLICA","f":"Adesivo"},{"c":"1516","n":"ART - ANOTAÇÃO DE RESPONSABILIDADE TÉCNICA","f":"Serviço"},{"c":"69","n":"BACKDROP EM ESTRUTURA METÁLICA COM LONA IMPRESSO","f":"Lona"},{"c":"1438","n":"BACKDROP EM ESTRUTURA METÁLICA COM TECIDO IMPRESSO","f":"Lona"},{"c":"221","n":"BACKLIGHT COM CAIXA METÁLICA E FECHAMENTO EM ACM","f":"Fachada"},{"c":"436","n":"BACKLIGHT COM CAIXA METÁLICA E FECHAMENTO EM ACM RECORTADO ELETRONICAMENTE","f":"Fachada"},{"c":"160","n":"BACKLIGHT COM CAIXA METÁLICA E FECHAMENTO EM ACRÍLICO","f":"Fachada"},{"c":"56","n":"BACKLIGHT COM CAIXA METÁLICA E FECHAMENTO EM LONA DIGITALIZADA","f":"Fachada"},{"c":"14","n":"BALCÃO DE PDV (TIPO DEGUSTAÇÃO), EVELOPADO EM ADESIVO IMPRESSO","f":"Adesivo"},{"c":"16","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL C/ CABO DE MADEIRA OU PVC (PROMOCIONAL)","f":"Lona"},{"c":"15","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL C/ MASTRO DE MADEIRA OU PVC DUPLA FACE","f":"Lona"},{"c":"908","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL C/ MASTRO METÁLICO DUPLA FACE","f":"Lona"},{"c":"909","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL C/ MASTRO METÁLICO FACE ÚNICA","f":"Lona"},{"c":"910","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL S/ MASTRO DUPLA FACE","f":"Lona"},{"c":"911","n":"BANDEIRA EM TECIDO C/ IMPRESSÃO DIGITAL S/ MASTRO FACE ÚNICA","f":"Lona"},{"c":"87","n":"BANDEIRA EM TECIDO COLORIDAS S/ IMPRESSÃO C/ MASTRO EM MADEIRA","f":"Lona"},{"c":"153","n":"BANDEIRA EM TECIDO COLORIDAS S/ IMPRESSÃO C/ MASTRO EM TUBO METÁLICO","f":"Lona"},{"c":"186","n":"BANDEIRA EM TECIDO COLORIDAS S/ IMPRESSÃO E S/ MASTRO","f":"Lona"},{"c":"17","n":"BANDEIRA EM TECIDO TRIANGULAR C/ MASTRO DE MADEIRA","f":"Lona"},{"c":"18","n":"BANDEIRA EM TECIDO TRIANGULAR C/ MASTRO METÁLICO","f":"Lona"},{"c":"19","n":"BANNER EM LONA C/ IMPRESSÃO DIGITAL E ACABAMENTO EM BASTÃO DE MADEIRA E CORDÃO","f":"Lona"},{"c":"461","n":"BANNER EM TECIDO C/ IMPRESSÃO DIGITAL E ACABAMENTO EM BASTÃO DE MADEIRA E CORDÃO","f":"Lona"},{"c":"897","n":"BANNER ROLL-UP","f":"Lona"},{"c":"232","n":"BIRUTA EM TECIDO COLORIDO MOTORIZADA","f":"Lona"},{"c":"887","n":"CANTONEIRA EM CHAPA GALVANIZADA C/ PINTURA AUTOMOTIVA","f":"Estrutura"},{"c":"82","n":"CAVALETE DUPLA FACE DURATEX MONTADO EM MADEIRA COM ADESIVO DIGITALIZADO","f":"Adesivo"},{"c":"1451","n":"CAVALETE DUPLA FACE EM ESTRUTURA DE MADEIRA COM LONA IMPRESSA","f":"Lona"},{"c":"1598","n":"CAVALETE DUPLA FACE EM ESTRUTURA DE MADEIRA COM PLACA DE PS 2MM ADESIVADA","f":"Placa"},{"c":"919","n":"CAVALETE DUPLA FACE EM ESTRUTURA METÁLICA COM PLACA DE PS 2MM ADESIVADA","f":"Placa"},{"c":"116","n":"CAVALETE DUPLA FACE EM ESTRUTURA METÁLICA E LONA DIGITAL","f":"Lona"},{"c":"112","n":"CAVALETE EM ESTRUTURA METÁLICA COM PLACA DE PS 2MM ADESIVADA","f":"Placa"},{"c":"20","n":"CAVALETE SIMPLES EM DURATEX MONTADO EM MADEIRA COM ADESIVO DIGITALIZADO","f":"Adesivo"},{"c":"481","n":"CAVALETE SIMPLES EM ESTRUTURA MADEIRA E LONA DIGITAL","f":"Lona"},{"c":"147","n":"CAVALETE SIMPLES EM ESTRUTURA METÁLICA E LONA DIGITAL","f":"Lona"},{"c":"441","n":"CONCERTINA EM AÇO GALVANIZADO","f":"Estrutura"},{"c":"23","n":"DESMONTAGEM E REMONTAGEM DE PAINEL, INCLUSO COMPLEMENTAÇÃO DE ESTRUTURA METÁLICA.","f":"Estrutura"},{"c":"217","n":"DISPLAY EM ACRÍLICO","f":"Display"},{"c":"1435","n":"DISPLAY EM MDF","f":"Display"},{"c":"1123","n":"DISPLAY EM PS","f":"Display"},{"c":"1442","n":"DISPLAY EM PVC","f":"Display"},{"c":"1608","n":"ENVELOPAMENTO DE VEÍCULO - GRANDE PORTE","f":"Adesivo"},{"c":"922","n":"ENVELOPAMENTO DE VEÍCULO - MÉDIO PORTE","f":"Adesivo"},{"c":"900","n":"ENVELOPAMENTO DE VEÍCULO - PEQUENO PORTE","f":"Adesivo"},{"c":"1563","n":"EQUIPE TÉCNICA","f":"Outros"},{"c":"1452","n":"ESTADIA EQUIPE FORA DE SP","f":"Outros"},{"c":"24","n":"ESTANDARTE PROMOCIONAL EM LONA, TENCIONADO C/ ESTRUTURA DE MADEIRA","f":"Lona"},{"c":"25","n":"FAIXA EM LONA C/ IMPRESSÃO DIGITAL E ACABAMENTO BASTÃO DE MADEIRA C/ ILHÓS E CORDÃO","f":"Lona"},{"c":"187","n":"FAIXA EM LONA C/ IMPRESSÃO DIGITAL E ACABAMENTO ILHÓS","f":"Lona"},{"c":"1513","n":"FITA DE LED","f":"LED"},{"c":"876","n":"FITAS DE LED (TIPO MANGUEIRA)","f":"LED"},{"c":"1444","n":"FRETE","f":"Serviço"},{"c":"26","n":"GRAVATA EM LONA DIGITAL 1000X1000","f":"Lona"},{"c":"924","n":"GRAVATA EM LONA DIGITAL 1000X1000 C/ CADEIRINHA ESPECIAL","f":"Lona"},{"c":"1139","n":"GUARDA-SOL TRADICIONAL 2,00 MT","f":"Outros"},{"c":"440","n":"GUARITA C/ ESTRUTURA METÁLICA E TELHA TRAPEZOIDAL","f":"Estrutura"},{"c":"81","n":"HOMEM SETA (SETA EM P.S 2MM C/ CORDÃO E CORTE ESPECIAL ROUTER - DUPLA FACE)","f":"Outros"},{"c":"477","n":"INSTALAÇÃO","f":"Serviço"},{"c":"1573","n":"INSTALAÇÃO ELÉTRICA","f":"Serviço"},{"c":"202","n":"INSTALAÇÃO EM HORÁRIO ESPECIAL (SHOPPING)","f":"Serviço"},{"c":"229","n":"LETRA CAIXA BACKLIGHT C/ FECHAMENTO FRONTAL EM ACRÍLICO","f":"Fachada"},{"c":"1515","n":"LETRA CAIXA EM ACM COM PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"149","n":"LETRA CAIXA EM ACRÍLICO 10mm","f":"Fachada"},{"c":"648","n":"LETRA CAIXA EM ACRÍLICO 2mm","f":"Fachada"},{"c":"210","n":"LETRA CAIXA EM ACRÍLICO 4mm","f":"Fachada"},{"c":"449","n":"LETRA CAIXA EM ACRÍLICO 5mm","f":"Fachada"},{"c":"127","n":"LETRA CAIXA EM ACRÍLICO 8mm","f":"Fachada"},{"c":"1550","n":"LETRA CAIXA EM AÇO INOX","f":"Fachada"},{"c":"895","n":"LETRA CAIXA EM AÇO INOX","f":"Fachada"},{"c":"896","n":"LETRA CAIXA EM AÇO INOX ESCOVADO","f":"Fachada"},{"c":"73","n":"LETRA CAIXA EM CHAPA GALVANIZADA COM PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"192","n":"LETRA CAIXA EM MDF 06MM C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"189","n":"LETRA CAIXA EM MDF 12MM e 6MM C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"1315","n":"LETRA CAIXA EM NEON","f":"Fachada"},{"c":"1545","n":"LETRA CAIXA EM NEONFLEX E ACRÍLICO DE FUNDO","f":"Fachada"},{"c":"71","n":"LETRA CAIXA EM PVC 10MM C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"902","n":"LETRA CAIXA EM PVC 15mm C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"27","n":"LETRA CAIXA EM PVC 20mm C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"892","n":"LETRA CAIXA EM PVC 30mm C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"1524","n":"LETRA CAIXA EM PVC 40MM C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"894","n":"LETRA CAIXA EM PVC 5mm C/ RECORTE NA ROUTER, ACABAMENTO PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"207","n":"LETRA CAIXA EM XPS 25mm C/ PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"208","n":"LETRA CAIXA EM XPS 50mm C/ PINTURA AUTOMOTIVA","f":"Fachada"},{"c":"710","n":"LOCAÇÃO DE EQUIPAMENTOS","f":"Serviço"},{"c":"1538","n":"LOCAÇÃO PLACA DE PERCURSO","f":"Placa"},{"c":"435","n":"LONA BACKLIGHT C/ IMPRESSÃO DIGITAL INSTALADA EM PAINEL EXISTENTE","f":"Fachada"},{"c":"74","n":"LONA BRILHO C/ IMPRESSÃO DIGITAL","f":"Lona"},{"c":"1","n":"LONA BRILHO C/ IMPRESSÃO DIGITAL INSTALADA EM PAINEL EXISTENTE","f":"Lona"},{"c":"1014","n":"LONA BRILHO C/ IMPRESSÃO DIGITAL REFORÇO E ILHÓS","f":"Lona"},{"c":"79","n":"LONA C/ IMPRESSÃO DIGITAL INSTALADA EM CAIXILHO DE MADEIRA","f":"Lona"},{"c":"598","n":"LONA C/ IMPRESSÃO DIGITAL MICROPERFURADA TIPO SANET","f":"Lona"},{"c":"1443","n":"LONA FOSCA C/ IMPRESSÃO DIGITAL","f":"Lona"},{"c":"937","n":"LONA FOSCA C/ IMPRESSÃO DIGITAL, REFORÇO E ILHÓS","f":"Lona"},{"c":"1447","n":"MANGUEIRA DE LED NEON","f":"LED"},{"c":"1602","n":"MOLDURA METÁLICA PARA PAINEL (TIPO BACKLIGHT)","f":"Fachada"},{"c":"923","n":"MOTOR DE BIRUTA","f":"Outros"},{"c":"1514","n":"MURETA DE ALVENARIA (1 FIADA)","f":"Outros"},{"c":"1578","n":"MURETA DE ALVENARIA (2 FIADAS)","f":"Outros"},{"c":"1579","n":"MÓBILE DUPLO EM P.S MED. 0,20 X 0,20, RECORTADO NA ROUTER E FIO DE NAYLON","f":"Outros"},{"c":"30","n":"MÓBILE DUPLO EM P.S MED. 0,30 X 0,30, RECORTADO NA ROUTER E FIO DE NAYLON","f":"Outros"},{"c":"1498","n":"MÓBILE DUPLO EM P.S MED. 0,35 X 0,35, RECORTADO NA ROUTER E FIO DE NAYLON","f":"Outros"},{"c":"235","n":"MÓBILE DUPLO EM P.S MED. 0,40 X 0,40, RECORTADO NA ROUTER E FIO DE NAYLON","f":"Outros"},{"c":"480","n":"MÓBILE DUPLO EM P.S MED. 0,50 X 0,50, RECORTADO NA ROUTER E FIO DE NAYLON","f":"Outros"},{"c":"1540","n":"PAINEL DE LED - ANUNCIE AQUI","f":"LED"},{"c":"1596","n":"PAINEL DE LED - DESINSTALAÇÃO, REMANEJAMENTO E INSTALAÇÃO","f":"LED"},{"c":"1588","n":"PAINEL DE LED - IMPLANTAÇÃO, INSTALAÇÃO E CONFIGURAÇÃO","f":"LED"},{"c":"1526","n":"PAINEL DE LED - INDOOR - VENDA","f":"LED"},{"c":"1595","n":"PAINEL DE LED - KIT INSTALAÇÃO (ESTRUTURA - PROJETOS ESPECIAIS)","f":"LED"},{"c":"1518","n":"PAINEL DE LED - KIT INSTALAÇÃO (ESTRUTURA)","f":"LED"},{"c":"1517","n":"PAINEL DE LED - LOCAÇÃO DE EQUIPAMENTO","f":"LED"},{"c":"1522","n":"PAINEL DE LED - LOCAÇÃO DE EQUIPAMENTO (TOTEM 0,64X1,92)","f":"LED"},{"c":"1520","n":"PAINEL DE LED - LOCAÇÃO DE EQUIPAMENTO (TOTEM 0,96X1,92)","f":"LED"},{"c":"1543","n":"PAINEL DE LED - MANUTENÇÃO","f":"LED"},{"c":"1586","n":"PAINEL DE LED - P1.5 - INDOOR - VENDA","f":"LED"},{"c":"1604","n":"PAINEL DE LED - P2 - FLEXÍVEL - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1592","n":"PAINEL DE LED - P2 - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1549","n":"PAINEL DE LED - P2 - INDOOR - VENDA","f":"LED"},{"c":"1593","n":"PAINEL DE LED - P2.5 - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1587","n":"PAINEL DE LED - P2.5 - INDOOR - VENDA","f":"LED"},{"c":"1597","n":"PAINEL DE LED - P2.9 - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1605","n":"PAINEL DE LED - P2.9 - INDOOR - VENDA","f":"LED"},{"c":"1601","n":"PAINEL DE LED - P2.9 - OUTDOOR - LOCAÇÃO","f":"LED"},{"c":"1594","n":"PAINEL DE LED - P3 - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1568","n":"PAINEL DE LED - P3 - INDOOR - VENDA","f":"LED"},{"c":"1590","n":"PAINEL DE LED - P3 - OUTDOOR - LOCAÇÃO","f":"LED"},{"c":"1565","n":"PAINEL DE LED - P3 - OUTDOOR - VENDA","f":"LED"},{"c":"1603","n":"PAINEL DE LED - P3.9 - INDOOR - LOCAÇÃO","f":"LED"},{"c":"1559","n":"PAINEL DE LED - P3.9 - INDOOR - VENDA","f":"LED"},{"c":"1569","n":"PAINEL DE LED - P3.9 - OUTDOOR - LOCAÇÃO","f":"LED"},{"c":"1544","n":"PAINEL DE LED - P3.9 - OUTDOOR - VENDA","f":"LED"},{"c":"1599","n":"PAINEL DE LED - P4 - OUTDOOR - LOCAÇÃO","f":"LED"},{"c":"1589","n":"PAINEL DE LED - P4 - OUTDOOR - VENDA","f":"LED"},{"c":"1525","n":"PAINEL DE LED - P5 - OUTDOOR - VENDA","f":"LED"},{"c":"1591","n":"PAINEL DE LED - P5 - OUTDOOR – LOCAÇÃO","f":"LED"},{"c":"1600","n":"PAINEL DE LED - P8 - OUTDOOR - LOCAÇÃO","f":"LED"},{"c":"1567","n":"PAINEL DE LED - REMOÇÃO (TELAS + COMPONENTES + ESTRUTURA)","f":"LED"},{"c":"1566","n":"PAINEL DE LED - REMOÇÃO (TELAS + COMPONENTES)","f":"LED"},{"c":"1561","n":"PAINEL DE LED - SEGURO MENSAL","f":"LED"},{"c":"1564","n":"PAINEL DE LED - SEGURO P/ EVENTO","f":"LED"},{"c":"1572","n":"PAINEL DE LED - SUBSTITUIÇÃO DE VÍDEO","f":"LED"},{"c":"1552","n":"PAINEL DE LED - VENDA DE EQUIPAMENTO (TOTEM 0,64X1,92 - P2.5 - INDOOR)","f":"LED"},{"c":"1606","n":"PAINEL DE LED - VENDA DE EQUIPAMENTO (TOTEM 0,96X1,92 - P2 - INDOOR)","f":"LED"},{"c":"1523","n":"PAINEL DE LED - VENDA DE EQUIPAMENTO (TOTEM 0,96X1,92 - P2.5 - INDOOR)","f":"LED"},{"c":"1511","n":"PAINEL DE MDF ADESIVADO","f":"Adesivo"},{"c":"226","n":"PAINEL DE MDF ADESIVADO (QUADROS SEM ILUMINAÇÃO)","f":"Adesivo"},{"c":"31","n":"PAINEL EM ACRÍLICO 5MM C/ ADESIVO DIGITALIZADO, INSTALADO C/ CABO DE AÇO","f":"Adesivo"},{"c":"32","n":"PAINEL EM ACRÍLICO 5MM C/ ADESIVO DIGITALIZADO, INSTALADO C/ ESPAÇADOR DE AÇO","f":"Adesivo"},{"c":"33","n":"PAINEL EM ACRÍLICO 5MM C/ IMPRESSÃO UV, INSTALADO C/ CABO DE AÇO","f":"Material"},{"c":"34","n":"PAINEL EM ACRÍLICO 5MM C/ IMPRESSÃO UV, INSTALADO C/ ESPAÇADOR DE AÇO","f":"Material"},{"c":"915","n":"PAINEL EM ACRÍLICO 5mm C/ ADESIVO DIGITALIZADO, INSTALADO C/ CUNHA","f":"Adesivo"},{"c":"913","n":"PAINEL EM ACRÍLICO 5mm C/ ADESIVO DIGITALIZADO, INSTALADO C/ FITA VHB","f":"Adesivo"},{"c":"914","n":"PAINEL EM ACRÍLICO 5mm C/ IMPRESSÃO UV, INSTALADO C/ CUNHA","f":"Material"},{"c":"224","n":"PAINEL EM ACRÍLICO 5mm C/ IMPRESSÃO UV, INSTALADO C/ FITA VHB","f":"Material"},{"c":"1501","n":"PAINEL EM ACRÍLICO, INSTALADO C/ ESPAÇADOR DE AÇO","f":"Material"},{"c":"183","n":"PAINEL EM CHAPA GALVANIZADA C/ QUADRO DE MADEIRA E ADESIVO DIGITAL IMPRESSO","f":"Adesivo"},{"c":"181","n":"PAINEL EM CHAPA GALVANIZADA C/ QUADRO METÁLICO E ADESIVO DIGITAL IMPRESSO","f":"Adesivo"},{"c":"1585","n":"PAINEL EM CHAPA GALVANIZADA C/ADESIVO E QUADRO METÁLICO C/ ESTR. METALICA SAINDO A 2M DO SOLO","f":"Adesivo"},{"c":"1459","n":"PAINEL EM ESTRUTURA DE MADEIRA C/ PS 2MM ADESIVADO","f":"Adesivo"},{"c":"103","n":"PAINEL EM ESTRUTURA METÁLICA C/ PS 2MM ADESIVADO","f":"Adesivo"},{"c":"227","n":"PAINEL EM ESTRUTURA METÁLICA GALVANIZADA REVESTIDO COM ALÚMINIO COMPOSTO (ACM)","f":"Estrutura"},{"c":"89","n":"PAINEL EM PVC DE 10mm C/ ADESIVO IMPRESSO","f":"Adesivo"},{"c":"205","n":"PAINEL EM PVC DE 15mm C/ ADESIVO IMPRESSO","f":"Adesivo"},{"c":"893","n":"PAINEL EM PVC DE 20mm C/ ADESIVO IMPRESSO","f":"Adesivo"},{"c":"206","n":"PAINEL EM PVC DE 5mm C/ ADESIVO IMPRESSO","f":"Adesivo"},{"c":"1483","n":"PAINEL EM VIDRO INCOLOR 6MM TEMPERADO C/ ADESIVO DIGITALIZADO, INSTALADO C/ ESPAÇADOR DE AÇO","f":"Adesivo"},{"c":"146","n":"PAINEL ESTRUTURA MADEIRA C/ LONA INSTALADA, SAINDO ATÉ 2M DO SOLO.","f":"Lona"},{"c":"169","n":"PAINEL ESTRUTURA MADEIRA, CHAPEADO E ADESIVO DIGITAL IMPRESSO","f":"Adesivo"},{"c":"36","n":"PAINEL ESTRUTURA METÁLICA TRELIÇADA CONCRETADA EM SOLO C/ CONTRAVENTAMENTO EM TELHA TRAPEZOIDAL E LONA DIGITAL IMPRESSA","f":"Lona"},{"c":"168","n":"PAINEL ESTRUTURA METÁLICA TRELIÇADA CONCRETADA EM SOLO E LONA DIGITAL IMPRESSA","f":"Lona"},{"c":"1166","n":"PAINEL ESTRUTURA METÁLICA TUBULAR C/ LONA INSTALADA","f":"Lona"},{"c":"37","n":"PAINEL ESTRUTURA METÁLICA TUBULAR C/ LONA INSTALADA, SAINDO ATÉ 2M DO SOLO.","f":"Lona"},{"c":"167","n":"PAPEL COUCHE COM IMPRESSÃO","f":"Outros"},{"c":"40","n":"PEDESTAL DE ALUMÍNIO COM REGULAGEM DE ALTURA","f":"Material"},{"c":"42","n":"PINTURA ARTÍSTICA ESPECIAL EM TAPUME, MURO OU STAND","f":"Display"},{"c":"44","n":"PINTURA FUNDO C/ GALVITE TAPUME, MURO OU STAND","f":"Display"},{"c":"45","n":"PIRULITO DUPLA FACE EM ESTRUTURA METÁLICA C/ LONA DIGITAL IMPRESSA","f":"Lona"},{"c":"1507","n":"PIRULITO EM ESTRUTURA DE MADEIRA COM PS 2MM ADESIVADO FIXADO NO SOLO","f":"Adesivo"},{"c":"933","n":"PIRULITO EM ESTRUTURA METÁLICA COM PS 2MM ADESIVADO","f":"Adesivo"},{"c":"171","n":"PIRULITO EM ESTRUTURA METÁLICA COM PS 2MM ADESIVADO FIXADO NO SOLO","f":"Adesivo"},{"c":"21","n":"PIRULITO FACE ÚNICA EM ESTRUTURA METÁLICA C/ LONA DIGITAL IMPRESSA","f":"Lona"},{"c":"70","n":"PLACA EM ACM","f":"Placa"},{"c":"1035","n":"PLACA EM AÇO INOX OU ESCOVADO C/ GRAVAÇÃO POR FOTOCORROSÃO","f":"Placa"},{"c":"135","n":"PLACA EM AÇO INOX OU ESCOVADO C/ IMPRESSÃO UV","f":"Placa"},{"c":"1506","n":"PLACA EM CAIXILHO DE MADEIRA E PS ADESIVADO","f":"Placa"},{"c":"1436","n":"PLACA EM PS 1MM COM ADESIVO IMPRESSO","f":"Placa"},{"c":"445","n":"PLACA EM PS 1mm C/ IMPRESSÃO UV","f":"Placa"},{"c":"178","n":"PLACA EM PS 2MM C/ IMPRESSÃO UV","f":"Placa"},{"c":"899","n":"PLACA EM PS 2MM COM ADESIVO IMPRESSO","f":"Placa"},{"c":"1450","n":"PLACA EM PS 3MM COM ADESIVO IMPRESSO","f":"Placa"},{"c":"925","n":"PLACA EM PS 3mm C/ IMPRESSÃO UV","f":"Placa"},{"c":"101","n":"PORTÃO DE ABRIR C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"100","n":"PORTÃO DE CORRER C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"62","n":"PROJETO QUIOSQUE SHOPPING 3D","f":"Serviço"},{"c":"130","n":"PROJETOS ESPECIAIS","f":"Serviço"},{"c":"1502","n":"PROJETOS ESPECIAIS EM MARCENARIA","f":"Serviço"},{"c":"1026","n":"PVC DE 10MM","f":"Material"},{"c":"269","n":"QUADRO BACKLIGHT DE MARCENARIA COM TECIDO ESPECIAL E IMPRESSÃO UV","f":"Fachada"},{"c":"437","n":"QUADRO DE MARCENARIA","f":"Outros"},{"c":"1509","n":"QUADRO METÁLICO","f":"Estrutura"},{"c":"1460","n":"QUADRO METÁLICO C/ LONA DIGITAL","f":"Lona"},{"c":"124","n":"QUADRO METÁLICO C/ LONA DIGITAL INSTALADO","f":"Lona"},{"c":"223","n":"QUIOSQUE EM MARCENARIA","f":"Outros"},{"c":"43","n":"REFLETOR 150 W C/ LÂMPADA MISTA, C/ HASTE DE FERRO","f":"Outros"},{"c":"46","n":"REFLETOR 250 W C/ LÂMPADA MISTA, C/ HASTE DE FERRO","f":"Outros"},{"c":"47","n":"REFLETOR 400 W C/ LÂMPADA MISTA, C/ HASTE DE FERRO","f":"Outros"},{"c":"48","n":"REFLETOR 500 W C/ LÂMPADA MISTA, C/ HASTE DE FERRO","f":"Outros"},{"c":"921","n":"REFLETOR DE LED 100 W C/ HASTE DE FERRO","f":"LED"},{"c":"446","n":"REFLETOR DE LED 30 W C/ HASTE DE FERRO","f":"LED"},{"c":"920","n":"REFLETOR DE LED 50 W C/ HASTE DE FERRO","f":"LED"},{"c":"1584","n":"REMANEJAMENTO DE PORTÃO","f":"Outros"},{"c":"1583","n":"REMANEJAMENTO DE TAPUME","f":"Outros"},{"c":"63","n":"REMOÇÃO DE ADESIVOS COM LIMPEZA DA COLA","f":"Adesivo"},{"c":"1582","n":"REMOÇÃO DE COMUNICAÇÃO VISUAL","f":"Outros"},{"c":"76","n":"REMOÇÃO DE ESTRUTURA METÁLICA E LONA","f":"Lona"},{"c":"49","n":"REMOÇÃO DE LONA, REFORMA E REINSTALAÇÃO","f":"Lona"},{"c":"1581","n":"REMOÇÃO DE TOTEM DE ESTACIONAMENTO","f":"Placa"},{"c":"476","n":"SAÍDA MÍNIMA DE EQUIPE ELETRICA","f":"Outros"},{"c":"1576","n":"SAÍDA MÍNIMA DE EQUIPE PARA MANUTENÇÃO","f":"Serviço"},{"c":"1012","n":"SERVIÇOS DIVERSOS/ MANUTENÇÃO","f":"Serviço"},{"c":"904","n":"SERVIÇOS PRESTADOS DE VISTORIA EM OBRAS","f":"Placa"},{"c":"1570","n":"TAPUME EM ACM C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"1542","n":"TAPUME EM ACM C/ ESTRUTURA METÁLICA E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"162","n":"TAPUME EM ALAMBRADO C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"926","n":"TAPUME EM ALAMBRADO C/ ESTRUTURA METÁLICA E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"203","n":"TAPUME EM CHAPA DE MADEIRITE NAVAL 10MM","f":"Estrutura"},{"c":"927","n":"TAPUME EM CHAPA DE MADEIRITE NAVAL 10MM E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"204","n":"TAPUME EM CHAPA DE MADEIRITE OSB 10MM","f":"Estrutura"},{"c":"928","n":"TAPUME EM CHAPA DE MADEIRITE OSB 10MM E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"1571","n":"TAPUME EM CHAPA GALVANIZADA LISA C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"1010","n":"TAPUME EM CHAPA GALVANIZADA LISA C/ ESTRUTURA METÁLICA E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"903","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA DE MADEIRA","f":"Estrutura"},{"c":"929","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA DE MADEIRA E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"930","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA DE MADEIRA E RODAPÉ DE TÁBUA","f":"Estrutura"},{"c":"99","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA METÁLICA","f":"Estrutura"},{"c":"931","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA METÁLICA E RODAPÉ DE ALVENARIA","f":"Estrutura"},{"c":"932","n":"TAPUME EM TELHA TRAPEZOIDAL C/ ESTRUTURA METÁLICA E RODAPÉ DE TÁBUA","f":"Estrutura"},{"c":"1449","n":"TECIDO CANVAS ESPECIAL COM IMPRESSÃO UV FRONTAL","f":"Lona"},{"c":"479","n":"TECIDO COLORIDO PARA BIRUTA","f":"Lona"},{"c":"1508","n":"TECIDO ESPECIAL COM IMPRESSÃO UV","f":"Lona"},{"c":"104","n":"TOTEM MDF","f":"Placa"},{"c":"126","n":"TOTEM METÁLICO","f":"Placa"},{"c":"1546","n":"TRAINEL ESTRUTURA METÁLICA TUBULAR COM LONA ESTICADA POR TRÁS","f":"Lona"},{"c":"1539","n":"VISITA TÉCNICA","f":"Outros"},{"c":"813","n":"WINDBANNER","f":"Lona"}];
+const FAMILIAS = ["Adesivo", "Display", "Estrutura", "Fachada", "LED", "Lona", "Material", "Outros", "Placa", "Serviço"];
+
+/* ============ conteúdo ============ */
+const SECOES = [
+ {id:"dia", grupo:"Todo dia", num:"01", nome:"Meu dia", eyebrow:"Rotina e metas",
+  titulo:"O dia na BW LED", sub:"Marque aqui suas atividades conforme o dia avança. O contador zera sozinho a cada novo dia.",
+  html:`
+  <div class="grid g4" id="metas"></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <h3>A rotina</h3>
+      <div class="kv"><span><b>08:00</b> · Alinhamento individual</span><span class="tag">15 min</span></div>
+      <div class="kv"><span><b>08:15</b> · Prospecção ativa</span><span class="tag led">bloco sagrado</span></div>
+      <div class="kv"><span><b>10:00</b> · Reuniões e visitas</span><span class="tag">rua</span></div>
+      <div class="kv"><span><b>13:00</b> · Propostas e orçamentos</span><span class="tag">mesa</span></div>
+      <div class="kv"><span><b>15:00</b> · Follow-up e negociação</span><span class="tag">telefone</span></div>
+      <div class="kv"><span><b>17:00</b> · Fechamento do dia com o gerente</span><span class="tag">números</span></div>
+      <div class="kv"><span><b>17:30</b> · Agendor atualizado</span><span class="tag">até 18h</span></div>
+    </div>
+    <div class="card">
+      <h3>O que levar para o alinhamento das 8h</h3>
+      <ul class="l">
+        <li><b>Números de ontem</b> — ligações, mensagens, reuniões e propostas.</li>
+        <li><b>Agenda de hoje</b> — quem vai prospectar, quais reuniões, quais propostas envia.</li>
+        <li><b>O que travou</b> — e a sua sugestão de solução, não só o problema.</li>
+      </ul>
+      <div class="note" style="margin-top:12px"><b>Prospecção vem antes de tudo.</b> É a única atividade que ninguém cobra na hora e que decide o mês inteiro. Por isso ela ocupa a sua melhor energia, às 8h15.</div>
+    </div>
+  </div>`},
+
+ {id:"funil", grupo:"Todo dia", num:"02", nome:"Minha meta", eyebrow:"Funil invertido",
+  titulo:"Quanto preciso fazer para ganhar o que quero", sub:"Comece pelo quanto você quer receber de comissão e volte até a prospecção diária. Ajuste as taxas conforme seus números reais forem aparecendo.",
+  html:`
+  <div class="grid g2">
+    <div class="card">
+      <h3>Seus números</h3>
+      <div class="grid g2" style="gap:11px">
+        <div><label class="f" for="cm">Comissão desejada no mês (R$)</label><input type="number" id="cm" value="4000" min="0" step="100"></div>
+        <div><label class="f" for="pc">% de comissão sobre a venda</label><input type="number" id="pc" value="3" min="0.1" step="0.5"></div>
+        <div><label class="f" for="tk">Ticket médio por venda (R$)</label><input type="number" id="tk" value="8000" min="100" step="500"></div>
+        <div><label class="f" for="tf">Fecho a cada X propostas (%)</label><input type="number" id="tf" value="25" min="1" max="100" step="1"></div>
+        <div><label class="f" for="tp">Reuniões que viram proposta (%)</label><input type="number" id="tp" value="60" min="1" max="100" step="1"></div>
+        <div><label class="f" for="tr">Prospecções que viram reunião (%)</label><input type="number" id="tr" value="12" min="1" max="100" step="1"></div>
+      </div>
+      <div class="note" style="margin-top:12px">Os valores que aparecem são um exemplo para você começar. Troque pelos seus assim que tiver o primeiro mês fechado.</div>
+    </div>
+    <div class="card">
+      <h3>O que isso significa por mês</h3>
+      <div class="out hi"><span>Preciso vender</span><b id="o-venda">—</b></div>
+      <div class="out"><span>Vendas fechadas</span><b id="o-vendas">—</b></div>
+      <div class="out"><span>Propostas enviadas</span><b id="o-prop">—</b></div>
+      <div class="out"><span>Reuniões realizadas</span><b id="o-reu">—</b></div>
+      <div class="out"><span>Prospecções feitas</span><b id="o-pros">—</b></div>
+      <h3 style="margin-top:16px">Sua meta diária (22 dias úteis)</h3>
+      <div class="out hi"><span>Prospecções por dia</span><b id="o-dia-pros">—</b></div>
+      <div class="out"><span>Reuniões por dia</span><b id="o-dia-reu">—</b></div>
+      <div class="out"><span>Propostas por dia</span><b id="o-dia-prop">—</b></div>
+      <div class="note ok" style="margin-top:12px" id="o-cmp"></div>
+    </div>
+  </div>`},
+
+ {id:"progresso", grupo:"Todo dia", num:"03", nome:"Meu estudo", eyebrow:"Progresso e ranking",
+  titulo:"Quanto do playbook você já estudou", sub:"Cada seção aberta e cada item de checklist marcado conta. O ranking mostra o time inteiro, para todo mundo saber quem está se preparando.",
+  html:`
+  <div class="grid g2">
+    <div class="card">
+      <h3>Seu progresso</h3>
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">
+        <span id="pct-num" style="font-family:var(--mono);font-size:44px;font-weight:600;line-height:1">0%</span>
+        <span style="color:var(--muted);font-size:13px">do playbook estudado</span>
+      </div>
+      <div class="bar" style="height:9px"><i id="pct-bar"></i></div>
+      <div class="kv" style="margin-top:14px"><span>Seções abertas</span><b id="pct-sec">0</b></div>
+      <div class="kv"><span>Itens de checklist concluídos</span><b id="pct-chk">0</b></div>
+      <div class="note" style="margin-top:12px">A conta: <b>60%</b> vem das seções que você abriu e <b>40%</b> dos itens de checklist marcados. Estudar é abrir, ler e aplicar.</div>
+    </div>
+    <div class="card">
+      <h3>Ranking do time</h3>
+      <div id="rank"><p style="color:var(--muted);font-size:13.5px">Carregando…</p></div>
+    </div>
+  </div>`},
+
+ {id:"prospeccao", grupo:"Vender", num:"04", nome:"Prospecção", eyebrow:"Primeiro contato",
+  titulo:"Onde achar e o que falar", sub:"O objetivo da ligação não é vender. É marcar a reunião. Quem tenta vender no telefone perde as duas coisas.",
+  html:`
+  <div class="grid g2">
+    <div class="card">
+      <h3>Ligação — 45 segundos</h3>
+      <div class="script">
+        <button class="copy" type="button">Copiar</button>
+        <p>"Bom dia, falo com o responsável pela comunicação visual da empresa? Meu nome é [seu nome], sou da BW LED."</p>
+        <p>"Passei pela loja de vocês e reparei na fachada — trabalho justamente com fachada, letreiro e painel de LED aqui em São Paulo."</p>
+        <p>"Vocês têm algum projeto de reforma, abertura de unidade ou troca de comunicação visual previsto?"</p>
+        <p>"Posso passar aí quinta às 10h, dar uma olhada e já levar uma ideia? São 20 minutos."</p>
+      </div>
+      <h3 style="margin-top:15px">WhatsApp ou LinkedIn</h3>
+      <div class="script">
+        <button class="copy" type="button">Copiar</button>
+        <p>"Olá [nome], tudo bem? Sou [seu nome], da BW LED — trabalhamos com fachadas, letreiros, painéis de LED e comunicação visual em São Paulo. Vi que vocês [estão abrindo unidade / reformaram a loja / estão em obra]. Posso te mandar duas ou três referências do que fizemos para empresas parecidas?"</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Gatilhos — procure empresas assim</h3>
+      <ul class="l">
+        <li>Vai abrir, mudar de endereço ou reformar</li>
+        <li>Trocou de marca, logo ou identidade visual</li>
+        <li>Fachada desbotada ou com luz queimada</li>
+        <li>Obra começando — tapume e placa são obrigatórios</li>
+        <li>Vai participar de feira ou evento</li>
+        <li>Abriu filial: quem abre uma, abre outra</li>
+      </ul>
+      <h3 style="margin-top:15px">Cadência — não desista no 2º toque</h3>
+      <div class="kv"><span>Dia 1 — ligação + mensagem de apresentação</span><b>1</b></div>
+      <div class="kv"><span>Dia 3 — referência visual de obra parecida</span><b>2</b></div>
+      <div class="kv"><span>Dia 7 — nova ligação, em outro horário</span><b>3</b></div>
+      <div class="kv"><span>Dia 14 — conteúdo útil: ideia, foto, tendência</span><b>4</b></div>
+      <div class="kv"><span>Dia 30 — "faz sentido eu voltar mais para frente?"</span><b>5</b></div>
+      <div class="note" style="margin-top:12px"><b>A maioria desiste no segundo contato.</b> A venda costuma acontecer entre o quinto e o oitavo.</div>
+    </div>
+  </div>`},
+
+ {id:"reuniao", grupo:"Vender", num:"04", nome:"Reunião", eyebrow:"Diagnóstico",
+  titulo:"A primeira reunião", sub:"Quem diagnostica bem vende mais caro e produz sem retrabalho. Leve trena, celular carregado e bloco.",
+  html:`
+  <div class="grid g2">
+    <div class="card">
+      <h3>Roteiro — 20 a 30 minutos</h3>
+      <div class="scroll"><table>
+        <tr><td style="width:96px"><b>Contexto</b></td><td>"Me conta um pouco da empresa e do que vocês estão planejando."</td></tr>
+        <tr><td><b>Situação</b></td><td>"Como está hoje a comunicação visual? Há quanto tempo foi feita?"</td></tr>
+        <tr><td><b>Problema</b></td><td>"O que te incomoda nela hoje? O que não funciona?"</td></tr>
+        <tr><td><b>Impacto</b></td><td>"O que isso custa — cliente que não acha, imagem, manutenção?"</td></tr>
+        <tr><td><b>Desejo</b></td><td>"Se pudesse ficar do jeito ideal, como seria?"</td></tr>
+        <tr><td><b>Decisão</b></td><td>"Quem mais participa da decisão? Qual prazo vocês têm em mente?"</td></tr>
+        <tr><td><b>Próximo passo</b></td><td>"Fecho a proposta até [data] e te ligo [dia] às [hora]. Combinado?"</td></tr>
+      </table></div>
+      <div class="note warn" style="margin-top:12px"><b>Nunca saia sem data do próximo contato.</b> "Depois eu te ligo" é como negócio morre: devagar e sem ninguém perceber.</div>
+    </div>
+    <div class="card">
+      <h3>Saia da reunião com isto na mão</h3>
+      <div id="ck-reuniao"></div>
+    </div>
+  </div>`},
+
+ {id:"objecoes", grupo:"Vender", num:"05", nome:"Objeções", eyebrow:"Negociação",
+  titulo:"O que responder quando ouvir", sub:"Objeção não é rejeição: é pedido de mais informação. Quem não tem interesse nenhum apenas encerra a conversa.",
+  html:`<div id="obj"></div>`},
+
+ {id:"proposta", grupo:"Vender", num:"06", nome:"Proposta", eyebrow:"Fechamento",
+  titulo:"Proposta, follow-up e fechamento", sub:"Proposta enviada sem data de retorno é proposta perdida.",
+  html:`
+  <div class="grid g2">
+    <div class="card">
+      <h3>Toda proposta precisa ter</h3>
+      <ul class="l">
+        <li>Escopo em linguagem de cliente, não código de produto</li>
+        <li>Medidas e quantidade de cada peça</li>
+        <li>Material e acabamento</li>
+        <li>Se inclui instalação — e o que <b>não</b> inclui (elétrica, alvenaria, andaime)</li>
+        <li>Prazo de produção e instalação, confirmado com a fábrica</li>
+        <li>Condição de pagamento e validade</li>
+        <li>Imagem de referência ou croqui</li>
+      </ul>
+      <div class="note warn" style="margin-top:12px"><b>Prazo só entra na proposta depois de confirmado com a produção.</b> Prazo no chute é a causa número 1 de desgaste com cliente.</div>
+    </div>
+    <div class="card">
+      <h3>Follow-up que funciona</h3>
+      <div class="kv"><span>No envio: "te ligo [dia] às [hora]" — marque no Agendor</span><b>D0</b></div>
+      <div class="kv"><span>Não pergunte "recebeu?". Pergunte "faltou algo no escopo?"</span><b>D+2</b></div>
+      <div class="kv"><span>Traga algo novo: referência, foto, agenda da fábrica</span><b>D+5</b></div>
+      <div class="kv"><span>"Seguimos ou retomo mais para frente?"</span><b>D+10</b></div>
+      <h3 style="margin-top:15px">Frases que fecham</h3>
+      <ul class="l">
+        <li>"Se eu conseguir entregar até [data], fechamos hoje?"</li>
+        <li>"O que falta para você dizer sim?"</li>
+        <li>"Posso reservar a agenda da produção para esta semana?"</li>
+        <li>"Fechando até sexta, mantenho esse preço e a data de instalação."</li>
+      </ul>
+      <div class="note ok" style="margin-top:12px">Fechou? <b>Peça a aprovação por escrito</b> e abra a OS no mesmo dia. Sem aprovação escrita, a OS não é liberada.</div>
+    </div>
+  </div>`},
+
+ {id:"os", grupo:"Entregar", num:"07", nome:"Abrir OS", eyebrow:"Processo",
+  titulo:"Abrindo a OS sem erro", sub:"Toda OS passa por três etapas. Nenhuma avança com informação faltando.",
+  html:`
+  <div class="stepflow" style="margin-bottom:14px">
+    <div><b>1 · Você abre</b>Cliente, local, prazo, medidas, material e arte aprovada.</div>
+    <div><b>2 · Douglas confere</b>Bate com o orçamento? Tem tudo que a fábrica precisa?</div>
+    <div><b>3 · A área aceita</b>Produção, marcenaria, serralheria ou expedição assume o prazo.</div>
+    <div style="border-top-color:var(--green)"><b>4 · OS liberada</b>Só então entra na fila. Antes disso, nada é cortado nem impresso.</div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Checklist antes de enviar</h3>
+      <div id="ck-os"></div>
+      <div class="note" id="os-status" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <h3>Regras de ouro</h3>
+      <ul class="l">
+        <li>Medida sempre em <b>centímetros</b>, sempre <b>largura × altura</b>, nessa ordem.</li>
+        <li>Proibido escrever "igual ao anterior", "ver no WhatsApp", "o cliente sabe", "a combinar".</li>
+        <li>Teve instalação, tem <b>foto do local</b> anexada.</li>
+        <li>Medida estimada não vale: ou foi conferida, ou precisa de vistoria antes de produzir.</li>
+        <li>Mudou algo depois da liberação? Nova versão da OS. Nunca alteração de boca.</li>
+      </ul>
+      <div class="note ok" style="margin-top:12px">A pergunta antes de enviar: <b>"se eu sumir amanhã, alguém executa essa OS sem me ligar?"</b></div>
+    </div>
+  </div>`},
+
+ {id:"produtos", grupo:"Consultar", num:"08", nome:"Produtos", eyebrow:"Catálogo",
+  titulo:"O que vendemos", sub:"Os 272 itens do cadastro. Busque por nome ou código e use o código ao pedir orçamento interno.",
+  html:`
+  <div class="card">
+    <input type="search" id="pq" placeholder="Buscar produto ou código…" autocomplete="off" style="font-family:var(--body);margin-bottom:11px">
+    <div class="chips" id="pchips"></div>
+    <span class="count" id="pcount"></span>
+    <div class="plist" id="plist"></div>
+  </div>`},
+
+ {id:"led", grupo:"Consultar", num:"09", nome:"Painel de LED", eyebrow:"Carro-chefe",
+  titulo:"Painel de LED", sub:"46 itens no cadastro, entre venda, locação, estrutura, instalação e manutenção.",
+  html:`
+  <div class="grid g3" style="margin-bottom:14px">
+    <div class="card"><h3>Venda</h3><p>O cliente quer o ativo próprio: fachada de loja, recepção, auditório, igreja, concessionária.</p></div>
+    <div class="card"><h3>Locação</h3><p>Evento, feira, ação promocional ou teste de mídia. Há totens prontos de 0,64×1,92 e 0,96×1,92.</p></div>
+    <div class="card"><h3>Serviços</h3><p>Implantação e configuração, manutenção, remanejamento, kit de estrutura e projetos especiais.</p></div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h3>As 7 perguntas obrigatórias</h3>
+      <ol class="l">
+        <li>Onde vai ser instalado — dentro ou fora?</li>
+        <li>Qual o espaço disponível (largura × altura)?</li>
+        <li>De que distância as pessoas vão olhar?</li>
+        <li>Tem ponto de energia perto? 110V ou 220V?</li>
+        <li>Como é a parede ou estrutura de fixação?</li>
+        <li>Quem coloca o conteúdo — o cliente ou nós?</li>
+        <li>Tem internet no local? Com que frequência troca o conteúdo?</li>
+      </ol>
+      <div class="note warn" style="margin-top:12px"><b>Nunca prometa prazo de LED sem falar com a produção.</b> Painel envolve equipamento, estrutura metálica e instalação elétrica: três áreas, três agendas.</div>
+    </div>
+    <div class="card">
+      <h3>Explique o pitch assim</h3>
+      <div class="note ok">"O pitch é a distância entre um LED e outro. Quanto menor o número, mais perto a pessoa pode chegar sem ver os pontos. <b>Regra prática: a distância mínima de visão, em metros, é mais ou menos o número do pitch.</b> Um P4 fica nítido a partir de 4 metros; um P2, a partir de 2 metros."</div>
+      <h3 style="margin-top:15px">O que define o preço</h3>
+      <div class="kv"><span>Tamanho — largura × altura</span><b>área</b></div>
+      <div class="kv"><span>Pitch — P1.5, P2, P3, P4, P10</span><b>definição</b></div>
+      <div class="kv"><span>Indoor ou outdoor</span><b>brilho</b></div>
+      <div class="kv"><span>Estrutura, altura e fixação</span><b>serralheria</b></div>
+      <div class="kv"><span>Controladora, conteúdo, treinamento</span><b>setup</b></div>
+    </div>
+  </div>`},
+
+ {id:"glossario", grupo:"Consultar", num:"10", nome:"Glossário", eyebrow:"Técnico",
+  titulo:"Os termos do setor", sub:"Use sem medo na frente do cliente. Dizer \"vou confirmar com a fábrica e te retorno hoje\" passa mais credibilidade do que inventar um termo errado.",
+  html:`
+  <div class="card">
+    <input type="search" id="gq" placeholder="Buscar termo…" autocomplete="off" style="font-family:var(--body);margin-bottom:12px">
+    <div class="scroll"><table id="gtab"></table></div>
+  </div>`},
+
+ {id:"funilcrm", grupo:"Consultar", num:"11", nome:"Funil no Agendor", eyebrow:"CRM",
+  titulo:"O funil no Agendor", sub:"Negócio que não está no Agendor, para a empresa, não existe.",
+  html:`
+  <div class="card scroll">
+    <table>
+      <tr><th>Etapa</th><th>O que significa</th><th>Para avançar</th><th>Erro comum</th></tr>
+      <tr><td><b>1 · Qualificação</b></td><td>Empresa identificada, sem contato com o decisor.</td><td>Nome, segmento e motivo de ser bom cliente.</td><td>Encher o funil de empresa sem gatilho.</td></tr>
+      <tr><td><b>2 · Prospecção</b></td><td>Contato iniciado por ligação, mensagem ou visita.</td><td>Falou com alguém; sabe nome e cargo.</td><td>Marcar prospecção sem ter falado com ninguém.</td></tr>
+      <tr><td><b>3 · Reunião</b></td><td>Reunião ou visita agendada e realizada.</td><td>Data da reunião e necessidade anotada.</td><td>Sair da reunião sem medida nem prazo.</td></tr>
+      <tr><td><b>4 · Apresentação</b></td><td>Solução apresentada e escopo validado.</td><td>Medidas, material e prazo confirmados.</td><td>Falar de preço antes de entender a necessidade.</td></tr>
+      <tr><td><b>5 · Proposta</b></td><td>Proposta enviada formalmente.</td><td>Proposta no e-mail e próximo contato marcado.</td><td>Enviar e ficar esperando resposta.</td></tr>
+      <tr><td><b>6 · Fechamento</b></td><td>Ganho ou perdido, com motivo.</td><td>Aprovação por escrito e OS aberta.</td><td>Deixar negócio parado meses sem fechar nem perder.</td></tr>
+    </table>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Higiene do funil</h3><ul class="l">
+      <li><b>Todo negócio tem próximo passo com data.</b></li>
+      <li>Atualize no mesmo dia, até as 18h.</li>
+      <li>Registre o que o cliente falou, não o seu resumo otimista.</li>
+      <li>Parado há mais de 30 dias: reative ou marque como perdido, com motivo.</li>
+    </ul></div>
+    <div class="card"><h3>As notificações do Agendor</h3>
+      <p>Não são burocracia: são a memória do seu funil. Se a notificação incomoda, o problema não é ela — é a atividade que ficou para trás.</p>
+      <div class="note"><b>A régua:</b> chegou tarefa, conclua ou reagende com data nova. Nunca ignore.</div>
+    </div>
+  </div>`},
+
+ {id:"equipe", grupo:"Consultar", num:"12", nome:"Quem é quem", eyebrow:"Estrutura",
+  titulo:"A quem recorrer", sub:"Saber a quem recorrer economiza horas e evita promessa que a fábrica não consegue cumprir.",
+  html:`
+  <div class="grid g3">
+    <div class="card"><h3>Diretoria</h3><p><b>Alberto · Edison · Felipe</b></p>
+      <ul class="l"><li>Metas, política de preço e desconto</li><li>Investimento e negociação fora da política</li><li>Crédito a cliente e contratos</li></ul>
+      <div class="note" style="margin-top:10px">Escale: preço fora da política, cliente de grande porte, risco jurídico.</div></div>
+    <div class="card"><h3>Gestão</h3><p><b>Douglas</b> · Gerente Comercial</p>
+      <ul class="l"><li>Seu gestor no dia a dia</li><li>Acompanha funil e indicadores</li><li>Confere e libera toda OS</li><li>Alinhamento das 8h e fechamento das 17h</li></ul>
+      <p style="margin-top:9px"><b>Paixão</b> · Produção e Expedição — organiza a fila e confirma prazo.</p></div>
+    <div class="card"><h3>A fábrica</h3>
+      <ul class="l"><li><b>Produção e impressão</b> — lonas, adesivos, impressão UV</li><li><b>Marcenaria</b> — madeira e MDF</li><li><b>Serralheria</b> — metal, solda, estrutura de LED</li><li><b>Expedição</b> — entrega e instalação</li></ul>
+      <div class="note ok" style="margin-top:10px">Conheça essas pessoas pelo nome. Quem tem relação com a fábrica vende com mais segurança.</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>É seu</h3><ul class="l">
+      <li>Prospectar todo dia</li><li>Entender a real necessidade do cliente</li><li>Montar proposta e negociar</li>
+      <li>Preencher a OS completa</li><li>Manter o Agendor atualizado</li><li>Acompanhar o cliente até a entrega</li></ul></div>
+    <div class="card"><h3>Não é seu</h3><ul class="l">
+      <li>Definir prazo sem confirmar com a produção</li><li>Prometer desconto fora da política</li>
+      <li>Decidir detalhe técnico de fabricação</li><li>Resolver problema interno de outra área</li><li>Liberar a própria OS para produção</li></ul></div>
+  </div>`},
+
+ {id:"onboarding", grupo:"Começar", num:"13", nome:"Primeiros 30 dias", eyebrow:"Rampagem",
+  titulo:"Do primeiro dia à primeira venda", sub:"Marque conforme avança. Seu progresso fica salvo neste navegador.",
+  html:`
+  <div class="grid g2">
+    <div class="card"><h3>Semana 1 — dia a dia</h3><div id="ck-sem1"></div></div>
+    <div class="card"><h3>Checklist de onboarding</h3><div id="ck-onb"></div>
+      <div class="bar" style="margin-top:12px"><i id="onb-bar"></i></div>
+      <span class="count" id="onb-pct"></span></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>As quatro semanas</h3>
+    <div class="scroll"><table>
+      <tr><th>Semana</th><th>Foco</th><th>Meta</th></tr>
+      <tr><td><b>1 · Aprender</b></td><td>Playbook lido, fábrica conhecida, Agendor configurado, lista de 50 empresas montada.</td><td>50 empresas mapeadas · 30 ligações</td></tr>
+      <tr><td><b>2 · Prospectar</b></td><td>Prospecção diária completa e primeiras reuniões agendadas.</td><td>Meta cheia · 3 reuniões agendadas</td></tr>
+      <tr><td><b>3 · Conduzir</b></td><td>Reuniões sozinha com o roteiro de diagnóstico; follow-up organizado.</td><td>Meta cheia · 5 propostas enviadas</td></tr>
+      <tr><td><b>4 · Fechar</b></td><td>Negociação, fechamento e primeira OS aberta completa.</td><td>Primeira venda · OS aprovada de primeira</td></tr>
+    </table></div>
+    <div class="note" style="margin-top:12px"><b>Comece simples:</b> nas primeiras semanas foque em adesivo, placa, lona e banner. Fecham rápido, dão confiança e geram relacionamento. Fachada e LED vêm depois, com a carteira formada.</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Combine com o gerente na primeira semana</h3>
+    <div class="grid g2">
+      <div><div class="kv"><span>Meu ticket médio de referência</span><b>?</b></div>
+      <div class="kv"><span>Minha meta de faturamento mensal</span><b>?</b></div>
+      <div class="kv"><span>Comissão e como é calculada</span><b>?</b></div></div>
+      <div><div class="kv"><span>Desconto máximo sem autorização</span><b>?</b></div>
+      <div class="kv"><span>Prazo médio de produção por peça</span><b>?</b></div>
+      <div class="kv"><span>Minha carteira ou região</span><b>?</b></div></div>
+    </div>
+  </div>`},
+];
+
+const OBJECOES = [
+ ["\"Está caro.\"","Não enxergou valor, ou comparou com um escopo diferente do nosso.",
+  "\"Entendo. Me ajuda a comparar: o outro orçamento inclui estrutura, instalação e garantia? O nosso inclui — e normalmente é aí que o barato sai caro depois.\""],
+ ["\"Vou pensar.\"","Faltou informação, ou existe outro decisor.",
+  "\"Claro. Só para eu te ajudar melhor: o que ainda falta para decidir — é valor, prazo ou alguma dúvida técnica?\""],
+ ["\"Me manda por e-mail.\"","Quer encerrar a ligação sem dizer não.",
+  "\"Mando agora. Para eu mandar algo que faça sentido e não só um catálogo: qual é o projeto de vocês para os próximos meses?\""],
+ ["\"Já tenho fornecedor.\"","Pode estar satisfeito, ou apenas acomodado.",
+  "\"Ótimo, sinal de que vocês investem nisso. Posso ser a segunda opção? Em fachada e LED aparece prazo apertado, e aí ter dois fornecedores salva.\""],
+ ["\"Não é prioridade agora.\"","Não existe gatilho neste momento.",
+  "\"Entendo. Quando costuma virar prioridade — na reforma, na troca de marca, ou quando a fachada apaga? Deixo para te procurar perto disso.\""],
+ ["\"Preciso falar com meu sócio.\"","Decisão compartilhada, o que é normal.",
+  "\"Perfeito. Faz sentido eu participar dessa conversa para tirar dúvida técnica na hora? São 15 minutos e evita ruído.\""],
+ ["\"Consegue dar desconto?\"","Testa o limite, como quase todo comprador faz.",
+  "\"Consigo olhar condições. Antes: o escopo está certo? Se ajustarmos prazo ou material, consigo um número melhor sem tirar qualidade.\" — nunca dê desconto sem autorização."],
+];
+
+const GLOSSARIO = [
+ ["ACM","Alumínio composto. Chapa leve e rígida, muito usada em fachada e totem."],
+ ["PS","Poliestireno. Chapa plástica fina, usada em placa e cavalete."],
+ ["PVC","Chapa plástica mais encorpada, boa para letra e placa."],
+ ["Acrílico","Chapa transparente ou colorida, de 2 a 20 mm. Dá brilho e profundidade."],
+ ["Lona","Material flexível para banner, fachada e tapume, com impressão digital."],
+ ["Letra caixa","Letra em volume (3D), em acrílico, ACM ou inox. Pode ser iluminada."],
+ ["Backlight","Iluminado por trás: a luz atravessa o material e destaca a arte."],
+ ["Frontlight","Iluminado por fora, com refletor apontado para a peça."],
+ ["Pitch","Distância entre os LEDs. Menor número significa mais definição e preço maior."],
+ ["Indoor / Outdoor","Painel para ambiente interno ou externo. Outdoor tem mais brilho e vedação."],
+ ["Gabinete","Módulo que forma o painel de LED. Vários gabinetes montam a tela."],
+ ["Controladora","Equipamento que envia o conteúdo para o painel."],
+ ["Adesivo jateado","Imita vidro jateado: dá privacidade sem bloquear a luz."],
+ ["Adesivo perfurado","Para vitrine: de fora vê-se a arte, de dentro enxerga-se a rua."],
+ ["Blackout","Adesivo com bloqueio total de luz, não deixa transparecer o que está atrás."],
+ ["Recorte eletrônico","Letra ou forma cortada no plotter e aplicada sem fundo."],
+ ["Laminação","Película protetora sobre a impressão. Protege de sol e risco."],
+ ["Ilhós","Argola metálica na borda da lona, para amarrar."],
+ ["Bainha","Dobra reforçada na borda da lona ou do tecido."],
+ ["Sangria","Margem extra de arte, para não sobrar filete branco no corte."],
+ ["Impressão UV","Impressão direta na chapa, com tinta curada por luz ultravioleta."],
+ ["Tapume","Fechamento de obra. Pode ser em madeirite, ACM ou alambrado."],
+ ["ART","Anotação de Responsabilidade Técnica, exigida em projetos estruturais."],
+ ["Chumbamento","Fixação da estrutura no concreto ou na alvenaria."],
+];
+
+const CK_REUNIAO = ["Medidas em cm (largura × altura), conferidas no local","Fotos do local, da parede e do ponto de energia",
+ "Endereço completo e onde exatamente a peça vai ficar","Tipo de superfície: alvenaria, vidro, ACM, metal, drywall",
+ "Condições de acesso: altura, escada, andaime, autorização, horário","Energia: tem ponto? 110V ou 220V? quem faz a elétrica?",
+ "Arte: cliente tem o arquivo? em que formato? quem aprova?","Prazo limite real e o motivo dele","Quem decide e quem paga"];
+
+const CK_OS = ["Cliente, CNPJ, responsável e telefone","Endereço completo com ponto de referência",
+ "Responsável no local, telefone e horário permitido","Condições de acesso anotadas",
+ "Data limite real e motivo do prazo","Medidas de cada peça em cm, largura × altura",
+ "Material, espessura, acabamento, cor e fixação","Quantidade de peças",
+ "Arte final anexada e aprovada por escrito","Fotos do local anexadas (se tem instalação)",
+ "Data e horário de instalação definidos","Tudo que foi prometido ao cliente está escrito na OS"];
+
+const CK_SEM1 = ["Dia 1 — ler o playbook e conhecer a fábrica inteira","Dia 2 — estudar o catálogo e configurar o Agendor",
+ "Dia 3 — montar lista de 50 empresas e fazer 10 ligações com o gerente","Dia 4 — prospecção com meta cheia e uma visita acompanhada",
+ "Dia 5 — simular uma reunião de diagnóstico com o gerente","Dia 6 e 7 — primeira reunião real e primeira proposta"];
+
+const CK_ONB = ["Playbook lido por completo","Fábrica visitada: produção, marcenaria, serralheria, expedição",
+ "Acesso ao Agendor criado e funil entendido","Acesso à planilha de indicadores",
+ "Catálogo e tabela de preços recebidos","Modelo de proposta e de OS recebidos",
+ "Política de desconto e condições de pagamento explicadas","Lista das 50 primeiras empresas montada",
+ "Primeira ligação feita com o gerente ao lado","Primeira visita acompanhada"];
+
+const METAS = [
+ {k:"lig", goal:10, lbl:"Ligações para clientes <b>novos</b>"},
+ {k:"msg", goal:10, lbl:"Mensagens: e-mail, WhatsApp ou LinkedIn"},
+ {k:"reu", goal:3,  lbl:"Reuniões ou visitas <b>agendadas</b>"},
+ {k:"pro", goal:2,  lbl:"Propostas enviadas"},
+];
+
+/* ============ storage seguro ============ */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("bwled:"+k); return v===null? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("bwled:"+k, JSON.stringify(v)); }catch(e){} }
+};
+const hoje = () => new Date().toISOString().slice(0,10);
+
+/* ============ navegação ============ */
+const nav = document.getElementById("nav");
+const main = document.getElementById("main");
+let grupoAtual = "";
+SECOES.forEach((s, i) => {
+  if (s.grupo !== grupoAtual){ grupoAtual = s.grupo;
+    const l = document.createElement("div"); l.className = "nav-lbl"; l.textContent = s.grupo; nav.appendChild(l); }
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.go = s.id;
+  b.innerHTML = '<i>' + String(i + 1).padStart(2, "0") + '</i>' + s.nome;
+  b.addEventListener("click", () => abrir(s.id));
+  nav.appendChild(b);
+});
+
+function abrir(id, termo){
+  const s = SECOES.find(x => x.id === id) || SECOES[0];
+  main.innerHTML = '<div class="sec-head"><div class="eyebrow">' + s.eyebrow + '</div><h2>' + s.titulo + '</h2><p>' + s.sub + '</p></div>' + s.html;
+  nav.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", String(b.dataset.go === s.id)));
+  montar(s.id);
+  store.set("sec", s.id);
+  const vistas = store.get("vistas", {});
+  if (!vistas[s.id]){ vistas[s.id] = true; store.set("vistas", vistas); }
+  atualizarProgresso();
+  window.scrollTo({top:0, behavior:"instant"});
+  if (termo) realcar(termo);
+}
+
+function realcar(t){
+  const re = new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "gi");
+  main.querySelectorAll("p,td,li,summary,h3,.lbl").forEach(el => {
+    if (el.children.length === 0 && re.test(el.textContent))
+      el.innerHTML = el.innerHTML.replace(re, "<mark>$1</mark>");
+  });
+  const m = main.querySelector("mark");
+  if (m) m.scrollIntoView({block:"center", behavior:"smooth"});
+}
+
+/* ============ montagem por seção ============ */
+function montar(id){
+  if (id === "dia") montarMetas();
+  if (id === "funil") montarFunil();
+  if (id === "objecoes") montarObjecoes();
+  if (id === "produtos") montarProdutos();
+  if (id === "glossario") montarGlossario();
+  if (id === "reuniao") checklist("ck-reuniao", CK_REUNIAO, "ckreu");
+  if (id === "os") { checklist("ck-os", CK_OS, "ckos", statusOS); statusOS(); }
+  if (id === "onboarding"){ checklist("ck-sem1", CK_SEM1, "cksem1"); checklist("ck-onb", CK_ONB, "ckonb", progressoOnb); progressoOnb(); }
+  if (id === "progresso"){ pintarProgresso(); pintarRanking(); }
+  main.querySelectorAll(".copy").forEach(b => b.addEventListener("click", () => copiar(b)));
+}
+
+function copiar(btn){
+  const txt = Array.from(btn.parentElement.querySelectorAll("p")).map(p => p.textContent.trim()).join("\n\n");
+  const ok = () => { btn.textContent = "Copiado"; setTimeout(() => btn.textContent = "Copiar", 1600); };
+  try{
+    navigator.clipboard.writeText(txt).then(ok).catch(() => selecionar(btn));
+  }catch(e){ selecionar(btn); }
+}
+function selecionar(btn){
+  const r = document.createRange(); r.selectNodeContents(btn.parentElement);
+  const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+  btn.textContent = "Selecionado"; setTimeout(() => btn.textContent = "Copiar", 1600);
+}
+
+/* --- metas do dia --- */
+function montarMetas(){
+  const box = document.getElementById("metas");
+  const dados = store.get("metas", {});
+  if (dados.dia !== hoje()) { METAS.forEach(m => dados[m.k] = 0); dados.dia = hoje(); store.set("metas", dados); }
+  box.innerHTML = "";
+  METAS.forEach(m => {
+    const d = document.createElement("div");
+    d.className = "meta"; d.id = "m-" + m.k;
+    d.innerHTML = '<div class="lbl">' + m.lbl + '</div>' +
+      '<div class="row"><button class="step" type="button" data-d="-1" aria-label="menos">–</button>' +
+      '<span class="val">0</span><span class="goal">/ ' + m.goal + '</span>' +
+      '<button class="step" type="button" data-d="1" aria-label="mais" style="margin-left:auto">+</button></div>' +
+      '<div class="bar"><i></i></div>';
+    box.appendChild(d);
+    d.querySelectorAll(".step").forEach(b => b.addEventListener("click", () => {
+      const v = store.get("metas", {});
+      v[m.k] = Math.max(0, (v[m.k] || 0) + Number(b.dataset.d));
+      v.dia = hoje(); store.set("metas", v); pintarMeta(m);
+    }));
+    pintarMeta(m);
+  });
+}
+function pintarMeta(m){
+  const v = (store.get("metas", {})[m.k]) || 0;
+  const el = document.getElementById("m-" + m.k);
+  if (!el) return;
+  el.querySelector(".val").textContent = v;
+  el.querySelector(".bar i").style.width = Math.min(100, v / m.goal * 100) + "%";
+  el.classList.toggle("done", v >= m.goal);
+}
+
+/* --- funil invertido --- */
+function montarFunil(){
+  const ids = ["cm","pc","tk","tf","tp","tr"];
+  const salvo = store.get("funil", null);
+  if (salvo) ids.forEach(i => { if (salvo[i] != null) document.getElementById(i).value = salvo[i]; });
+  const calc = () => {
+    const g = i => Number(document.getElementById(i).value) || 0;
+    const cm = g("cm"), pc = Math.max(0.1, g("pc")), tk = Math.max(1, g("tk"));
+    const tf = Math.min(100, Math.max(1, g("tf"))), tp = Math.min(100, Math.max(1, g("tp"))), tr = Math.min(100, Math.max(1, g("tr")));
+    const venda = cm / (pc/100);
+    const vendas = Math.ceil(venda / tk);
+    const props = Math.ceil(vendas / (tf/100));
+    const reus  = Math.ceil(props / (tp/100));
+    const pros  = Math.ceil(reus / (tr/100));
+    const brl = n => n.toLocaleString("pt-BR", {style:"currency", currency:"BRL", maximumFractionDigits:0});
+    document.getElementById("o-venda").textContent = brl(venda);
+    document.getElementById("o-vendas").textContent = vendas;
+    document.getElementById("o-prop").textContent = props;
+    document.getElementById("o-reu").textContent = reus;
+    document.getElementById("o-pros").textContent = pros;
+    const dp = Math.ceil(pros/22), dr = (reus/22), dpr = (props/22);
+    document.getElementById("o-dia-pros").textContent = dp;
+    document.getElementById("o-dia-reu").textContent = dr.toFixed(1).replace(".", ",");
+    document.getElementById("o-dia-prop").textContent = dpr.toFixed(1).replace(".", ",");
+    const cmp = document.getElementById("o-cmp");
+    if (dp <= 20){ cmp.className = "note ok";
+      cmp.innerHTML = "<b>Cabe na sua rotina.</b> A meta da casa é 10 ligações e 10 mensagens por dia — 20 contatos. A sua conta pede " + dp + " prospecções por dia."; }
+    else { cmp.className = "note warn";
+      cmp.innerHTML = "<b>Acima do padrão da casa.</b> A meta da casa dá 20 contatos por dia e a sua conta pede " + dp + ". Reveja o ticket médio, a taxa de fechamento ou a comissão desejada — ou combine um plano com o gerente."; }
+    const vals = {}; ids.forEach(i => vals[i] = document.getElementById(i).value);
+    store.set("funil", vals);
+  };
+  ids.forEach(i => document.getElementById(i).addEventListener("input", calc));
+  calc();
+}
+
+/* --- objeções --- */
+function montarObjecoes(){
+  const box = document.getElementById("obj");
+  box.innerHTML = OBJECOES.map(o =>
+    '<details><summary>' + o[0] + '</summary><div class="body">' +
+    '<p style="color:var(--muted);font-size:13px;margin-bottom:9px"><b>O que costuma estar por trás:</b> ' + o[1] + '</p>' +
+    '<div class="script"><button class="copy" type="button">Copiar</button><p>' + o[2] + '</p></div></div></details>').join("");
+  box.querySelectorAll(".copy").forEach(b => b.addEventListener("click", () => copiar(b)));
+}
+
+/* --- produtos --- */
+let famAtiva = "";
+function montarProdutos(){
+  const chips = document.getElementById("pchips");
+  chips.innerHTML = '<button class="chip" type="button" data-f="">Todas</button>' +
+    FAMILIAS.map(f => '<button class="chip" type="button" data-f="' + f + '">' + f + '</button>').join("");
+  chips.querySelectorAll(".chip").forEach(c => {
+    c.setAttribute("aria-pressed", String(c.dataset.f === famAtiva));
+    c.addEventListener("click", () => { famAtiva = c.dataset.f;
+      chips.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.f === famAtiva)));
+      listarProdutos(); });
+  });
+  document.getElementById("pq").addEventListener("input", listarProdutos);
+  listarProdutos();
+}
+function listarProdutos(){
+  const t = (document.getElementById("pq").value || "").trim().toLowerCase();
+  const lista = PRODUTOS.filter(p =>
+    (!famAtiva || p.f === famAtiva) &&
+    (!t || p.n.toLowerCase().includes(t) || p.c.includes(t)));
+  document.getElementById("pcount").textContent =
+    lista.length + " de " + PRODUTOS.length + " produtos" + (famAtiva ? " · " + famAtiva : "");
+  document.getElementById("plist").innerHTML = lista.length
+    ? lista.slice(0, 400).map(p => '<div class="prow"><code>' + p.c + '</code><span class="nm">' + p.n + '</span><span class="tag">' + p.f + '</span></div>').join("")
+    : '<div class="prow" style="color:var(--muted)">Nenhum produto encontrado. Tente outro termo ou limpe o filtro.</div>';
+}
+
+/* --- glossário --- */
+function montarGlossario(){
+  const render = () => {
+    const t = (document.getElementById("gq").value || "").trim().toLowerCase();
+    const l = GLOSSARIO.filter(g => !t || g[0].toLowerCase().includes(t) || g[1].toLowerCase().includes(t));
+    document.getElementById("gtab").innerHTML = l.length
+      ? l.map(g => '<tr><td style="width:150px"><b>' + g[0] + '</b></td><td>' + g[1] + '</td></tr>').join("")
+      : '<tr><td style="color:var(--muted)">Nenhum termo encontrado.</td></tr>';
+  };
+  document.getElementById("gq").addEventListener("input", render);
+  render();
+}
+
+/* --- checklists --- */
+function checklist(alvo, itens, chave, aoMudar){
+  const box = document.getElementById(alvo);
+  if (!box) return;
+  const estado = store.get(chave, {});
+  box.innerHTML = itens.map((t, i) =>
+    '<label class="ck' + (estado[i] ? " on" : "") + '"><input type="checkbox" id="' + chave + '-' + i + '"' + (estado[i] ? " checked" : "") + '><span>' + t + '</span></label>').join("");
+  box.querySelectorAll("input").forEach((inp, i) => inp.addEventListener("change", () => {
+    const e = store.get(chave, {}); e[i] = inp.checked; store.set(chave, e);
+    inp.parentElement.classList.toggle("on", inp.checked);
+    if (aoMudar) aoMudar();
+    atualizarProgresso();
+  }));
+}
+function statusOS(){
+  const e = store.get("ckos", {});
+  const falta = CK_OS.filter((_, i) => !e[i]).length;
+  const el = document.getElementById("os-status");
+  if (!el) return;
+  if (falta === 0){ el.className = "note ok"; el.innerHTML = "<b>OS pronta para enviar.</b> Com tudo isso preenchido, ela passa na conferência de primeira."; }
+  else { el.className = "note warn"; el.innerHTML = "<b>Faltam " + falta + " " + (falta === 1 ? "item" : "itens") + ".</b> OS incompleta volta, atrasa a entrega e trava a fila da produção."; }
+}
+function progressoOnb(){
+  const e = store.get("ckonb", {});
+  const feitos = CK_ONB.filter((_, i) => e[i]).length;
+  const pct = Math.round(feitos / CK_ONB.length * 100);
+  const bar = document.getElementById("onb-bar"), lbl = document.getElementById("onb-pct");
+  if (bar) bar.style.width = pct + "%";
+  if (lbl) lbl.textContent = feitos + " de " + CK_ONB.length + " concluídos · " + pct + "%";
+}
+
+/* ============ progresso e ranking ============ */
+const CHECKS = {ckreu:CK_REUNIAO.length, ckos:CK_OS.length, cksem1:CK_SEM1.length, ckonb:CK_ONB.length};
+let DB = null, USUARIO = null, MEUID = null, RANKING = [], ultimoEnvio = "", timerEnvio = null;
+
+function calcular(){
+  const vistas = Object.keys(store.get("vistas", {})).length;
+  let feitos = 0, total = 0;
+  Object.keys(CHECKS).forEach(k => {
+    total += CHECKS[k];
+    const e = store.get(k, {});
+    feitos += Object.keys(e).filter(i => e[i]).length;
+  });
+  const pSec = Math.min(1, vistas / SECOES.length);
+  const pChk = total ? feitos / total : 0;
+  return {pct: Math.round((pSec*0.6 + pChk*0.4) * 100), secoes: vistas, checks: feitos, totalChecks: total};
+}
+
+function pintarProgresso(){
+  const p = calcular();
+  const n = document.getElementById("pct-num");
+  if (!n) return;
+  n.textContent = p.pct + "%";
+  document.getElementById("pct-bar").style.width = p.pct + "%";
+  document.getElementById("pct-sec").textContent = p.secoes + " de " + SECOES.length;
+  document.getElementById("pct-chk").textContent = p.checks + " de " + p.totalChecks;
+}
+
+function atualizarProgresso(){
+  pintarProgresso();
+  if (!DB || !MEUID) return;
+  clearTimeout(timerEnvio);
+  timerEnvio = setTimeout(async () => {
+    const p = calcular();
+    const chave = p.pct + "|" + p.secoes + "|" + p.checks;
+    if (chave === ultimoEnvio) return;
+    ultimoEnvio = chave;
+    try { await DB.doc("progresso/" + MEUID).set({pct:p.pct, secoes:p.secoes, checks:p.checks, atualizado:Date.now()}); }
+    catch(e){ ultimoEnvio = ""; }
+  }, 1200);
+}
+
+async function pintarRanking(){
+  const box = document.getElementById("rank");
+  if (!box) return;
+  if (!DB){
+    box.innerHTML = '<div class="note">O ranking aparece quando você abre o playbook pelo link compartilhado, com a sua conta. Seu progresso continua salvo neste navegador.</div>';
+    return;
+  }
+  if (!RANKING.length){
+    box.innerHTML = '<p style="color:var(--muted);font-size:13.5px">Ninguém registrou progresso ainda. Abra as seções e marque os checklists — em segundos você aparece aqui.</p>';
+    return;
+  }
+  let perfis = {};
+  if (USUARIO){ try { perfis = await USUARIO.profiles(RANKING.map(r => r.id)); } catch(e){ perfis = {}; } }
+  box.innerHTML = RANKING.map((r, i) => {
+    const eu = r.id === MEUID;
+    return '<div class="kv"><span style="display:flex;gap:10px;align-items:center;min-width:0">' +
+      '<b style="color:var(--amber);min-width:18px">' + (i+1) + '</b>' +
+      '<span class="nome" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap' + (eu ? ';font-weight:600' : '') + '"></span>' +
+      (eu ? '<span class="tag">você</span>' : '') +
+      '</span><b>' + (Number(r.pct) || 0) + '%</b></div>';
+  }).join("");
+  box.querySelectorAll(".kv").forEach((el, i) => {
+    const r = RANKING[i], p = perfis[r.id] || {};
+    el.querySelector(".nome").textContent = p.name || (r.id === MEUID ? "Você" : "Alguém do time");
+  });
+}
+
+(async () => {
+  try{
+    if (!window.claude || !claude.use) { pintarRanking(); return; }
+    DB = await claude.use("db");
+    USUARIO = await claude.use("user");
+    if (USUARIO) MEUID = await USUARIO.id();
+    if (DB){
+      DB.collection("progresso").orderBy("pct", "desc").limit(30).onSnapshot(
+        snap => { RANKING = snap.docs.map(d => Object.assign({id:d.id}, d.data())); pintarRanking(); },
+        () => {}
+      );
+    }
+    atualizarProgresso();
+    pintarRanking();
+  }catch(e){ pintarRanking(); }
+})();
+
+/* ============ busca global ============ */
+const INDICE = [];
+SECOES.forEach(s => {
+  const tmp = document.createElement("div"); tmp.innerHTML = s.html;
+  tmp.querySelectorAll("p,li,td,summary,h3").forEach(el => {
+    const t = el.textContent.replace(/\s+/g," ").trim();
+    if (t.length > 14) INDICE.push({sec:s.id, nome:s.nome, txt:t});
+  });
+  INDICE.push({sec:s.id, nome:s.nome, txt:s.titulo + " — " + s.sub});
+});
+OBJECOES.forEach(o => INDICE.push({sec:"objecoes", nome:"Objeções", txt:o[0] + " " + o[2]}));
+GLOSSARIO.forEach(g => INDICE.push({sec:"glossario", nome:"Glossário", txt:g[0] + ": " + g[1]}));
+
+const q = document.getElementById("q"), results = document.getElementById("results");
+q.addEventListener("input", () => {
+  const t = q.value.trim().toLowerCase();
+  if (t.length < 2){ results.hidden = true; return; }
+  const prods = PRODUTOS.filter(p => p.n.toLowerCase().includes(t) || p.c.includes(t)).slice(0, 6);
+  const txt = INDICE.filter(i => i.txt.toLowerCase().includes(t)).slice(0, 10);
+  let html = prods.map(p =>
+    '<button type="button" data-sec="produtos" data-t="' + esc(p.n) + '"><span class="where">Produto · ' + p.f + '</span>' + esc(p.n) + ' <code style="color:var(--muted)">' + p.c + '</code></button>').join("");
+  html += txt.map(i =>
+    '<button type="button" data-sec="' + i.sec + '" data-t="' + esc(q.value.trim()) + '"><span class="where">' + i.nome + '</span>' + esc(corta(i.txt, t)) + '</button>').join("");
+  results.innerHTML = html || '<div class="empty">Nada encontrado para “' + esc(q.value) + '”.</div>';
+  results.hidden = false;
+  results.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    results.hidden = true;
+    if (b.dataset.sec === "produtos"){ abrir("produtos"); const pq = document.getElementById("pq"); if (pq){ pq.value = q.value.trim(); listarProdutos(); } }
+    else abrir(b.dataset.sec, b.dataset.t);
+  }));
+});
+q.addEventListener("keydown", e => { if (e.key === "Escape"){ q.value = ""; results.hidden = true; } });
+document.addEventListener("click", e => { if (!e.target.closest(".searchwrap")) results.hidden = true; });
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function corta(t, termo){
+  const i = t.toLowerCase().indexOf(termo);
+  if (i < 0 || t.length < 96) return t.slice(0, 96);
+  const ini = Math.max(0, i - 36);
+  return (ini > 0 ? "…" : "") + t.slice(ini, ini + 96) + "…";
+}
+
+/* ============ tema ============ */
+document.getElementById("theme").addEventListener("click", () => {
+  const atual = document.documentElement.getAttribute("data-theme");
+  const escuroAgora = atual ? atual === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const novo = escuroAgora ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", novo);
+  store.set("tema", novo);
+});
+const temaSalvo = store.get("tema", null);
+if (temaSalvo) document.documentElement.setAttribute("data-theme", temaSalvo);
+
+/* ============ início ============ */
+abrir(store.get("sec", "dia"));
+</script>
+</body>
+</html>
