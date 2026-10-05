@@ -132,10 +132,20 @@ input[type=number],input[type=text]{width:100%;padding:8px 10px;border:1px solid
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12.5px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .plist{max-height:430px;overflow-y:auto;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
-.prow{display:flex;gap:11px;align-items:baseline;padding:8px 13px;border-bottom:1px solid var(--line);font-size:13.5px}
+.prow{display:flex;gap:11px;align-items:center;padding:8px 13px;border-bottom:1px solid var(--line);font-size:13.5px}
 .prow:last-child{border-bottom:0}
 .prow code{font-family:var(--mono);font-size:11.5px;color:var(--muted);min-width:46px}
 .prow .nm{flex:1;min-width:0}
+.ico{width:34px;height:34px;flex:none;border:1px solid var(--line);border-radius:7px;background:var(--surface2);
+  display:grid;place-items:center;color:var(--amber)}
+.ico svg{width:20px;height:20px;display:block}
+.fambox{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-left:3px solid var(--amber);
+  background:var(--surface2);border-radius:9px;padding:12px 14px;margin-bottom:12px}
+.fambox .ico{width:52px;height:52px;background:var(--surface)}
+.fambox .ico svg{width:30px;height:30px}
+.fambox h4{font-family:var(--display);font-size:15px;font-weight:700;margin:0 0 3px}
+.fambox p{margin:0;font-size:13px;color:var(--muted);line-height:1.4}
+.fambox .pg{margin-top:6px;font-size:12.5px;font-style:italic;color:var(--ink)}
 .count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;display:block}
 details{border:1px solid var(--line);border-radius:9px;background:var(--surface);margin-bottom:8px;box-shadow:var(--shadow)}
 details summary{cursor:pointer;padding:12px 15px;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
@@ -427,6 +437,7 @@ const SECOES = [
   <div class="card">
     <input type="search" id="pq" placeholder="Buscar produto ou código…" autocomplete="off" style="font-family:var(--body);margin-bottom:11px">
     <div class="chips" id="pchips"></div>
+    <div id="fambox"></div>
     <span class="count" id="pcount"></span>
     <div class="plist" id="plist"></div>
   </div>`},
@@ -738,7 +749,34 @@ function montarObjecoes(){
   box.querySelectorAll(".copy").forEach(b => b.addEventListener("click", () => copiar(b)));
 }
 
-/* --- produtos --- */
+/* --- produtos: ilustração e contexto por família --- */
+const S = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">';
+const ICONES = {
+  "LED": S + '<rect x="2.5" y="4" width="19" height="12.5" rx="1.5"/><path d="M9 20h6M12 16.5V20"/><circle cx="7.5" cy="8" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="8" r=".9" fill="currentColor" stroke="none"/><circle cx="16.5" cy="8" r=".9" fill="currentColor" stroke="none"/><circle cx="7.5" cy="12.5" r=".9" fill="currentColor" stroke="none"/><circle cx="12" cy="12.5" r=".9" fill="currentColor" stroke="none"/><circle cx="16.5" cy="12.5" r=".9" fill="currentColor" stroke="none"/></svg>',
+  "Fachada": S + '<path d="M3 21V10h18v11"/><path d="M2 10l2-5h16l2 5z"/><path d="M8 21v-6h8v6"/><path d="M12 2v2M7.5 3l.8 1.6M16.5 3l-.8 1.6"/></svg>',
+  "Adesivo": S + '<path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5"/><path d="M8.5 13.5c1.8 1.6 5.2 1.6 7 0"/></svg>',
+  "Lona": S + '<path d="M4 6h16v10.5l-8-3-8 3z"/><circle cx="6.5" cy="4" r="1.1"/><circle cx="17.5" cy="4" r="1.1"/><path d="M6.5 5v1M17.5 5v1"/></svg>',
+  "Placa": S + '<rect x="3.5" y="3.5" width="17" height="10.5" rx="1.2"/><path d="M12 14v6M8.5 20h7"/><path d="M7 7.5h10M7 10.5h6"/></svg>',
+  "Estrutura": S + '<rect x="3.5" y="3.5" width="17" height="17" rx="1"/><path d="M3.5 3.5l17 17M20.5 3.5l-17 17"/></svg>',
+  "Material": S + '<path d="M3 7.5L12 4l9 3.5-9 3.5z"/><path d="M3 12l9 3.5 9-3.5"/><path d="M3 16.5L12 20l9-3.5"/></svg>',
+  "Display": S + '<rect x="5" y="3.5" width="14" height="10" rx="1.2"/><path d="M12 13.5V18"/><path d="M7.5 21l4.5-3 4.5 3"/></svg>',
+  "Serviço": S + '<path d="M7 2.5v19M17 2.5v19"/><path d="M7 7h10M7 11.5h10M7 16h10"/></svg>',
+  "Outros": S + '<rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><circle cx="8.5" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="12" r="1.1" fill="currentColor" stroke="none"/></svg>'
+};
+const FAMINFO = {
+  "LED": ["Painéis e letreiros digitais: venda, locação, estrutura, implantação e manutenção.", "Vai ficar dentro ou fora? De que distância as pessoas vão olhar?"],
+  "Fachada": ["Letra caixa, backlight, frontlight e luminosos — o que faz a marca ser vista da rua.", "A peça precisa acender à noite? Já existe ponto de energia?"],
+  "Adesivo": ["Adesivação de vidro, parede e veículo, envelopamento e recorte eletrônico.", "Qual é a superfície, e ela está lisa, limpa e sem adesivo antigo?"],
+  "Lona": ["Lonas, banners, faixas, bandeiras e tecidos com impressão digital.", "Vai ficar exposto ao tempo? Por quanto tempo precisa durar?"],
+  "Placa": ["Placas, sinalização e totens em PS, ACM, acrílico ou inox.", "Onde será fixada, em que altura e sobre qual superfície?"],
+  "Estrutura": ["Estrutura metálica, tapumes, portões e marcenaria que sustentam a peça.", "Precisa de solda, chumbamento ou projeto com ART?"],
+  "Material": ["Chapas e materiais vendidos avulsos: acrílico, PVC, alumínio.", "Qual espessura, qual medida e quantas chapas?"],
+  "Display": ["Displays, expositores e materiais de ponto de venda.", "É para balcão, chão ou vitrine? Quantas unidades?"],
+  "Serviço": ["Instalação, elétrica, ART, projeto, frete, locação e manutenção.", "O cliente tem autorização e horário liberado para a equipe?"],
+  "Outros": ["Itens diversos do cadastro que não entram nas famílias acima.", "Confirme medida e viabilidade com a produção antes de orçar."]
+};
+const icone = f => ICONES[f] || ICONES["Outros"];
+
 let famAtiva = "";
 function montarProdutos(){
   const chips = document.getElementById("pchips");
@@ -758,10 +796,23 @@ function listarProdutos(){
   const lista = PRODUTOS.filter(p =>
     (!famAtiva || p.f === famAtiva) &&
     (!t || p.n.toLowerCase().includes(t) || p.c.includes(t)));
+
+  const fb = document.getElementById("fambox");
+  if (fb){
+    if (famAtiva && FAMINFO[famAtiva]){
+      fb.innerHTML = '<div class="fambox"><span class="ico">' + icone(famAtiva) + '</span><div style="min-width:0">' +
+        '<h4>' + famAtiva + '</h4><p>' + FAMINFO[famAtiva][0] + '</p>' +
+        '<p class="pg">Pergunte sempre: "' + FAMINFO[famAtiva][1] + '"</p></div></div>';
+    } else fb.innerHTML = "";
+  }
+
   document.getElementById("pcount").textContent =
     lista.length + " de " + PRODUTOS.length + " produtos" + (famAtiva ? " · " + famAtiva : "");
   document.getElementById("plist").innerHTML = lista.length
-    ? lista.slice(0, 400).map(p => '<div class="prow"><code>' + p.c + '</code><span class="nm">' + p.n + '</span><span class="tag">' + p.f + '</span></div>').join("")
+    ? lista.slice(0, 400).map(p =>
+        '<div class="prow"><span class="ico">' + icone(p.f) + '</span>' +
+        '<code>' + p.c + '</code><span class="nm">' + p.n + '</span>' +
+        '<span class="tag">' + p.f + '</span></div>').join("")
     : '<div class="prow" style="color:var(--muted)">Nenhum produto encontrado. Tente outro termo ou limpe o filtro.</div>';
 }
 
