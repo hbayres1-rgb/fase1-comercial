@@ -138,6 +138,16 @@ h3{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute
 .erro{color:var(--e5);font-size:13px;margin-top:9px;font-weight:500}
 .tagarea{display:inline-block;font-size:11px;font-family:var(--mono);border:1px solid var(--e4);color:var(--e4);
   background:var(--e4s);border-radius:5px;padding:2px 7px;margin:2px 4px 2px 0}
+.anexos{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.anx{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 11px;background:var(--surface);font-size:13.5px}
+.anx .tp{font-family:var(--mono);font-size:10px;letter-spacing:.06em;border:1px solid var(--line);border-radius:5px;padding:2px 6px;color:var(--muted);flex:none}
+.anx a{color:var(--marca);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.anx a:hover{text-decoration:underline}
+.anx img{width:34px;height:34px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex:none}
+.anx .x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:2px 4px;flex:none}
+.anx .x:hover{color:var(--e5)}
+.addanx{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.addanx input[type=text]{flex:1;min-width:170px}
 .config{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .sugest{border:1px solid var(--line);border-radius:8px;background:var(--surface);margin-top:5px;max-height:190px;overflow:auto}
 .sugest button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:8px 11px;
@@ -186,7 +196,8 @@ const ETAPAS = {
 };
 const ORDEM = ["comercial","producao","complemento","liberada","recusada","concluida"];
 
-let DB = null, USER = null, EU = null, SOU_DONO = false, DEMO = false;
+let DB = null, USER = null, EU = null, SOU_DONO = false, DEMO = false, ASSETS = null;
+let anexosNovos = [];
 let LISTA = [], PAPEIS = {gerente:null, producao:null}, PERFIS = {};
 let filtro = "abertas", tela = "lista", abertaId = null, erroTela = "";
 
@@ -205,6 +216,88 @@ const dataBR = s => { if (!s) return "—"; const p = String(s).slice(0,10).spli
 const quando = t => { if (!t) return ""; const d = new Date(t);
   return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
 const nome = id => NOMES_DEMO[id] || (PERFIS[id] && PERFIS[id].name) || (id === (EU && EU.id) ? "Você" : "Alguém do time");
+
+/* ---------- anexos ---------- */
+const urlOk = u => { try { const x = new URL(u); return x.protocol === "http:" || x.protocol === "https:"; } catch(e){ return false; } };
+const ehImagem = a => String(a.mime || "").indexOf("image/") === 0;
+const urlAnexo = a => a.tipo === "arquivo" ? ("/_blob/" + a.id) : a.url;
+
+function blocoAnexos(lista, aoRemover){
+  const box = el("div","anexos");
+  if (!lista || !lista.length){
+    box.appendChild(el("div","sub","Nenhum anexo. Anexe aqui o PDF da OS do sistema, a arte aprovada ou as fotos do local."));
+    return box;
+  }
+  lista.forEach((a, i) => {
+    const linha = el("div","anx");
+    if (a.tipo === "arquivo" && ehImagem(a)){
+      const img = el("img"); img.src = urlAnexo(a); img.alt = a.rotulo || "anexo"; linha.appendChild(img);
+    } else {
+      linha.appendChild(el("span","tp", a.tipo === "arquivo" ? "ARQUIVO" : "LINK"));
+    }
+    const link = el("a","", esc(a.rotulo || urlAnexo(a)));
+    link.href = urlAnexo(a); link.target = "_blank"; link.rel = "noopener";
+    linha.appendChild(link);
+    if (aoRemover){
+      const x = el("button","x","×"); x.type = "button"; x.title = "Remover";
+      x.onclick = () => aoRemover(i);
+      linha.appendChild(x);
+    }
+    box.appendChild(linha);
+  });
+  return box;
+}
+
+function controlesAnexo(aoAdicionar){
+  const d = el("div");
+  const l1 = el("div","addanx");
+  const rot = el("input"); rot.type = "text"; rot.placeholder = "Nome do anexo (ex.: OS 4821 do sistema)";
+  const url = el("input"); url.type = "text"; url.placeholder = "Cole o link: Drive, sistema, foto…";
+  const b = el("button","btn","Anexar link"); b.type = "button";
+  b.onclick = () => {
+    const u = (url.value || "").trim();
+    if (!urlOk(u)){ erroTela = "Cole um link que comece com http:// ou https://."; render(); return; }
+    aoAdicionar({tipo:"link", url:u, rotulo:(rot.value || "").trim() || u, por: EU && EU.id, t: Date.now()});
+  };
+  l1.appendChild(rot); l1.appendChild(url); l1.appendChild(b);
+  d.appendChild(l1);
+
+  if (ASSETS){
+    const l2 = el("div","addanx");
+    const f = el("input"); f.type = "file"; f.accept = "image/*,application/pdf";
+    f.style.flex = "1"; f.style.minWidth = "190px";
+    const bf = el("button","btn","Enviar arquivo"); bf.type = "button";
+    bf.onclick = async () => {
+      const arq = f.files && f.files[0];
+      if (!arq){ erroTela = "Escolha um arquivo para enviar."; render(); return; }
+      bf.disabled = true; bf.textContent = "Enviando…";
+      try{
+        const r = await ASSETS.upload(arq);
+        aoAdicionar({tipo:"arquivo", id:r.id, rotulo:arq.name, mime:r.contentType, por: EU && EU.id, t: Date.now()});
+      }catch(e){
+        erroTela = e && e.code === "too_large" ? "Arquivo muito grande. O limite é 20 MB."
+          : e && e.code === "unsupported_type" ? "Tipo não aceito. Envie imagem (JPG, PNG) ou PDF."
+          : "Não foi possível enviar o arquivo. Tente de novo ou use o link.";
+        render();
+      }
+    };
+    l2.appendChild(f); l2.appendChild(bf);
+    d.appendChild(l2);
+  } else {
+    d.appendChild(el("div","sub","Enviar arquivo direto exige permissão de edição nesta página. Qualquer pessoa pode anexar pelo link — por exemplo, o PDF da OS no Drive."));
+  }
+  return d;
+}
+
+async function anexarNaOS(o, a){
+  const anexos = (o.anexos || []).concat([a]).slice(-12);
+  const ev = {t:Date.now(), por:EU.id, acao:"anexou " + (a.tipo === "arquivo" ? "um arquivo" : "um link"), motivo:a.rotulo};
+  try{
+    await DB.doc("os/" + o.id).update({anexos, atualizadoEm:Date.now(), historico:(o.historico || []).concat([ev]).slice(-40)});
+    erroTela = "";
+  }catch(e){ erroTela = "Não foi possível salvar o anexo."; }
+  render();
+}
 
 function souGerente(){ return !!(EU && PAPEIS.gerente && EU.id === PAPEIS.gerente); }
 function souProducao(){ return !!(EU && PAPEIS.producao && EU.id === PAPEIS.producao); }
@@ -366,6 +459,12 @@ function telaNova(){
     AREAS.map(a => '<label><input type="checkbox" class="chk-area" value="' + a + '"> ' + a + '</label>').join("") + '</div>';
   g.appendChild(dTipo);
 
+  const dAnx = el("div","campo full");
+  dAnx.appendChild(el("label","","Anexos — a OS gerada no sistema, a arte aprovada e as fotos do local"));
+  dAnx.appendChild(blocoAnexos(anexosNovos, i => { anexosNovos.splice(i,1); render(); }));
+  dAnx.appendChild(controlesAnexo(a => { anexosNovos.push(a); erroTela = ""; render(); }));
+  g.appendChild(dAnx);
+
   p.appendChild(g);
   if (erroTela) p.appendChild(el("div","erro", esc(erroTela)));
 
@@ -401,11 +500,13 @@ async function enviarNova(btn){
   dados.criadoEm = Date.now();
   dados.atualizadoEm = Date.now();
   dados.areasLiberadas = [];
-  dados.historico = [{t:Date.now(), por:EU.id, acao:"abriu a OS"}];
+  dados.anexos = anexosNovos.slice(0, 12);
+  dados.historico = [{t:Date.now(), por:EU.id, acao:"abriu a OS" + (anexosNovos.length ? " com " + anexosNovos.length + " anexo(s)" : "")}];
 
   btn.disabled = true; btn.textContent = "Enviando…";
   try{
     await DB.collection("os").doc().set(dados);
+    anexosNovos = [];
     tela = "lista"; filtro = "abertas"; erroTela = "";
   }catch(e){
     erroTela = e && e.code === "invalid_argument"
@@ -454,6 +555,11 @@ function telaDetalhe(){
     esq.appendChild(el("div","linha", '<span>Liberada para</span><b>' +
       o.areasLiberadas.map(a => '<span class="tagarea">' + esc(a) + '</span>').join("") + '</b>'));
   }
+  const cxAnx = el("div","cx");
+  cxAnx.appendChild(el("h3","","Anexos"));
+  cxAnx.appendChild(blocoAnexos(o.anexos || []));
+  if (DB && EU && EU.id) cxAnx.appendChild(controlesAnexo(a => anexarNaOS(o, a)));
+  esq.appendChild(cxAnx);
   grade.appendChild(esq);
 
   const dir = el("div");
@@ -694,7 +800,7 @@ async function resolverNomes(){
   try { PERFIS = await USER.profiles(Array.from(ids)); } catch(e){}
 }
 
-$("#b-nova").onclick = () => { tela = "nova"; erroTela = ""; render(); };
+$("#b-nova").onclick = () => { tela = "nova"; erroTela = ""; anexosNovos = []; render(); };
 $("#b-config").onclick = () => { tela = "config"; erroTela = ""; render(); };
 $("#b-tema").onclick = () => {
   const atual = document.documentElement.getAttribute("data-theme");
@@ -802,6 +908,7 @@ async function iniciarDemo(){
     if (!window.claude || !claude.use){ await iniciarDemo(); return; }
     USER = await claude.use("user");
     DB = await claude.use("db");
+    ASSETS = await claude.use("assets");
     if (USER){ EU = await USER.me(); SOU_DONO = await USER.isOwner(); }
     if (!DB){ render(); return; }
 
