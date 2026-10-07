@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="description" content="Fluxo de aprovação de Ordens de Serviço da FASE 1: abertura, Gerente Comercial, Produção e liberação por área.">
+<meta name="theme-color" content="#C62D49">
+<title>Aprovação de OS FASE 1 · Demonstração</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23EC3237'/%3E%3Cstop offset='1' stop-color='%23C62D49'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='url(%23g)'/%3E%3Ctext x='16' y='23' font-family='Arial' font-style='italic' font-size='15' font-weight='bold' fill='%23fff' text-anchor='middle'%3EOS%3C/text%3E%3C/svg%3E">
+<style>
+    :root{color-scheme:light}
+    *{-webkit-tap-highlight-color:transparent}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;background:#fafaf9}
+    img{max-width:100%}
+    [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: barra de status no topo, fila de OS como lista densa, detalhe em painel lateral. Cor: vermelho FASE 1 (#EC3237 -> #C62D49) como marca; cada etapa do fluxo tem a sua propria cor semantica. */
+:root{
+  --bg:#EFF0F2; --surface:#FFFFFF; --surface2:#F6F6F8; --ink:#16181D; --muted:#5F6671; --line:#D8DADF;
+  --marca:#C1202F; --marca-soft:#FCEBED; --grad:linear-gradient(135deg,#EC3237,#C62D49);
+  --e1:#9A5312; --e1s:#FDF1E3;   /* aguardando comercial */
+  --e2:#2B4C73; --e2s:#EBF0F6;   /* aguardando producao  */
+  --e3:#6B4E9E; --e3s:#F1ECFA;   /* aguardando complemento */
+  --e4:#1C7355; --e4s:#E6F3EE;   /* liberada */
+  --e5:#8A2330; --e5s:#FBEAEC;   /* recusada */
+  --e6:#5F6671; --e6s:#EFF0F2;   /* concluida */
+  --shadow:0 1px 2px rgba(22,24,29,.07), 0 6px 18px rgba(22,24,29,.05);
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#101216; --surface:#181B21; --surface2:#1F232B; --ink:#E7E9ED; --muted:#99A1AC; --line:#2A2F38;
+  --marca:#FF6068; --marca-soft:#2B1115;
+  --e1:#E3A258; --e1s:#2A1C0C; --e2:#7FA8D8; --e2s:#141C26; --e3:#AE93E0; --e3s:#1B1526;
+  --e4:#4FB18A; --e4s:#0E1F19; --e5:#E8737F; --e5s:#2A1116; --e6:#99A1AC; --e6s:#1F232B;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.32); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#101216; --surface:#181B21; --surface2:#1F232B; --ink:#E7E9ED; --muted:#99A1AC; --line:#2A2F38;
+  --marca:#FF6068; --marca-soft:#2B1115;
+  --e1:#E3A258; --e1s:#2A1C0C; --e2:#7FA8D8; --e2s:#141C26; --e3:#AE93E0; --e3s:#1B1526;
+  --e4:#4FB18A; --e4s:#0E1F19; --e5:#E8737F; --e5s:#2A1116; --e6:#99A1AC; --e6s:#1F232B;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.32); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--marca);outline-offset:2px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:11px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:9px;min-width:0}
+.brand b{font-family:var(--display);font-weight:800;font-style:italic;font-size:19px;letter-spacing:-.4px;color:var(--marca);white-space:nowrap}
+@supports (-webkit-background-clip:text) or (background-clip:text){
+  .brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+}
+.brand span{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.top .dir{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:8px;padding:8px 13px;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--marca);color:var(--marca)}
+.btn.p{background:var(--marca);border-color:var(--marca);color:#fff;font-weight:600}
+.btn.p:hover{filter:brightness(1.08);color:#fff}
+.btn.ok{background:var(--e4);border-color:var(--e4);color:#fff;font-weight:600}
+.btn.no{background:var(--e5);border-color:var(--e5);color:#fff;font-weight:600}
+.btn.wait{background:var(--e3);border-color:var(--e3);color:#fff;font-weight:600}
+.btn.ok:hover,.btn.no:hover,.btn.wait:hover{filter:brightness(1.08);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.wrap{max-width:1180px;margin:0 auto;padding:18px 16px 70px}
+.aviso{border-left:3px solid var(--e1);background:var(--e1s);padding:11px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-bottom:14px}
+.aviso.erro{border-color:var(--e5);background:var(--e5s)}
+.aviso b{font-weight:600}
+
+.fluxo{display:grid;grid-template-columns:repeat(auto-fit,minmax(188px,1fr));gap:8px;margin-bottom:16px}
+.fluxo div{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--line);border-radius:9px;padding:10px 13px;font-size:12.5px;color:var(--muted);line-height:1.4}
+.fluxo div b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+.fluxo div i{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em}
+.filtros{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.f{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:6px 13px;font-size:13px;cursor:pointer;display:flex;gap:7px;align-items:center}
+.f b{font-family:var(--mono);font-size:12px}
+.f[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.f[aria-pressed="true"] b{color:var(--bg)}
+
+.lista{display:flex;flex-direction:column;gap:9px}
+.os{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:13px 15px;
+    box-shadow:var(--shadow);cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start}
+.os:hover{border-color:var(--marca)}
+.os .num{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.os .cli{font-weight:600;font-size:15.5px;margin:1px 0 3px;overflow:hidden;text-overflow:ellipsis}
+.os .desc{font-size:13.5px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.os .meta{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap}
+.pill{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.02em}
+.vazio{text-align:center;color:var(--muted);padding:42px 16px;font-size:14px;background:var(--surface);border:1px dashed var(--line);border-radius:10px}
+
+/* formulario e detalhe */
+.painel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow)}
+.painel h2{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:13.5px;margin-top:3px}
+.campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px;margin-top:16px}
+.campo{display:flex;flex-direction:column;gap:5px;min-width:0}
+.campo.full{grid-column:1/-1}
+label{font-size:12px;color:var(--muted);font-weight:500}
+label .req{color:var(--marca)}
+input[type=text],input[type=date],input[type=number],select,textarea{
+  width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);color:var(--ink);
+  font-family:inherit;font-size:14px}
+textarea{resize:vertical;min-height:74px;line-height:1.45}
+input:invalid{border-color:var(--e5)}
+.radios{display:flex;gap:8px;flex-wrap:wrap}
+.radios label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:7px 11px;
+  font-size:13.5px;color:var(--ink);cursor:pointer;background:var(--surface2)}
+.radios input{accent-color:var(--marca)}
+.acoes{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
+
+.det{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:18px;align-items:start}
+.linha{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.linha:last-child{border-bottom:0}
+.linha span{color:var(--muted);flex:none}
+.linha b{font-weight:500;text-align:right;min-width:0;overflow-wrap:anywhere}
+h3{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 9px}
+.hist{display:flex;flex-direction:column;gap:11px}
+.ev{display:flex;gap:11px;font-size:13.5px}
+.ev .bolinha{width:10px;height:10px;border-radius:50%;flex:none;margin-top:5px;background:var(--muted)}
+.ev .quando{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ev .motivo{background:var(--surface2);border-left:2px solid var(--line);padding:7px 10px;border-radius:0 6px 6px 0;margin-top:5px;font-size:13px}
+.areas{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.areas label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;background:var(--surface2)}
+.areas input{accent-color:var(--e4)}
+.cx{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface2);margin-top:14px}
+.cx h3{margin-bottom:7px}
+.erro{color:var(--e5);font-size:13px;margin-top:9px;font-weight:500}
+.tagarea{display:inline-block;font-size:11px;font-family:var(--mono);border:1px solid var(--e4);color:var(--e4);
+  background:var(--e4s);border-radius:5px;padding:2px 7px;margin:2px 4px 2px 0}
+.config{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.sugest{border:1px solid var(--line);border-radius:8px;background:var(--surface);margin-top:5px;max-height:190px;overflow:auto}
+.sugest button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:8px 11px;
+  cursor:pointer;font-size:13.5px;border-bottom:1px solid var(--line)}
+.sugest button:hover{background:var(--surface2)}
+.sugest button:last-child{border-bottom:0}
+
+@media (max-width:760px){
+  .det{grid-template-columns:1fr}
+  .os{grid-template-columns:1fr}
+  .os .pill{justify-self:start}
+  .brand span{display:none}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>FASE 1</b><span>Aprovação de OS</span></div>
+    <div class="dir">
+      <select id="b-papel" hidden style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);color:var(--ink);font-family:inherit;font-size:13.5px">
+        <option value="u-vendedor">Ver como: Vendedora</option>
+        <option value="u-gerente">Ver como: Gerente Comercial</option>
+        <option value="u-producao">Ver como: Produção</option>
+      </select>
+      <button class="btn" id="b-config" type="button" hidden>Papéis</button>
+      <button class="btn" id="b-tema" type="button">Tema</button>
+      <button class="btn p" id="b-nova" type="button">+ Nova OS</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="avisos"></div>
+  <div id="tela"></div>
+</div>
+
+<script>
+const AREAS = ["Impressão", "Marcenaria", "Serralheria", "Expedição", "Instalação"];
+const ETAPAS = {
+  comercial:   {rotulo:"Aguardando Comercial",   cor:"--e1", soft:"--e1s"},
+  producao:    {rotulo:"Aguardando Produção",    cor:"--e2", soft:"--e2s"},
+  complemento: {rotulo:"Aguardando complemento", cor:"--e3", soft:"--e3s"},
+  liberada:    {rotulo:"Liberada para execução", cor:"--e4", soft:"--e4s"},
+  recusada:    {rotulo:"Recusada",               cor:"--e5", soft:"--e5s"},
+  concluida:   {rotulo:"Concluída",              cor:"--e6", soft:"--e6s"}
+};
+const ORDEM = ["comercial","producao","complemento","liberada","recusada","concluida"];
+
+let DB = null, USER = null, EU = null, SOU_DONO = false, DEMO = false;
+let LISTA = [], PAPEIS = {gerente:null, producao:null}, PERFIS = {};
+let filtro = "abertas", tela = "lista", abertaId = null, erroTela = "";
+
+const LINK_REAL = "https://claude.ai/artifact/JTitWhfEE2hZC7DyYX13p3";
+const NOMES_DEMO = {
+  "u-vendedor": "Vendedora (demonstração)",
+  "u-gerente": "Gerente Comercial (demonstração)",
+  "u-producao": "Produção (demonstração)"
+};
+
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h !== undefined) e.innerHTML = h; return e; };
+const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const hoje = () => new Date().toISOString().slice(0,10);
+const dataBR = s => { if (!s) return "—"; const p = String(s).slice(0,10).split("-"); return p.length === 3 ? p[2]+"/"+p[1]+"/"+p[0] : s; };
+const quando = t => { if (!t) return ""; const d = new Date(t);
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); };
+const nome = id => NOMES_DEMO[id] || (PERFIS[id] && PERFIS[id].name) || (id === (EU && EU.id) ? "Você" : "Alguém do time");
+
+function souGerente(){ return !!(EU && PAPEIS.gerente && EU.id === PAPEIS.gerente); }
+function souProducao(){ return !!(EU && PAPEIS.producao && EU.id === PAPEIS.producao); }
+function podeAgir(etapa){
+  if (!EU || !EU.id) return false;
+  if (etapa === "comercial") return souGerente() || (SOU_DONO && !PAPEIS.gerente);
+  if (etapa === "producao")  return souProducao() || (SOU_DONO && !PAPEIS.producao);
+  return false;
+}
+
+/* ---------- avisos de contexto ---------- */
+function pintarAvisos(){
+  const box = $("#avisos"); box.innerHTML = "";
+  if (DEMO){
+    const a = el("div","aviso",
+      "<b>Modo demonstração.</b> Aqui você navega pelo fluxo inteiro e testa as aprovações, mas as OS ficam guardadas só neste aparelho — " +
+      "ninguém mais vê o que você criar. Use o seletor no topo para alternar entre vendedora, Gerente Comercial e Produção. " +
+      'No dia a dia a equipe usa o sistema real, com base compartilhada: <a href="' + LINK_REAL + '" target="_blank" rel="noopener">abrir o sistema real</a>.');
+    a.style.borderColor = "var(--e3)"; a.style.background = "var(--e3s)";
+    const limpar = el("button","btn","Limpar dados da demonstração");
+    limpar.type = "button"; limpar.style.marginTop = "9px";
+    limpar.onclick = () => { try{ localStorage.removeItem("fase1os:demo"); }catch(e){} location.reload(); };
+    a.appendChild(el("div","")).appendChild(limpar);
+    box.appendChild(a);
+  }
+  if (!DB){
+    box.appendChild(el("div","aviso erro",
+      "<b>Esta página está em modo somente leitura.</b> Para abrir e aprovar OS, abra pelo link compartilhado com a sua conta FASE 1. " +
+      "Se você já está conectado e vê esta mensagem, peça acesso de Contribuidor ao administrador da página."));
+    return;
+  }
+  if (SOU_DONO && (!PAPEIS.gerente || !PAPEIS.producao)){
+    box.appendChild(el("div","aviso",
+      "<b>Configure os papéis antes de usar.</b> Defina quem é o Gerente Comercial e quem é o Encarregado de Produção no botão <b>Papéis</b>, no topo. " +
+      "Enquanto não configurar, só você consegue aprovar."));
+  }
+  const minhas = LISTA.filter(o => (o.etapa === "comercial" && souGerente()) || (o.etapa === "producao" && souProducao())).length;
+  if (minhas > 0){
+    const a = el("div","aviso", "<b>" + minhas + " OS " + (minhas === 1 ? "esperando" : "esperando") + " a sua aprovação.</b> Elas aparecem no topo da fila.");
+    a.style.borderColor = "var(--e1)";
+    box.appendChild(a);
+  }
+}
+
+/* ---------- lista ---------- */
+function contagem(){
+  const c = {};
+  ORDEM.forEach(k => c[k] = 0);
+  LISTA.forEach(o => { if (c[o.etapa] !== undefined) c[o.etapa]++; });
+  c.abertas = c.comercial + c.producao + c.complemento;
+  c.todas = LISTA.length;
+  return c;
+}
+
+function telaLista(){
+  const c = contagem();
+  const box = el("div");
+
+  const fluxo = el("div","fluxo");
+  [["01","Qualquer pessoa abre","Preenche a OS com cliente, local, medidas, material, prazo e arte.","--e6"],
+   ["02","Gerente Comercial","Aprova, recusa com motivo ou pede complemento.","--e1"],
+   ["03","Encarregado de Produção","Aceita e libera para as áreas, recusa ou pede complemento.","--e2"],
+   ["04","Execução","Impressão, marcenaria, serralheria, expedição e instalação.","--e4"]
+  ].forEach(([n,t,d,cor]) => {
+    const x = el("div","", '<i style="color:var(' + cor + ')">' + n + '</i><b>' + t + '</b>' + d);
+    x.style.borderTopColor = "var(" + cor + ")";
+    fluxo.appendChild(x);
+  });
+  box.appendChild(fluxo);
+
+  const fil = el("div","filtros");
+  const opc = [["abertas","Em andamento",c.abertas],["comercial",ETAPAS.comercial.rotulo,c.comercial],
+               ["producao",ETAPAS.producao.rotulo,c.producao],["complemento","Complemento",c.complemento],
+               ["liberada","Liberadas",c.liberada],["recusada","Recusadas",c.recusada],
+               ["concluida","Concluídas",c.concluida],["todas","Todas",c.todas]];
+  opc.forEach(([k,r,n]) => {
+    const b = el("button","f", esc(r) + " <b>" + n + "</b>");
+    b.type = "button"; b.setAttribute("aria-pressed", String(filtro === k));
+    b.onclick = () => { filtro = k; render(); };
+    fil.appendChild(b);
+  });
+  box.appendChild(fil);
+
+  let itens = LISTA.filter(o => filtro === "todas" ? true : filtro === "abertas" ? ["comercial","producao","complemento"].includes(o.etapa) : o.etapa === filtro);
+  const prioridade = o => ((o.etapa === "comercial" && souGerente()) || (o.etapa === "producao" && souProducao())) ? 0 : 1;
+  itens.sort((a,b) => prioridade(a) - prioridade(b) || (b.atualizadoEm || 0) - (a.atualizadoEm || 0));
+
+  if (!itens.length){
+    box.appendChild(el("div","vazio", filtro === "abertas"
+      ? "Nenhuma OS em andamento. Quando alguém abrir uma, ela aparece aqui para aprovação."
+      : "Nenhuma OS neste filtro."));
+    return box;
+  }
+
+  const lista = el("div","lista");
+  itens.forEach(o => {
+    const et = ETAPAS[o.etapa] || ETAPAS.comercial;
+    const card = el("div","os");
+    card.style.borderLeftColor = "var(" + et.cor + ")";
+    const esq = el("div","",
+      '<div class="num">OS ' + esc(o.numero || "s/nº") + (o.prioridade === "urgente" ? ' · <span style="color:var(--e5);font-weight:600">URGENTE</span>' : "") + '</div>' +
+      '<div class="cli">' + esc(o.cliente || "Cliente não informado") + '</div>' +
+      '<div class="desc">' + esc(o.descricao || "") + '</div>' +
+      '<div class="meta"><span>Entrega: <b>' + dataBR(o.prazo) + '</b></span>' +
+      '<span>Aberta por ' + esc(nome(o.autor)) + '</span>' +
+      '<span>' + quando(o.atualizadoEm) + '</span></div>');
+    const pill = el("span","pill", esc(et.rotulo));
+    pill.style.background = "var(" + et.soft + ")"; pill.style.color = "var(" + et.cor + ")";
+    card.appendChild(esq); card.appendChild(pill);
+    card.onclick = () => { abertaId = o.id; tela = "detalhe"; erroTela = ""; render(); };
+    lista.appendChild(card);
+  });
+  box.appendChild(lista);
+  return box;
+}
+
+/* ---------- formulário ---------- */
+const CAMPOS = [
+  {k:"numero", r:"Nº da OS no sistema", req:true, ph:"ex.: 4821"},
+  {k:"cliente", r:"Cliente", req:true, ph:"Razão social ou nome"},
+  {k:"contato", r:"Contato no local e telefone", req:true, ph:"Nome · (11) 90000-0000"},
+  {k:"local", r:"Endereço de entrega ou instalação", req:true, full:true, ph:"Rua, número, bairro, cidade e ponto de referência"},
+  {k:"descricao", r:"O que será feito", req:true, full:true, area:true, ph:"Descreva como se a pessoa da produção nunca tivesse falado com o cliente"},
+  {k:"medidas", r:"Medidas em cm (largura × altura) e quantidade", req:true, ph:"ex.: 300 × 80 cm · 2 peças"},
+  {k:"material", r:"Material, acabamento e cor", req:true, ph:"ex.: ACM branco, letras em acrílico preto fosco"},
+  {k:"fixacao", r:"Como será fixado e em qual superfície", req:false, ph:"ex.: parafusado em alvenaria"},
+  {k:"prazo", r:"Data limite de entrega", req:true, tipo:"date"},
+  {k:"obs", r:"Observações e combinados com o cliente", req:false, full:true, area:true, ph:"Tudo que foi prometido e não cabe nos campos acima"}
+];
+
+function telaNova(){
+  const p = el("div","painel");
+  p.appendChild(el("h2","","Abrir nova OS"));
+  p.appendChild(el("div","sub","Preencha pensando em quem vai executar. Campo incompleto volta e atrasa a entrega."));
+  const g = el("div","campos");
+  CAMPOS.forEach(c => {
+    const d = el("div","campo" + (c.full ? " full" : ""));
+    d.innerHTML = '<label for="c-' + c.k + '">' + esc(c.r) + (c.req ? ' <span class="req">*</span>' : "") + '</label>' +
+      (c.area ? '<textarea id="c-' + c.k + '" placeholder="' + esc(c.ph || "") + '"></textarea>'
+              : '<input type="' + (c.tipo || "text") + '" id="c-' + c.k + '" placeholder="' + esc(c.ph || "") + '">');
+    g.appendChild(d);
+  });
+
+  const dPri = el("div","campo");
+  dPri.innerHTML = '<label>Prioridade</label><div class="radios">' +
+    '<label><input type="radio" name="pri" value="normal" checked> Normal</label>' +
+    '<label><input type="radio" name="pri" value="urgente"> Urgente</label></div>';
+  g.appendChild(dPri);
+
+  const dArte = el("div","campo");
+  dArte.innerHTML = '<label>Arte aprovada pelo cliente por escrito <span class="req">*</span></label><div class="radios">' +
+    '<label><input type="radio" name="arte" value="sim"> Sim</label>' +
+    '<label><input type="radio" name="arte" value="nao"> Ainda não</label>' +
+    '<label><input type="radio" name="arte" value="na"> Não se aplica</label></div>';
+  g.appendChild(dArte);
+
+  const dTipo = el("div","campo full");
+  dTipo.innerHTML = '<label>O que esta OS envolve</label><div class="areas">' +
+    AREAS.map(a => '<label><input type="checkbox" class="chk-area" value="' + a + '"> ' + a + '</label>').join("") + '</div>';
+  g.appendChild(dTipo);
+
+  p.appendChild(g);
+  if (erroTela) p.appendChild(el("div","erro", esc(erroTela)));
+
+  const ac = el("div","acoes");
+  const bOk = el("button","btn p","Enviar para aprovação do Comercial"); bOk.type = "button";
+  bOk.onclick = () => enviarNova(bOk);
+  const bC = el("button","btn","Cancelar"); bC.type = "button";
+  bC.onclick = () => { tela = "lista"; erroTela = ""; render(); };
+  ac.appendChild(bOk); ac.appendChild(bC);
+  p.appendChild(ac);
+  return p;
+}
+
+async function enviarNova(btn){
+  const dados = {};
+  let faltando = [];
+  CAMPOS.forEach(c => {
+    const v = ($("#c-" + c.k).value || "").trim();
+    dados[c.k] = v;
+    if (c.req && !v) faltando.push(c.r);
+  });
+  const arte = document.querySelector('input[name="arte"]:checked');
+  if (!arte) faltando.push("Arte aprovada");
+  if (faltando.length){
+    erroTela = "Faltam preencher: " + faltando.join(" · ");
+    render(); return;
+  }
+  dados.prioridade = (document.querySelector('input[name="pri"]:checked') || {}).value || "normal";
+  dados.arte = arte.value;
+  dados.envolve = Array.from(document.querySelectorAll(".chk-area:checked")).map(i => i.value);
+  dados.etapa = "comercial";
+  dados.autor = EU.id;
+  dados.criadoEm = Date.now();
+  dados.atualizadoEm = Date.now();
+  dados.areasLiberadas = [];
+  dados.historico = [{t:Date.now(), por:EU.id, acao:"abriu a OS"}];
+
+  btn.disabled = true; btn.textContent = "Enviando…";
+  try{
+    await DB.collection("os").doc().set(dados);
+    tela = "lista"; filtro = "abertas"; erroTela = "";
+  }catch(e){
+    erroTela = e && e.code === "invalid_argument"
+      ? "Você não tem permissão para abrir OS nesta página. Peça acesso de Contribuidor ao administrador."
+      : "Não foi possível enviar agora. Tente de novo em instantes.";
+  }
+  render();
+}
+
+/* ---------- detalhe ---------- */
+function telaDetalhe(){
+  const o = LISTA.find(x => x.id === abertaId);
+  if (!o){ tela = "lista"; return telaLista(); }
+  const et = ETAPAS[o.etapa] || ETAPAS.comercial;
+
+  const p = el("div","painel");
+  const cab = el("div","", "");
+  cab.style.display = "flex"; cab.style.justifyContent = "space-between"; cab.style.gap = "14px"; cab.style.flexWrap = "wrap";
+  cab.appendChild(el("div","",
+    '<h2>OS ' + esc(o.numero || "s/nº") + ' · ' + esc(o.cliente || "") + '</h2>' +
+    '<div class="sub">Aberta por ' + esc(nome(o.autor)) + " em " + quando(o.criadoEm) +
+    (o.prioridade === "urgente" ? ' · <b style="color:var(--e5)">URGENTE</b>' : "") + '</div>'));
+  const pill = el("span","pill", esc(et.rotulo));
+  pill.style.background = "var(" + et.soft + ")"; pill.style.color = "var(" + et.cor + ")";
+  pill.style.alignSelf = "flex-start"; pill.style.fontSize = "12px"; pill.style.padding = "6px 13px";
+  cab.appendChild(pill);
+  p.appendChild(cab);
+
+  const grade = el("div","det"); grade.style.marginTop = "16px";
+
+  const esq = el("div");
+  esq.appendChild(el("h3","","Dados da OS"));
+  const linhas = [
+    ["Cliente", o.cliente], ["Contato no local", o.contato], ["Local", o.local],
+    ["O que será feito", o.descricao], ["Medidas e quantidade", o.medidas],
+    ["Material e acabamento", o.material], ["Fixação", o.fixacao],
+    ["Entrega até", dataBR(o.prazo)],
+    ["Arte aprovada", o.arte === "sim" ? "Sim" : o.arte === "nao" ? "Ainda não" : "Não se aplica"],
+    ["Envolve", (o.envolve || []).join(" · ")], ["Observações", o.obs]
+  ];
+  linhas.forEach(([r,v]) => {
+    if (!v) return;
+    esq.appendChild(el("div","linha", '<span>' + esc(r) + '</span><b>' + esc(v) + '</b>'));
+  });
+  if ((o.areasLiberadas || []).length){
+    esq.appendChild(el("div","linha", '<span>Liberada para</span><b>' +
+      o.areasLiberadas.map(a => '<span class="tagarea">' + esc(a) + '</span>').join("") + '</b>'));
+  }
+  grade.appendChild(esq);
+
+  const dir = el("div");
+  dir.appendChild(el("h3","","Histórico"));
+  const h = el("div","hist");
+  (o.historico || []).slice().reverse().forEach(ev => {
+    const linha = el("div","ev");
+    const cor = ev.acao.indexOf("recus") >= 0 ? "--e5" : ev.acao.indexOf("complement") >= 0 ? "--e3"
+              : ev.acao.indexOf("aprov") >= 0 || ev.acao.indexOf("liber") >= 0 ? "--e4" : "--e6";
+    const b = el("span","bolinha"); b.style.background = "var(" + cor + ")";
+    linha.appendChild(b);
+    linha.appendChild(el("div","",
+      '<div><b>' + esc(nome(ev.por)) + '</b> ' + esc(ev.acao) + '</div>' +
+      '<div class="quando">' + quando(ev.t) + '</div>' +
+      (ev.motivo ? '<div class="motivo">' + esc(ev.motivo) + '</div>' : "") +
+      (ev.areas && ev.areas.length ? '<div style="margin-top:5px">' + ev.areas.map(a => '<span class="tagarea">' + esc(a) + '</span>').join("") + '</div>' : "")));
+    h.appendChild(linha);
+  });
+  dir.appendChild(h);
+  grade.appendChild(dir);
+  p.appendChild(grade);
+
+  p.appendChild(blocoAcoes(o));
+
+  const ac = el("div","acoes");
+  const volta = el("button","btn","← Voltar para a fila"); volta.type = "button";
+  volta.onclick = () => { tela = "lista"; erroTela = ""; render(); };
+  ac.appendChild(volta);
+  p.appendChild(ac);
+  return p;
+}
+
+function blocoAcoes(o){
+  const cx = el("div","cx");
+
+  if (o.etapa === "comercial" || o.etapa === "producao"){
+    const etapaNome = o.etapa === "comercial" ? "Gerente Comercial" : "Encarregado de Produção";
+    if (!podeAgir(o.etapa)){
+      cx.appendChild(el("h3","","Aguardando " + etapaNome));
+      cx.appendChild(el("div","sub","Só o " + etapaNome + " pode aprovar ou recusar nesta etapa."));
+      return cx;
+    }
+    cx.appendChild(el("h3","","Sua decisão como " + etapaNome));
+    const mot = el("textarea"); mot.id = "motivo";
+    mot.placeholder = o.etapa === "comercial"
+      ? "Motivo da recusa ou o que falta completar (obrigatório para recusar ou pedir complemento)"
+      : "O que falta para a produção executar sem parar (obrigatório para recusar ou pedir complemento)";
+    cx.appendChild(mot);
+
+    if (o.etapa === "producao"){
+      const d = el("div");
+      d.innerHTML = '<label style="display:block;margin:12px 0 5px">Liberar para quais áreas</label><div class="areas">' +
+        AREAS.map(a => '<label><input type="checkbox" class="lib-area" value="' + a + '"' +
+          ((o.envolve || []).includes(a) ? " checked" : "") + '> ' + a + '</label>').join("") + '</div>';
+      cx.appendChild(d);
+    }
+
+    const ac = el("div","acoes"); ac.style.borderTop = "0"; ac.style.paddingTop = "6px";
+    const bOk = el("button","btn ok", o.etapa === "comercial" ? "Aprovar e enviar para a Produção" : "Aceitar e liberar para execução");
+    bOk.type = "button"; bOk.onclick = () => decidir(o, "aprovar", bOk);
+    const bW = el("button","btn wait","Aguardando complemento"); bW.type = "button";
+    bW.onclick = () => decidir(o, "complemento", bW);
+    const bN = el("button","btn no","Recusar"); bN.type = "button";
+    bN.onclick = () => decidir(o, "recusar", bN);
+    ac.appendChild(bOk); ac.appendChild(bW); ac.appendChild(bN);
+    cx.appendChild(ac);
+  }
+
+  else if (o.etapa === "complemento"){
+    cx.appendChild(el("h3","","Complemento solicitado"));
+    cx.appendChild(el("div","sub","Quem abriu a OS completa a informação abaixo e devolve para " +
+      (o.voltarPara === "producao" ? "a Produção" : "o Comercial") + "."));
+    const t = el("textarea"); t.id = "motivo"; t.placeholder = "Escreva aqui a informação que faltava";
+    cx.appendChild(t);
+    const ac = el("div","acoes"); ac.style.borderTop = "0"; ac.style.paddingTop = "6px";
+    const b = el("button","btn p","Enviar complemento"); b.type = "button";
+    b.onclick = () => decidir(o, "complementou", b);
+    ac.appendChild(b);
+    cx.appendChild(ac);
+  }
+
+  else if (o.etapa === "recusada"){
+    cx.appendChild(el("h3","","OS recusada"));
+    cx.appendChild(el("div","sub","Corrija o que foi apontado no histórico e reabra para uma nova análise do Comercial."));
+    const t = el("textarea"); t.id = "motivo"; t.placeholder = "O que foi corrigido";
+    cx.appendChild(t);
+    const ac = el("div","acoes"); ac.style.borderTop = "0"; ac.style.paddingTop = "6px";
+    const b = el("button","btn p","Reabrir OS"); b.type = "button";
+    b.onclick = () => decidir(o, "reabrir", b);
+    ac.appendChild(b);
+    cx.appendChild(ac);
+  }
+
+  else if (o.etapa === "liberada"){
+    cx.appendChild(el("h3","","Em execução"));
+    cx.appendChild(el("div","sub","Quando a entrega ou instalação terminar, marque como concluída para tirar da fila."));
+    if (podeAgir("producao") || (EU && EU.id === o.autor)){
+      const ac = el("div","acoes"); ac.style.borderTop = "0"; ac.style.paddingTop = "6px";
+      const b = el("button","btn ok","Marcar como concluída"); b.type = "button";
+      b.onclick = () => decidir(o, "concluir", b);
+      ac.appendChild(b);
+      cx.appendChild(ac);
+    }
+  }
+
+  else {
+    cx.appendChild(el("h3","","OS concluída"));
+    cx.appendChild(el("div","sub","Entrega finalizada. O histórico fica guardado para consulta."));
+  }
+
+  if (erroTela) cx.appendChild(el("div","erro", esc(erroTela)));
+  return cx;
+}
+
+async function decidir(o, acao, btn){
+  const campo = $("#motivo");
+  const motivo = campo ? (campo.value || "").trim() : "";
+  const exigeMotivo = ["recusar","complemento","complementou"].includes(acao);
+  if (exigeMotivo && !motivo){
+    erroTela = acao === "complementou" ? "Escreva a informação que faltava antes de enviar."
+      : "Escreva o motivo. Sem motivo, quem abriu não sabe o que corrigir.";
+    render(); return;
+  }
+
+  const ev = {t:Date.now(), por:EU.id};
+  const dados = {atualizadoEm: Date.now()};
+
+  if (acao === "aprovar"){
+    if (o.etapa === "comercial"){ dados.etapa = "producao"; ev.acao = "aprovou no Comercial"; }
+    else {
+      const areas = Array.from(document.querySelectorAll(".lib-area:checked")).map(i => i.value);
+      if (!areas.length){ erroTela = "Marque pelo menos uma área para liberar a execução."; render(); return; }
+      dados.etapa = "liberada"; dados.areasLiberadas = areas;
+      ev.acao = "liberou para execução"; ev.areas = areas;
+    }
+  } else if (acao === "recusar"){
+    dados.etapa = "recusada";
+    ev.acao = "recusou na etapa " + (o.etapa === "comercial" ? "Comercial" : "Produção");
+    ev.motivo = motivo;
+  } else if (acao === "complemento"){
+    dados.etapa = "complemento"; dados.voltarPara = o.etapa;
+    ev.acao = "pediu complemento"; ev.motivo = motivo;
+  } else if (acao === "complementou"){
+    dados.etapa = o.voltarPara || "comercial";
+    ev.acao = "enviou o complemento"; ev.motivo = motivo;
+  } else if (acao === "reabrir"){
+    dados.etapa = "comercial";
+    ev.acao = "reabriu a OS"; if (motivo) ev.motivo = motivo;
+  } else if (acao === "concluir"){
+    dados.etapa = "concluida"; ev.acao = "marcou como concluída";
+  }
+
+  dados.historico = (o.historico || []).concat([ev]).slice(-40);
+  btn.disabled = true; btn.textContent = "Salvando…";
+  try{
+    await DB.doc("os/" + o.id).update(dados);
+    erroTela = "";
+  }catch(e){
+    erroTela = e && e.code === "invalid_argument"
+      ? "Você não tem permissão para alterar esta OS. Peça acesso de Contribuidor ao administrador."
+      : "Não foi possível salvar agora. Tente de novo em instantes.";
+  }
+  render();
+}
+
+/* ---------- papéis ---------- */
+function telaConfig(){
+  const p = el("div","painel");
+  p.appendChild(el("h2","","Quem aprova cada etapa"));
+  p.appendChild(el("div","sub","Busque a pessoa pelo nome. Só quem está definido aqui vê os botões de aprovar e recusar."));
+
+  [["gerente","Gerente Comercial — aprova a etapa 1"],["producao","Encarregado de Produção — aprova a etapa 2"]].forEach(([chave, rotulo]) => {
+    const d = el("div","campo"); d.style.marginTop = "16px";
+    const atual = PAPEIS[chave] ? nome(PAPEIS[chave]) : "ninguém definido";
+    d.innerHTML = '<label>' + esc(rotulo) + '</label>' +
+      '<div class="sub" style="margin:0 0 6px">Hoje: <b>' + esc(atual) + '</b></div>' +
+      '<input type="text" id="busca-' + chave + '" placeholder="Digite o nome para buscar…">' +
+      '<div class="sugest" id="sug-' + chave + '" hidden></div>';
+    p.appendChild(d);
+  });
+
+  const ac = el("div","acoes");
+  const v = el("button","btn","← Voltar"); v.type = "button";
+  v.onclick = () => { tela = "lista"; render(); };
+  ac.appendChild(v);
+  p.appendChild(ac);
+
+  setTimeout(() => {
+    ["gerente","producao"].forEach(chave => {
+      const inp = $("#busca-" + chave), sug = $("#sug-" + chave);
+      if (!inp || !USER) return;
+      const buscar = async () => {
+        let hits = [];
+        try { hits = await USER.search(inp.value.trim()); } catch(e){ hits = []; }
+        if (!hits.length){ sug.hidden = true; return; }
+        sug.innerHTML = "";
+        hits.forEach(h => {
+          const b = el("button","", "");
+          b.type = "button"; b.textContent = h.name;
+          b.onclick = async () => {
+            try{
+              const novo = Object.assign({}, PAPEIS); novo[chave] = h.id;
+              await DB.doc("config/papeis").set(novo);
+              PAPEIS = novo; PERFIS[h.id] = h; sug.hidden = true; render();
+            }catch(e){ erroTela = "Não foi possível salvar o papel."; render(); }
+          };
+          sug.appendChild(b);
+        });
+        sug.hidden = false;
+      };
+      inp.addEventListener("input", buscar);
+      inp.addEventListener("focus", buscar);
+    });
+  }, 0);
+
+  return p;
+}
+
+/* ---------- render ---------- */
+function render(){
+  pintarAvisos();
+  const t = $("#tela"); t.innerHTML = "";
+  $("#b-nova").hidden = !DB || tela !== "lista";
+  $("#b-config").hidden = !SOU_DONO || tela === "config";
+  if (tela === "nova") t.appendChild(telaNova());
+  else if (tela === "detalhe") t.appendChild(telaDetalhe());
+  else if (tela === "config") t.appendChild(telaConfig());
+  else t.appendChild(telaLista());
+}
+
+async function resolverNomes(){
+  if (!USER) return;
+  const ids = new Set();
+  LISTA.forEach(o => { if (o.autor) ids.add(o.autor); (o.historico || []).forEach(e => e.por && ids.add(e.por)); });
+  if (PAPEIS.gerente) ids.add(PAPEIS.gerente);
+  if (PAPEIS.producao) ids.add(PAPEIS.producao);
+  if (!ids.size) return;
+  try { PERFIS = await USER.profiles(Array.from(ids)); } catch(e){}
+}
+
+$("#b-nova").onclick = () => { tela = "nova"; erroTela = ""; render(); };
+$("#b-config").onclick = () => { tela = "config"; erroTela = ""; render(); };
+$("#b-tema").onclick = () => {
+  const atual = document.documentElement.getAttribute("data-theme");
+  const escuro = atual ? atual === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const novo = escuro ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", novo);
+  try { localStorage.setItem("fase1os:tema", novo); } catch(e){}
+};
+try { const tm = localStorage.getItem("fase1os:tema"); if (tm) document.documentElement.setAttribute("data-theme", tm); } catch(e){}
+
+render();
+
+/* ---------- modo demonstração (GitHub Pages, sem base compartilhada) ---------- */
+function bancoLocal(){
+  const KEY = "fase1os:demo";
+  const ouvintes = [];
+  const ler = () => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ return {}; } };
+  const gravar = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){} ouvintes.forEach(f => f()); };
+  function refDoc(col, id){
+    return {
+      id, path: col + "/" + id,
+      async set(data){ const d = ler(); d[col] = d[col] || {}; d[col][id] = data; gravar(d); },
+      async update(data){ const d = ler(); d[col] = d[col] || {}; d[col][id] = Object.assign({}, d[col][id], data); gravar(d); },
+      async get(){ const v = (ler()[col] || {})[id]; return {id, exists: !!v, data: () => v}; },
+      onSnapshot(next){ const f = () => { const v = (ler()[col] || {})[id]; next({id, exists: !!v, data: () => v}); };
+        ouvintes.push(f); f(); return () => {}; }
+    };
+  }
+  function refCol(col){
+    return {
+      doc(id){ return refDoc(col, id || ("d" + Date.now().toString(36) + Math.random().toString(36).slice(2,6))); },
+      orderBy(){ return this; }, limit(){ return this; },
+      onSnapshot(next){
+        const f = () => {
+          const m = ler()[col] || {};
+          const docs = Object.keys(m).map(k => ({id:k, exists:true, data: () => m[k]}))
+            .sort((a,b) => (b.data().atualizadoEm || 0) - (a.data().atualizadoEm || 0));
+          next({docs, size: docs.length, empty: !docs.length});
+        };
+        ouvintes.push(f); f(); return () => {};
+      }
+    };
+  }
+  return { collection: refCol, doc(caminho){ const p = caminho.split("/"); return refDoc(p[0], p[1]); } };
+}
+
+async function semearDemo(){
+  const snap = await DB.doc("config/semeado").get();
+  if (snap.exists) return;
+  const agora = Date.now();
+  const base = {
+    cliente:"Padaria Pão de Casa (exemplo)", contato:"Marcos · (11) 90000-0000",
+    local:"Av. Santo Amaro, 1200 — Brooklin, São Paulo · em frente ao posto",
+    medidas:"300 × 80 cm · 1 peça", material:"ACM branco com letra caixa em acrílico preto",
+    fixacao:"Parafusado em alvenaria, altura de 3,5 m", arte:"sim", prioridade:"normal",
+    envolve:["Serralheria","Instalação"], areasLiberadas:[]
+  };
+  await DB.collection("os").doc("exemplo-1").set(Object.assign({}, base, {
+    numero:"4821", descricao:"Fachada nova com letra caixa iluminada, sobre estrutura metálica.",
+    prazo:new Date(agora + 12*864e5).toISOString().slice(0,10), obs:"Inauguração marcada: não pode atrasar.",
+    etapa:"comercial", autor:"u-vendedor", criadoEm:agora - 3600e3, atualizadoEm:agora - 3600e3,
+    historico:[{t:agora - 3600e3, por:"u-vendedor", acao:"abriu a OS"}]
+  }));
+  await DB.collection("os").doc("exemplo-2").set(Object.assign({}, base, {
+    numero:"4818", cliente:"Ótica Visão Clara (exemplo)",
+    descricao:"Adesivação de vitrine com recorte eletrônico e jateado na porta de vidro.",
+    medidas:"220 × 150 cm · 2 peças", material:"Adesivo jateado com recorte",
+    envolve:["Impressão","Instalação"], prazo:new Date(agora + 5*864e5).toISOString().slice(0,10),
+    etapa:"producao", autor:"u-vendedor", prioridade:"urgente",
+    criadoEm:agora - 7200e3, atualizadoEm:agora - 1800e3,
+    historico:[{t:agora - 7200e3, por:"u-vendedor", acao:"abriu a OS"},
+               {t:agora - 1800e3, por:"u-gerente", acao:"aprovou no Comercial"}]
+  }));
+  await DB.doc("config/papeis").set({gerente:"u-gerente", producao:"u-producao"});
+  await DB.doc("config/semeado").set({em: agora});
+}
+
+async function iniciarDemo(){
+  DEMO = true;
+  DB = bancoLocal();
+  let papel = "u-vendedor";
+  try { papel = localStorage.getItem("fase1os:papel") || papel; } catch(e){}
+  EU = {id: papel, name: NOMES_DEMO[papel]};
+  const sel = $("#b-papel");
+  sel.hidden = false; sel.value = papel;
+  sel.onchange = () => {
+    EU = {id: sel.value, name: NOMES_DEMO[sel.value]};
+    try { localStorage.setItem("fase1os:papel", sel.value); } catch(e){}
+    tela = "lista"; render();
+  };
+  await semearDemo();
+  DB.doc("config/papeis").onSnapshot(s => {
+    const d = s.exists ? s.data() : {};
+    PAPEIS = {gerente: d.gerente || null, producao: d.producao || null};
+    render();
+  });
+  DB.collection("os").onSnapshot(snap => {
+    LISTA = snap.docs.map(d => Object.assign({id: d.id}, d.data()));
+    render();
+  });
+}
+
+(async () => {
+  try{
+    if (!window.claude || !claude.use){ await iniciarDemo(); return; }
+    USER = await claude.use("user");
+    DB = await claude.use("db");
+    if (USER){ EU = await USER.me(); SOU_DONO = await USER.isOwner(); }
+    if (!DB){ render(); return; }
+
+    DB.doc("config/papeis").onSnapshot(async snap => {
+      const d = snap.exists ? snap.data() : {};
+      PAPEIS = {gerente: d.gerente || null, producao: d.producao || null};
+      await resolverNomes();
+      render();
+    }, () => {});
+
+    DB.collection("os").orderBy("atualizadoEm", "desc").limit(200).onSnapshot(async snap => {
+      LISTA = snap.docs.map(d => Object.assign({id: d.id}, d.data()));
+      await resolverNomes();
+      render();
+    }, () => { erroTela = "A lista de OS parou de atualizar. Recarregue a página."; render(); });
+
+    render();
+  }catch(e){ render(); }
+})();
+</script>
+</body>
+</html>
